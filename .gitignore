@@ -1,0 +1,59 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+web_frontend/node_modules
+web_frontend/.pnp
+web_frontend/.pnp.js
+
+# testing
+web_frontend/coverage
+
+# next.js
+web_frontend/.next/
+web_frontend/out/
+
+# production
+web_frontend/build
+
+# misc
+web_frontend.DS_Store
+web_frontend*.pem
+
+# debug
+web_frontend/npm-debug.log*
+web_frontend/yarn-debug.log*
+web_frontend/yarn-error.log*
+
+# env files
+web_frontend/.env
+web_frontend/.env.local
+web_frontend/.env.development.local
+web_frontend/.env.test.local
+web_frontend/.env.production.local
+
+# vercel
+.vercel
+
+
+# SERVER
+api_backend/.phpunit.cache
+api_backend/node_modules
+api_backend/public/build
+api_backend/public/hot
+api_backend/public/storage
+api_backend/storage/*.key
+api_backend/vendor
+api_backend/.env
+api_backend/.env.backup
+api_backend/.env.production
+api_backend/.phpactor.json
+api_backend/.phpunit.result.cache
+api_backend/Homestead.json
+api_backend/Homestead.yaml
+api_backend/auth.json
+api_backend/npm-debug.log
+api_backend/yarn-error.log
+api_backend/.fleet
+api_backend/.idea
+api_backend/.vscode
+
