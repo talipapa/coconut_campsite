@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\CustomVendors\Xendivel;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\v1\TransactionResource;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
-use App\Http\Resources\Api\TransactionResource;
 use App\Models\CampManager;
 use App\Models\Manager;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class TransactionController extends Controller
 {
@@ -50,9 +52,8 @@ class TransactionController extends Controller
         $validated = $request->validate([
             'booking_id' => 'required',
             'price' => 'required',
-            'status' => 'required',
+            'paymentMethod' => 'required',
             'payment_type' => 'required',
-            'xendit_transaction_id' => 'required',
         ]);
 
         // Check first if the booking doesn't have a transaction yet
@@ -61,19 +62,44 @@ class TransactionController extends Controller
             return response()->json(['message' => 'Transaction already exists for this booking'], 400);
         }
 
+        // Create transaction
         $transaction = Transaction::create([
             'user_id' => Auth::user()->id,
             'booking_id' => $validated['booking_id'],
             'price' => $validated['price'],
-            'status' => $validated['status'],
             'payment_type' => $validated['payment_type'],
-            'xendit_transaction_id' => $validated['xendit_transaction_id'],
         ]);
         $transactionJsonObject = new TransactionResource($transaction);
+
+        try {
+            //code...
+    
+            // Prepare payment request body
+            $xenditRequest = [
+                'reference_id' => $transaction->id,
+                'amount' => floatval($validated['price']),
+                'currency' => 'PHP',
+                'checkout_method' => 'ONE_TIME_PAYMENT',
+                'channel_code' => 'PH_GCASH',
+                'channel_properties' => [
+                    'success_redirect_url' => 'https://example.com/success',
+                    'failure_redirect_url' => 'https://example.com/failure',
+                ],
+            ];
+
+            Log::info($xenditRequest);
+    
+            // Send payment request to XENDIT
+            $response = Xendivel::payWithEwallet($xenditRequest)->getResponse();
+        } catch (\Throwable $th) {
+            Log::error($th);
+            $transaction->delete();
+        }
         return response()->json([
             'message' => 'Campsite type tag added successfully',
-            'data' => $transactionJsonObject
+            'data' => $response
         ], 201);
+
     }
 
     /**

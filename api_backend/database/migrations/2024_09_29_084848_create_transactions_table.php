@@ -12,7 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
+            $table->foreignIdFor(\App\Models\User::class)->constrained();
+            $table->foreignIdFor(\App\Models\Booking::class)->constrained();
+            $table->string('price');
+            $table->string('status')->default('PENDING');
+            $table->string('payment_type');
+            $table->string('xendit_product_id')->nullable();
             $table->timestamps();
         });
     }

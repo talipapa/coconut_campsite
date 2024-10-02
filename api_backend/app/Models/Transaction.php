@@ -15,7 +15,7 @@ class Transaction extends Model
         'price',
         'status',
         'payment_type',
-        'xendit_transaction_id'
+        'xendit_product_id'
     ];
 
     public function user()

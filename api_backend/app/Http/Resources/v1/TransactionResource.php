@@ -15,13 +15,12 @@ class TransactionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'user_id' => $this->user_id,
-            'booking_id' => $this->booking_id,
-            'price' => $this->price,
-            'status' => $this->status,
-            'payment_type' => $this->payment_type,
-            'xendit_transaction_id' => $this->xendit_transaction_id
+        'user_id' => $this->user_id,
+        'booking_id' => $this->booking_id,
+        'price' => $this->price,
+        'status' => $this->status,
+        'payment_type' => $this->payment_type,
+        'xendit_product_id' => $this->xendit_product_id
         ];
     }
 }

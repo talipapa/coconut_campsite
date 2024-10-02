@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\eWalletEvents;
+use Illuminate\Support\Facades\Log;
 
 class eWalletWebhookListener
 {
@@ -33,6 +34,33 @@ class eWalletWebhookListener
     {
         // You can inspect the returned data from the webhoook in your logs file
         // storage/logs/laravel.log
-        logger('Webhook data received: ', $event->webhook_data);
+
+
+
+        // logger('Webhook data received: ', $event->webhook_data);
+        
+        // Event type
+        Log::info($event->webhook_data['event']);
+
+        if ($event->webhook_data['event'] === 'ewallet.capture'){
+            $data = $event->webhook_data['data'];
+            $id = substr($data['id'], 4, -4);
+            // Xendit product ID
+            logger('Xendit ID', [$id]); 
+            // Xendit order ID
+            logger('Status', [$data['status']]); 
+            // Charged amount
+            logger('Charge amount', [$data['charge_amount']]); 
+            // Transaction status
+            logger('Status', [$data['status']]); 
+        }
+
+
+
+
+
+
+
+
     }
 }
