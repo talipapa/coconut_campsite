@@ -29,6 +29,18 @@ class BookingController extends Controller
         return BookingResource::collection($bookings);
     }
 
+    public function showSelfBooking(Request $request){
+        $booking = Booking::where('user_id', $request->user()->id)->first();
+        if (!$booking) {
+            return response()->json(['message' => false], 201);
+        }
+        return response()->json(
+            ['message' => true, 
+             'data' => new BookingResource($booking)
+            ]
+            , 201);
+    }
+
 
 
     /**
@@ -119,12 +131,24 @@ class BookingController extends Controller
     {
         // Validate
         $validated = $request->validate([
-            'user_id' => 'required',
-            'price' => 'required',
-            'check_in' => 'required',
-            'booking_type' => 'required',
-            'campsite_id' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required',
+            'telNumber' => 'required',
+            'adultCount' => 'required',
+            'childCount' => 'required',
+            'checkInDate' => 'required',
+            'bookingType' => 'required',
+            'tentPitchingCount' => 'required',
+            'bonfireKitCount' => 'required',
+            'isCabin' => 'required',
         ]);
+
+        $userOwner = User::find($booking->user_id);
+        
+        if ($userOwner->id !== $request->user()->id) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
         
         // Find data
         $booking = Booking::find($booking->id);
@@ -136,12 +160,18 @@ class BookingController extends Controller
 
         // Update data
         $booking->update([
-            'user_id' => $validated['user_id'],
-            'price' => $validated['price'],
-            'check_in' => $validated['check_in'],
-            'booking_type' => $validated['booking_type'],
-            'campsite_id' => $validated['campsite_id'],
-
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'email' => $validated['email'],
+            'tel_number' => $validated['telNumber'],
+            'adultCount' => $validated['adultCount'],
+            'childCount' => $validated['childCount'],
+            'check_in' => Carbon::parse($validated['checkInDate'])->timezone('Asia/Manila')->format('Y-m-d'),
+            'booking_type' => $validated['bookingType'],
+            'tent_pitching_count' => $validated['tentPitchingCount'],
+            'bonfire_kit_count' => $validated['bonfireKitCount'],
+            'is_cabin' => $validated['isCabin'],
+            'note' => $request->note,
         ]);
 
         // Return response
@@ -150,7 +180,6 @@ class BookingController extends Controller
             'message' => 'Booking updated successfully', 
             'old_data' => $oldData,
             'new_data' => $bookingDataJson,
-
         ], 200);
     }
 

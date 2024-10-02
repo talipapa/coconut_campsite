@@ -5,11 +5,13 @@ import Loading from '@/app/(app)/Loading'
 import AuthenticatedNavbar from './AuthenticatedNavbar'
 import { ConfigProvider } from 'antd'
 import AuthenticatedFooter from './AuthenticatedFooter'
+import { useLaravelBooking } from '@/hooks/booking'
 
 const AppLayout = ({ children }) => {
     const { user } = useAuth({ middleware: 'auth' })
+    const { booking } = useLaravelBooking()
 
-    if (!user) {
+    if (!user && !booking) {
         return <Loading/>
     }
 

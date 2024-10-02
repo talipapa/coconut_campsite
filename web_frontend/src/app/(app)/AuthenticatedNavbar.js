@@ -5,14 +5,13 @@ import React from 'react'
 import Link from 'next/link'
 import { FaCampground } from 'react-icons/fa'
 import { FaFacebookSquare } from 'react-icons/fa'
-import { Button } from 'antd'
+import { Button, Skeleton } from 'antd'
 import { usePathname } from 'next/navigation'
 
 const AuthenticatedNavbar = ({user, currentPath}) => {
   const { logout } = useAuth() 
 
   const pathName = usePathname()
-  console.log(usePathname())
   return (
     <nav className='bg-[#855139] p-[30px] text-white flex flex-row justify-between space-x-10 '>
         <div className='w-full flex flex-row items-end space-x-5'>
@@ -27,7 +26,10 @@ const AuthenticatedNavbar = ({user, currentPath}) => {
                 <Link href="/booking" className={`cursor-pointer font-semibold ${pathName === "/booking" ? 'text-[#FFC39E]' : ""}`}>Booking</Link>
                 <Link href="/account" className={`cursor-pointer font-semibold ${pathName === "/account" ? 'text-[#FFC39E]' : ""}`}>Account</Link>
             </ul>
-            <Button color='danger' variant='solid' onClick={logout} icon={<FaCampground/>}>Logout</Button> 
+            {user ? (
+              <Button color='danger' variant='solid' onClick={logout} icon={<FaCampground/>}>Logout</Button> 
+
+            ) : <Skeleton.Input/>}
         </div>
     </nav>
   )

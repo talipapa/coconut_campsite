@@ -13,7 +13,9 @@ Route::apiResource('/manager', ManagerController::class)->except(['update', 'des
 // Route::apiResource('/campsite/settings/picture', CampsitePictureController::class)->except(['store', 'destroy']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::apiResource('/booking', BookingController::class)->except(['bookingListAll', 'viewOnyCampsiteBooking', 'update', 'destroy']);
+    Route::apiResource('/booking', BookingController::class)->except(['bookingListAll', 'viewOnyCampsiteBooking', 'destroy']);
+    Route::get('/booking-check', [BookingController::class, 'showSelfBooking']);
+
     Route::apiResource('/transaction', TransactionController::class)->except(['transactionListAll', 'viewOnlyCampsiteTransaction', 'update', 'destroy']);
 });
 

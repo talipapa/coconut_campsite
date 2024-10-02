@@ -21,18 +21,23 @@ const RootLayout = ({ children }) => {
                     colorFillSecondary: '#BC7B5C',
                     colorBorderSecondary: '#FFC39E',
                     dangerShadow: '0 2px 0 rgba(255, 38, 5, 0.00)',
+                    colorBgTextHover: '#5CBCB6',
                 
-                borderRadius: '0.2em',
+                    borderRadius: '0.2em',
                     colorBgContainer: '#FFC39E',
 
                     // Alias Token
                     colorBgContainer: '#f6ffed',
                 },
                 
+                
                 components: {
                     Carousel: {
                         arrowSize: 40,
                     },
+                    Breadcrumb:{
+                        linkHoverColor: '#ffffff',
+                    }
                 }
             }}
             >

@@ -1,8 +1,20 @@
+import { Skeleton } from "antd"
+import Header from "./Header"
+import { FaFacebookSquare } from "react-icons/fa"
+import AuthenticatedFooter from "./AuthenticatedFooter"
+import AuthenticatedNavbar from "./AuthenticatedNavbar"
+
 const Loading = () => {
     return (
-        <div className="flex min-h-screen w-full items-center justify-center bg-gray-100">
-            Loading...
+        <div className="min-h-screen bg-gray-100">
+            <AuthenticatedNavbar/>
+            <main className='min-h-[100vh] p-[30px]'>
+                <Skeleton paragraph={{ rows: 10 }}/>
+            </main>
+            <AuthenticatedFooter />
         </div>
+
+        
     )
 }
 

@@ -5,7 +5,7 @@ import Input from "antd/es/input/Input";
 import { UserOutlined } from '@ant-design/icons';
 import { useEffect, useState } from "react";
 import { MdOutlineEmail } from "react-icons/md";
-import { Button, DatePicker, InputNumber, Radio, notification, Space } from "antd";
+import { Button, DatePicker, InputNumber, Radio, notification, Space, Breadcrumb } from "antd";
 
 import { usePrice } from "@/hooks/prices";
 import dayjs from "dayjs";
@@ -13,12 +13,18 @@ import TextArea from "antd/es/input/TextArea";
 import InputError from "@/components/InputError";
 import { useAuth } from "@/hooks/auth";
 import { useLaravelBooking } from "@/hooks/booking";
+import axios from "@/lib/axios";
+import { Router } from "next/router";
+import { redirect } from "next/dist/server/api-utils";
+import { permanentRedirect } from "next/navigation";
+import Loading from "../Loading";
 
 
 export default function Page() {
     const { user } = useAuth()
     const { adultPrice, childPrice, tentPitchPrice, bonfireKitPrice, cabinPrice, calcPricePerUnit } = usePrice()
-    const { 
+    const {
+        booking,
         first_name, 
         setFirstName, 
         last_name,
@@ -44,19 +50,22 @@ export default function Page() {
         note,
         setNote,
         createBooking,
+        editBooking,
         errors,
         contextHolder
     } = useLaravelBooking()
 
-    useEffect(() => {
-        setFirstName(user.first_name)
-        setLastName(user.last_name)
-        setEmail(user.email)
-    }, [])
+
+
+
 
     const submitForm = event => {
         event.preventDefault()
-        createBooking()
+        if (booking) {
+            editBooking()
+        } else{
+            createBooking()
+        }
     }
 
     const bookingTypeOption = [
@@ -81,12 +90,29 @@ export default function Page() {
         },
     ];
 
+   
 
     return (
         <>
             {contextHolder}
             <div>
-                <Header title="Booking" />
+                <header className="bg-white shadow">
+                    <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+
+                        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                        <Breadcrumb
+                            items={[
+                            {
+                                title: <a href="/">Home</a>,
+                            },
+                            {
+                                title: "Booking",
+                            }
+                            ]}
+                        />
+                        </h2>
+                    </div>
+                </header>
                 <div className="m-[30px] my-[60px] space-y-14">
                     <div className="space-y-1">
                         <h2 className="font-bold">Campsite Booking Confirmation</h2>

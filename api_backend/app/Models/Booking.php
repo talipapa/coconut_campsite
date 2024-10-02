@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 class Booking extends Model
 {
     use HasFactory, HasUlids;
+
+    protected $casts = [
+        'is_cabin' => 'boolean'
+    ];
     
     protected $fillable = [
         'user_id',
