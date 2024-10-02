@@ -179,7 +179,7 @@ export const useLaravelBooking = () => {
     useEffect(() => {
         if (booking?.message === true){
             setFirstName(booking?.data.first_name)
-            setLastName(booking?.data.first_name)
+            setLastName(booking?.data.last_name)
             setEmail(booking?.data.email)
             setTelNumber(booking?.data.tel_number)
             setAdultCount(booking?.data.adult_count)

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
-use App\Http\Resources\Api\v1\TransactionResource;
+use App\Http\Resources\Api\TransactionResource;
 use App\Models\CampManager;
 use App\Models\Manager;
 use Illuminate\Support\Facades\Auth;
