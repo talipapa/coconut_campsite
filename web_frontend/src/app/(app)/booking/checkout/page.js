@@ -10,18 +10,18 @@ import CashPayment from "./CashPayment";
 export default function Page() {
     
     const {booking} = useLaravelBooking()
-    const {adultPrice, childPrice, tentPitchPrice, bonfireKitPrice, cabinPrice, calcPricePerUnit, calculateSubPrice} = usePrice()
+    const {adultPrice, checkInDate, childPrice, tentPitchPrice, bonfireKitPrice, cabinPrice, calcPricePerUnit, calculateSubPrice} = usePrice()
 
-    const [componentPaymentMethod, setComponentPaymentMethod] = useState("online")
+    const [componentPaymentMethod, setComponentPaymentMethod] = useState("XENDIT")
 
     const paymentOptions = [
         {
             label: "Online payment",
-            value: "online"
+            value: "XENDIT"
         },
         {
             label: "Cash on site",
-            value: "cash"
+            value: "CASH"
         },
     ]
 
@@ -66,8 +66,8 @@ export default function Page() {
                         <h1 className="text-2xl font-semibold">Booking Summary</h1>
                         <div className="space-y-5">
                             <ul className="space-y-1">
-                                <li>Check In Date: {booking?.data.check_in}</li>
-                                <li className="capitalize">Booking Type: {booking?.data.booking_type}</li>
+                                <li>Check In Date: {booking.data.check_in}</li>
+                                <li className="capitalize">Booking Type: {checkInDate}</li>
                             </ul>
                             <ul className="space-y-1">
                                 <li>First Name: {booking?.data.first_name}</li>
@@ -102,7 +102,7 @@ export default function Page() {
                             buttonStyle="solid"
                         />
 
-                        {componentPaymentMethod === "cash" ? <CashPayment/> : <OnlinePayment/>}
+                        {componentPaymentMethod === "CASH" ? <CashPayment paymentType={componentPaymentMethod}/> : <OnlinePayment paymentType={componentPaymentMethod}/>}
                         
                     </div>
                 </div>

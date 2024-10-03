@@ -5,7 +5,7 @@ import Input from "antd/es/input/Input";
 import { UserOutlined } from '@ant-design/icons';
 import { useEffect, useState } from "react";
 import { MdOutlineEmail } from "react-icons/md";
-import { Button, DatePicker, InputNumber, Radio, notification, Space, Breadcrumb } from "antd";
+import { Button, DatePicker, InputNumber, Radio, notification, Space, Breadcrumb, message } from "antd";
 
 import { usePrice } from "@/hooks/prices";
 import dayjs from "dayjs";
@@ -18,6 +18,8 @@ import { Router } from "next/router";
 import { redirect } from "next/dist/server/api-utils";
 import { permanentRedirect } from "next/navigation";
 import Loading from "../Loading";
+import { useRouter } from "next/navigation";
+
 
 
 export default function Page() {
@@ -55,16 +57,24 @@ export default function Page() {
         contextHolder
     } = useLaravelBooking()
 
+    const router = useRouter()
+
+    useEffect(() => {
+        if (booking?.message === true && booking?.data.status === "PAID"){
+            router.push('/account')
+        }
+    }, [booking])
+
 
 
 
 
     const submitForm = event => {
         event.preventDefault()
-        if (booking) {
-            editBooking()
-        } else{
+        if (booking['message'] === false) {
             createBooking()
+        } else{
+            editBooking()
         }
     }
 

@@ -4,31 +4,46 @@ import MailFilled from '@ant-design/icons/MailFilled'
 import { useAuth } from '@/hooks/auth'
 import { usePrice } from '@/hooks/prices'
 import { useLaravelBooking } from '@/hooks/booking'
+import axios from '@/lib/axios'
 
-const OnlinePayment = () => {
+const OnlinePayment = (componentPaymentMethod) => {
   const { user } = useAuth({ middleware: 'auth' })
-
   const [invoiceEmail, setInvoiceEmail] = React.useState(user?.email)
-  const [paymentMethodVal, setPaymentMethodVal] = React.useState("gcash")
-
-  const {calculateSubPrice, calculateFee, calculateTotalPrice} = usePrice()
+  
   const {booking} = useLaravelBooking()
-
+  const {calculateSubPrice, calculateFee, calculateTotalPrice} = usePrice()
+  const [paymentMethodVal, setPaymentMethodVal] = React.useState("PH_GCASH")
   const subTotal = calculateSubPrice()
+
+ // TODO LIST: REDIRECT TO SUCCESS PAYMENT ROUTE
+  const confirmBooking = async () => {
+    axios.post('api/v1/transaction', {
+      email: invoiceEmail,
+      booking_id: booking.data.id,
+      price: calculateTotalPrice(subTotal, calculateFee(subTotal, paymentMethodVal)),
+      payment_type: componentPaymentMethod['paymentType'],
+      paymentMethod: paymentMethodVal
+    })
+    .then((response) => {
+      // console.log(response.data.data.)
+      window.location.href =
+      response.data.data.actions.desktop_web_checkout_url
+    })
+  }
   
 
   const paymentMethod = [
     {
         label: "Gcash",
-        value: "gcash"
+        value: "PH_GCASH"
     },
     {
         label: "Paymaya",
-        value: "paymaya"
+        value: "PH_PAYMAYA"
     },
     {
         label: "GrabPay",
-        value: "grabpay"
+        value: "PH_GRABPAY"
     },
 ]
 
@@ -74,7 +89,7 @@ const OnlinePayment = () => {
 
 
       </div>
-      <Button className="w-full" type="primary" size='large'>Confirm Booking</Button>
+      <Button className="w-full" type="primary" size='large' onClick={confirmBooking}>Confirm Booking</Button>
     </div>
   )
 }

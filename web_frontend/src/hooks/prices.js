@@ -16,10 +16,10 @@ export const usePrice = () => {
     const [cabinPrice, setCabinPrice] = useState(650.00)
 
     const [eWalletFee, setEWalletFee] = useState({
-        "gcash" : 0.023,
-        "paymaya" : 0.018,
-        "grabpay" : 0.020,
-        "shopeepay" : 0.020,
+        "PH_GCASH" : 0.023,
+        "PH_PAYMAYA" : 0.018,
+        "PH_GRABPAY" : 0.020,
+        "PH_SHOPEEPAY" : 0.020,
     })
 
     const [subPrice, setSubPrice] = useState(0)

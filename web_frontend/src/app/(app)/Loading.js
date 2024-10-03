@@ -9,9 +9,9 @@ const Loading = () => {
         <div className="min-h-screen bg-gray-100">
             <AuthenticatedNavbar/>
             <main className='min-h-[100vh] p-[30px]'>
-                <Skeleton paragraph={{ rows: 10 }}/>
+                <Skeleton paragraph={{ rows: 10 }} active/>
             </main>
-            <AuthenticatedFooter />
+            <AuthenticatedFooter  />
         </div>
 
         

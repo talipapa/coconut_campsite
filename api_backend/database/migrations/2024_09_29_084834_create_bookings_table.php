@@ -28,7 +28,7 @@ return new class extends Migration
             $table->integer('bonfire_kit_count');
             $table->boolean('is_cabin');
             $table->text('note')->nullable();
-            $table->string('status')->default('pending');
+            $table->string('status')->default('PENDING');
             $table->timestamps();
         });
     }
