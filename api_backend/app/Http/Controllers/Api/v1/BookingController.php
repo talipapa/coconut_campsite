@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\BookingResource;
+use App\Http\Resources\v1\SuccessfulBookingResource;
 use App\Models\Booking;
 use App\Models\User;
 use Carbon\Carbon;
@@ -31,14 +32,25 @@ class BookingController extends Controller
 
     public function showSelfBooking(Request $request){
         $booking = Booking::where('user_id', $request->user()->id)->first();
+
         if (!$booking) {
             return response()->json(['message' => false], 201);
         }
-        return response()->json(
-            ['message' => true, 
-             'data' => new BookingResource($booking)
-            ]
-            , 201);
+
+        if ($booking->transaction) {
+            return response()->json(
+                ['message' => true, 
+                 'data' => new SuccessfulBookingResource($booking),], 201
+                );
+        } else{
+            return response()->json(
+                ['message' => true, 
+                 'data' => new BookingResource($booking)], 201
+            );
+
+        }
+
+        
     }
 
 

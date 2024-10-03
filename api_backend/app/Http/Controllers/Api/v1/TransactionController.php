@@ -93,15 +93,16 @@ class TransactionController extends Controller
             
                     // Send payment request to XENDIT
                     $response = Xendivel::payWithEwallet($xenditRequest)->getResponse();
+                    return response()->json([
+                        'message' => '[Online Payment] Booking Created Successfully',
+                        'data' => $response
+                    ], 201);
+                    
                 } catch (\Throwable $th) {
                     Log::error($th);
                     $transaction->delete();
                 }
         
-                return response()->json([
-                    'message' => '[Online Payment] Booking Created Successfully',
-                    'data' => $response
-                ], 201);
             case 'CASH':
                 # code...
                 $transaction = Transaction::create([

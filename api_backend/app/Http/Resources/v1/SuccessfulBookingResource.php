@@ -5,7 +5,7 @@ namespace App\Http\Resources\v1;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BookingResource extends JsonResource
+class SuccessfulBookingResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -30,6 +30,7 @@ class BookingResource extends JsonResource
             'is_cabin' => $this->is_cabin,
             'note' => $this->note,
             'status' => $this->status,
+            'transactionStatus' => $this->transaction->status,
             'created_at' => $this->created_at,
         ];
     }

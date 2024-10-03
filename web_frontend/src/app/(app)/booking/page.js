@@ -1,6 +1,6 @@
 "use client"
 
-import Header from "../Header";
+import axios from "@/lib/axios";
 import Input from "antd/es/input/Input";
 import { UserOutlined } from '@ant-design/icons';
 import { useEffect, useState } from "react";
@@ -13,60 +13,217 @@ import TextArea from "antd/es/input/TextArea";
 import InputError from "@/components/InputError";
 import { useAuth } from "@/hooks/auth";
 import { useLaravelBooking } from "@/hooks/booking";
-import axios from "@/lib/axios";
-import { Router } from "next/router";
-import { permanentRedirect } from "next/navigation";
-import Loading from "../Loading";
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation';
 
 
 
 export default function Page() {
     const { user } = useAuth()
+    const router = useRouter()
     const { adultPrice, childPrice, tentPitchPrice, bonfireKitPrice, cabinPrice, calcPricePerUnit } = usePrice()
     const {
         booking,
-        first_name, 
-        setFirstName, 
-        last_name,
-        setLastName,
-        email,
-        setEmail,
-        telNumber,
-        setTelNumber,
-        adultCount,
-        setAdultCount,
-        childCount,
-        setChildCount,
-        checkInDate,
-        setCheckInDate,
-        bookingType,
-        setBookingType,
-        tentPitchingCount,
-        setTentPitchingCount,
-        bonfireKitCount,
-        setBonfireKitCount,
-        isCabin,
-        setIsCabin,
-        note,
-        setNote,
-        createBooking,
-        editBooking,
-        errors,
-        contextHolder
+        apiVersion,
+        mutate,
     } = useLaravelBooking()
+    const [existBooking, setExistBooking] = useState()
+    const [first_name, setFirstName] = useState(user.first_name)
+    const [last_name, setLastName] = useState(user.last_name)
+    const [email, setEmail] = useState(user.email)
+    const [telNumber, setTelNumber] = useState('')
+    const [adultCount, setAdultCount] = useState(1)
+    const [childCount, setChildCount] = useState(0)
+    const [checkInDate, setCheckInDate] = useState('') 
+    const [bookingType, setBookingType] = useState('daytour')
+    const [tentPitchingCount, setTentPitchingCount] = useState(0)
+    const [bonfireKitCount, setBonfireKitCount] = useState(0)
+    const [isCabin, setIsCabin] = useState(false)
+    const [note, setNote] = useState('')
+    const [errors, setErrors] = useState([])
 
-
+    
     useEffect(() => {
         if (booking?.message === true && booking?.data.status === "PAID"){
-            redirect('/account')
+            router.push('/view-booking')
         }
+        
         if (booking?.message === true && booking?.data.transactionStatus === "CASH_PENDING"){
-            redirect('/account')
+            router.push('/view-booking')
         }
+
+        if (booking?.message === true && booking?.data.status === "PENDING"){
+            setFirstName(booking?.data.first_name)
+            setLastName(booking?.data.last_name)
+            setEmail(booking?.data.email)
+            setTelNumber(booking?.data.tel_number)
+            setAdultCount(booking?.data.adult_count)
+            setChildCount(booking?.data.child_count)
+            setCheckInDate(dayjs(booking?.data.check_in))
+            setBookingType(booking?.data.booking_type)
+            setTentPitchingCount(booking?.data.tent_pitching_count)
+            setBonfireKitCount(booking?.data.bonfire_kit_count)
+            setIsCabin(booking?.data.is_cabin)
+            setNote(booking?.data.note)
+        } 
     }, [booking])
 
+    // Display feedback notification
+    const [api, contextHolder] = notification.useNotification();
+    const openErrorValidationNotification = ({errors}) => {
+        api['error']({
+          message: 'Something is wrong!',
+          placement: 'bottomRight',
+          description:
+            <>
+                {Object.keys(errors).map((key) => (
+                    <>
+                        {errors[key].map((error) => (
+                            <p>{error}</p>
+                        ))}
+                    </>
+                ))}
+            </>
+        });
+    }
+    const openErrorExistingNotification = () => {
+        api['error']({
+          message: 'Existing booking detected!',
+          placement: 'bottomRight',
+          description: "You already have existing booking!"
+          
+        });
+    }
+    
+    const openSuccessNotification = () => {
+        api['success']({
+          message: 'You will be redirected shortly!',
+          placement: 'bottomRight',
+          description:
+            "Thank you for booking with us!, You will be redirected to Payment page in a few seconds."
+        });
+    }
 
+    const createBooking = async () => {
+        const bookingData = {
+            first_name,
+            last_name,
+            email,
+            telNumber,
+            adultCount,
+            childCount,
+            checkInDate,
+            bookingType,
+            tentPitchingCount,
+            bonfireKitCount,
+            isCabin,
+            note,
+            errors,
+            setErrors,
+        }
+        
+        try {
+            setErrors([])
+            const response = await axios.post('api/' + apiVersion + "/booking", bookingData)
+            mutate('/api/v1/booking-check');
+            
+            switch (response.status) {
+                case 200:
+                    openSuccessNotification()
+                    setTimeout(() => {
+                        router.push('/booking/checkout')
+                    }, 300)
+                    
+                    break;
+                case 201:
+                    openSuccessNotification()
+                    setTimeout(() => {
+                        router.push('/booking/checkout')
+                    }, 300)
+                    
+                    break;
+                case 203:
+                    openSuccessNotification()
+                    setTimeout(() => {
+                        router.push('/booking/checkout')
+                    }, 300)
+                    
+                    break;
+                case 204:
+                    openSuccessNotification()
+                    setTimeout(() => {
+                        router.push('/booking/checkout')
+                    }, 300)
+                    break;
+                default:
+                    openErrorValidationNotification({errors: "Something went wrong!"})
+                    break;
+            }
+
+        } catch (error) {
+            switch (error.response.status) {
+                case 400:
+                    openErrorExistingNotification()
+                    break;
+                case 422:
+                    openErrorValidationNotification({errors: error.response.data.errors})
+                    setErrors(error.response.data.errors)
+                    break;
+                default:
+                    throw error
+            }
+        }
+
+        
+
+    }
+
+    const editBooking = async () => {
+        const bookingData = {
+            first_name,
+            last_name,
+            user_id: user?.id,
+            email,
+            telNumber,
+            adultCount,
+            childCount,
+            checkInDate,
+            bookingType,
+            tentPitchingCount,
+            bonfireKitCount,
+            isCabin,
+            note,
+            errors,
+            setErrors,
+        }
+
+        try {
+            setErrors([])
+            const response = await axios.patch('api/' + apiVersion + "/booking/" + booking?.data.id, bookingData)
+            mutate();
+            if (response.status === 200 || response.status === 201 || response.status === 203 || response.status === 204){
+                openSuccessNotification()
+                setTimeout(() => {
+                    router.push('/booking/checkout')
+                }, 2000)
+            }
+
+        } catch (error) {
+            console.log(error)
+            switch (error.response?.status) {
+                case 400:
+                    openErrorExistingNotification()
+                    break;
+                case 422:
+                    openErrorValidationNotification({errors: error.response.data.errors})
+                    setErrors(error.response.data.errors)
+                    break;
+                default:
+                    throw error
+            }
+        }
+
+
+    }
 
 
 
@@ -117,7 +274,10 @@ export default function Page() {
                                 title: <a href="/">Home</a>,
                             },
                             {
-                                title: "Booking",
+                                title: <span className="text-black">Booking</span>,
+                            },
+                            {
+                                title: <a href="/booking/checkout">Checkout</a>,
                             }
                             ]}
                         />
