@@ -1,32 +1,16 @@
 'use client'
 
 import { useLaravelBooking } from "@/hooks/booking";
-import { Breadcrumb, Button, Radio, Skeleton } from "antd";
+import { Breadcrumb, Button, Skeleton } from "antd";
 import { usePrice } from "@/hooks/prices";
-import OnlinePayment from "./OnlinePayment";
-import { useEffect, useState } from "react";
-import CashPayment from "./CashPayment";
-import { redirect } from 'next/navigation'
+import CheckoutCard from "./CheckoutCard";
+
 
 export default function Page() {
-
     const {booking} = useLaravelBooking()
     const {adultPrice, checkInDate, childPrice, tentPitchPrice, bonfireKitPrice, cabinPrice, calcPricePerUnit, calculateSubPrice} = usePrice()
-    const [componentPaymentMethod, setComponentPaymentMethod] = useState("XENDIT")
-
-    const paymentOptions = [
-        {
-            label: "Online payment",
-            value: "XENDIT"
-        },
-        {
-            label: "Cash on site",
-            value: "CASH"
-        },
-    ]
-
     
-    if (!booking) {
+    if (booking && booking.data == undefined) {
         return (
             <>
                 <div className="m-[30px]">
@@ -36,8 +20,12 @@ export default function Page() {
         )
     }
 
-    console.log(booking)
-    
+    if (booking.message === false) {
+        return (
+            <>        
+            </>
+        )
+    }
     
     return (
         <>
@@ -70,45 +58,33 @@ export default function Page() {
                         <h1 className="text-2xl font-semibold">Booking Summary</h1>
                         <div className="space-y-5">
                             <ul className="space-y-1">
-                                <li>Check In Date: {booking?.data?.check_in}</li>
+                                <li>Check In Date: {booking.data.check_in}</li>
                                 <li className="capitalize">Booking Type: {checkInDate}</li>
                             </ul>
                             <ul className="space-y-1">
-                                <li>First Name: {booking?.data.first_name}</li>
-                                <li>Last Name: {booking?.data.last_name}</li>
-                                <li>Email: {booking?.data.email}</li>
-                                <li>Tel Number: {booking?.data.tel_number}</li>
+                                <li>First Name: {booking.data.first_name}</li>
+                                <li>Last Name: {booking.data.last_name}</li>
+                                <li>Email: {booking.data.email}</li>
+                                <li>Tel Number: {booking.data.tel_number}</li>
                             </ul>
                             <ul className="space-y-1">
-                                <li>{booking?.data.adult_count !== 0 && `Adult (${booking?.data.adult_count} pax * ${childPrice}) = P ${(booking?.data.adult_count * adultPrice).toFixed(2)}` }</li>
+                                <li>{booking.data.adult_count !== 0 && `Adult (${booking.data.adult_count} pax * ${childPrice}) = P ${(booking.data.adult_count * adultPrice).toFixed(2)}` }</li>
 
-                                <li>{booking?.data.child_count !== 0 && `Child (${booking?.data.child_count} pax * ${childPrice}) = P ${calcPricePerUnit(childPrice, booking?.data.child_count)}` }</li>
+                                <li>{booking.data.child_count !== 0 && `Child (${booking.data.child_count} pax * ${childPrice}) = P ${calcPricePerUnit(childPrice, booking.data.child_count)}` }</li>
 
-                                <li>{booking?.data.tent_pitching_count !== 0 && `Tent pitching (${booking?.data.tent_pitching_count} * ${tentPitchPrice}) = P ${calcPricePerUnit(tentPitchPrice, booking?.data.tent_pitching_count)}` }</li>
+                                <li>{booking.data.tent_pitching_count !== 0 && `Tent pitching (${booking.data.tent_pitching_count} * ${tentPitchPrice}) = P ${calcPricePerUnit(tentPitchPrice, booking.data.tent_pitching_count)}` }</li>
 
-                                <li>{booking?.data.bonfire_kit_count !== 0 && `Tent pitching (${booking?.data.bonfire_kit_count} * ${bonfireKitPrice}) = P ${calcPricePerUnit(bonfireKitPrice, booking?.data.bonfire_kit_count)}` }</li>
-                                <li>{booking?.data.is_cabin ? `Cabin (4-5 person) = P ${cabinPrice.toFixed(2)}` : "No"}</li>
+                                <li>{booking.data.bonfire_kit_count !== 0 && `Tent pitching (${booking.data.bonfire_kit_count} * ${bonfireKitPrice}) = P ${calcPricePerUnit(bonfireKitPrice, booking.data.bonfire_kit_count)}` }</li>
+                                <li>{booking.data.is_cabin && `Cabin (4-5 person) = P ${cabinPrice.toFixed(2)}`}</li>
                                 <li className="font-bold">{`Total: P ${calculateSubPrice()}`}</li>
                             </ul>
                             <ul>
-                                <li>Note: {booking?.data.note}</li>
+                                { booking.data.note && <li>Note: {booking.data.note}</li>}
                             </ul>
                         </div>
                     </div>
-                    <div className="bg-white w-full h-full px-[30px] py-[50px] flex flex-col justify-between space-y-6">
-                        <Radio.Group
-                            block
-                            value={componentPaymentMethod}
-                            onChange={(e) => setComponentPaymentMethod(e.target.value)}
-                            options={paymentOptions}
-                            size="large"
-                            optionType="button"
-                            buttonStyle="solid"
-                        />
+                    <CheckoutCard/>
 
-                        {componentPaymentMethod === "CASH" ? <CashPayment paymentType={componentPaymentMethod}/> : <OnlinePayment paymentType={componentPaymentMethod}/>}
-                        
-                    </div>
                 </div>
             </div>
         </>
