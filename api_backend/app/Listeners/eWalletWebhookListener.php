@@ -3,6 +3,9 @@
 namespace App\Listeners;
 
 use App\Events\eWalletEvents;
+use App\Models\Booking;
+use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
 class eWalletWebhookListener
@@ -42,9 +45,52 @@ class eWalletWebhookListener
         // Event type
         Log::info($event->webhook_data['event']);
 
-        if ($event->webhook_data['event'] === 'ewallet.capture'){
+        if($event->webhook_data['data']['status'] === 'SUCCEEDED'){
+            // Get the transaction
+            $transaction = Transaction::find($event->webhook_data['data']['reference_id']);
+            
+            // Bind xendit product ID to transaction
             $data = $event->webhook_data['data'];
             $id = substr($data['id'], 4, -4);
+            $transaction->xendit_product_id = $id;
+
+            // Set the transaction status to success
+            $transaction->status = $event->webhook_data['data']['status'];
+
+            // Get the booking
+            $booking = Booking::find($transaction->booking_id);
+
+            // Set the booking status to PAID
+            $booking->status = 'PAID';
+
+            $booking->save();
+            $transaction->save();
+
+            logger('Online payment succeeded!!', [
+                'email' => $booking->user->email,
+                'transaction_id' => $transaction->id,
+                'xendit_product_id' => $transaction->xendit_product_id,
+                'status' => $transaction->status,
+                'booking_id' => $booking->id,
+                'status' => $booking->status
+            ]);
+        }
+
+        if($event->webhook_data['data']['status'] === 'FAILED'){
+            // Get the transaction
+            $transaction = Transaction::find($event->webhook_data['data']['reference_id']);
+            
+            // Set the transaction status to failed
+            $transaction->status = $event->webhook_data['data']['status'];
+            $transaction->save();
+            logger('Transaction status updated to failed', [
+                'user email' => User::find($transaction->user_id)->email,
+                'transaction_id' => $transaction->id,
+                'status' => $transaction->status
+            ]);
+        }
+
+        if ($event->webhook_data['event'] === 'ewallet.capture'){
             // Xendit product ID
             logger('Xendit ID', [$id]); 
             // Xendit order ID

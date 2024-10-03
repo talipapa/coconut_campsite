@@ -15,7 +15,7 @@ const AuthenticatedNavbar = ({user, currentPath}) => {
   return (
     <nav className='bg-[#855139] p-[30px] text-white flex flex-row justify-between space-x-10 '>
         <div className='w-full flex flex-row items-end space-x-5'>
-                <h1 className='text-2xl font-semibold'>Coconut Campsite</h1>
+                <a href='/' className='text-2xl font-semibold'>Coconut Campsite</a>
                 <div className='flex flex-row space-x-3'>
                     <FaFacebookSquare onClick={() => window.open("https://www.facebook.com/profile.php?id=61558384738390", "_blank")}  size={30} color='#0866FF' className='hover:scale-125 transition-all '/>
                 </div>

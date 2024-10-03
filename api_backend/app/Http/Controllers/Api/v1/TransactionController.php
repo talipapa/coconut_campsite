@@ -62,45 +62,65 @@ class TransactionController extends Controller
             return response()->json(['message' => 'Transaction already exists for this booking'], 400);
         }
 
-        // Create transaction
-        $transaction = Transaction::create([
-            'user_id' => Auth::user()->id,
-            'booking_id' => $validated['booking_id'],
-            'price' => $validated['price'],
-            'payment_type' => $validated['payment_type'],
-        ]);
-        $transactionJsonObject = new TransactionResource($transaction);
+        switch ($validated['payment_type']) {
+            case 'XENDIT':
+                // Create transaction
+                $transaction = Transaction::create([
+                    'user_id' => Auth::user()->id,
+                    'booking_id' => $validated['booking_id'],
+                    'price' => $validated['price'],
+                    'payment_type' => $validated['payment_type'],
+                ]);
+                $transactionJsonObject = new TransactionResource($transaction);
+        
+                try {
+                    //code...
+            
+                    // Prepare payment request body
+                    $xenditRequest = [
+                        'reference_id' => $transaction->id,
+                        'amount' => floatval($validated['price']),
+                        'currency' => 'PHP',
+                        'checkout_method' => 'ONE_TIME_PAYMENT',
+                        'channel_code' => $validated['paymentMethod'],
+                        'channel_properties' => [
+                            'success_redirect_url' => env('XENDIT_SUCCESS_URL'),
+                            'failure_redirect_url' => env('XENDIT_FAILURE_URL'),
+                        ],
+                    ];
+        
+                    Log::info($xenditRequest);
+            
+                    // Send payment request to XENDIT
+                    $response = Xendivel::payWithEwallet($xenditRequest)->getResponse();
+                } catch (\Throwable $th) {
+                    Log::error($th);
+                    $transaction->delete();
+                }
+        
+                return response()->json([
+                    'message' => '[Online Payment] Booking Created Successfully',
+                    'data' => $response
+                ], 201);
+            case 'CASH':
+                # code...
+                $transaction = Transaction::create([
+                    'user_id' => Auth::user()->id,
+                    'booking_id' => $validated['booking_id'],
+                    'price' => $validated['price'],
+                    'payment_type' => $validated['payment_type'],
+                    'status' => 'CASH_PENDING'
+                ]);
 
-        try {
-            //code...
     
-            // Prepare payment request body
-            $xenditRequest = [
-                'reference_id' => $transaction->id,
-                'amount' => floatval($validated['price']),
-                'currency' => 'PHP',
-                'checkout_method' => 'ONE_TIME_PAYMENT',
-                'channel_code' => 'PH_GCASH',
-                'channel_properties' => [
-                    'success_redirect_url' => 'https://example.com/success',
-                    'failure_redirect_url' => 'https://example.com/failure',
-                ],
-            ];
-
-            Log::info($xenditRequest);
-    
-            // Send payment request to XENDIT
-            $response = Xendivel::payWithEwallet($xenditRequest)->getResponse();
-        } catch (\Throwable $th) {
-            Log::error($th);
-            $transaction->delete();
+                return response()->json([
+                    'message' => '[Online Payment] Transaction Created Successfully',
+                    'data' => new TransactionResource($transaction)
+                ], 201);
+            default:
+                return response()->json(['message' => 'Invalid payment type'], 400);
         }
-        return response()->json([
-            'message' => 'Campsite type tag added successfully',
-            'data' => $response
-        ], 201);
-
-    }
+    } 
 
     /**
      * Display the specified resource.

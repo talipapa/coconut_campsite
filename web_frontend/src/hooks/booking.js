@@ -105,7 +105,6 @@ export const useLaravelBooking = () => {
             if (response.status === 200 || response.status === 201 || response.status === 203 || response.status === 204){
                 openSuccessNotification()
                 setTimeout(() => {
-                
                     router.push('/booking/checkout')
                 }, 200)
             }
@@ -160,6 +159,7 @@ export const useLaravelBooking = () => {
             }
 
         } catch (error) {
+            console.log(error)
             switch (error.response.status) {
                 case 400:
                     openErrorExistingNotification()
@@ -177,7 +177,7 @@ export const useLaravelBooking = () => {
     }
 
     useEffect(() => {
-        if (booking?.message === true){
+        if (booking?.message === true && booking?.data.status === "PENDING"){
             setFirstName(booking?.data.first_name)
             setLastName(booking?.data.last_name)
             setEmail(booking?.data.email)
@@ -190,6 +190,9 @@ export const useLaravelBooking = () => {
             setBonfireKitCount(booking?.data.bonfire_kit_count)
             setIsCabin(booking?.data.is_cabin)
             setNote(booking?.data.note)
+        } else{
+            // The user has existing booking and transaction is paid
+            // Redirect to /account page
         }
 
         if (first_name === ""){
