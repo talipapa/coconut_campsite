@@ -99,7 +99,7 @@ class BookingController extends Controller
                 'bonfire_kit_count' => $validated['bonfireKitCount'],
                 'is_cabin' => $validated['isCabin'],
                 'note' => $request->note,
-                'status' => 'pending',
+                'status' => 'PENDING',
             ]);
             $bookingJson = new BookingResource($booking);
         } catch (\Throwable $th) {

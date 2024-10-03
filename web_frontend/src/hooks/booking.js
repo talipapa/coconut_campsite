@@ -102,11 +102,37 @@ export const useLaravelBooking = () => {
         try {
             setErrors([])
             const response = await axios.post('api/' + apiVersion + "/booking", bookingData)
-            if (response.status === 200 || response.status === 201 || response.status === 203 || response.status === 204){
-                openSuccessNotification()
-                setTimeout(() => {
-                    router.push('/booking/checkout')
-                }, 200)
+
+            switch (response.status) {
+                case 200:
+                    openSuccessNotification()
+                    setTimeout(() => {
+                        router.push('/booking/checkout')
+                    }, 200)
+                    
+                    break;
+                case 201:
+                    openSuccessNotification()
+                    setTimeout(() => {
+                        router.push('/booking/checkout')
+                    }, 200)
+                    
+                    break;
+                case 203:
+                    openSuccessNotification()
+                    setTimeout(() => {
+                        router.push('/booking/checkout')
+                    }, 200)
+                    
+                    break;
+                case 204:
+                    openSuccessNotification()
+                    setTimeout(() => {
+                        router.push('/booking/checkout')
+                    }, 200)
+                    break;
+                default:
+                    break;
             }
 
         } catch (error) {
@@ -190,16 +216,14 @@ export const useLaravelBooking = () => {
             setBonfireKitCount(booking?.data.bonfire_kit_count)
             setIsCabin(booking?.data.is_cabin)
             setNote(booking?.data.note)
-        } else{
-            // The user has existing booking and transaction is paid
-            // Redirect to /account page
-        }
+        } 
 
         if (first_name === ""){
             setFirstName(user?.first_name)
             setLastName(user?.last_name)
             setEmail(user?.email)
         }
+
     }, [booking, user])
 
     return {

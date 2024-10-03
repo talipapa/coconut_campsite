@@ -15,10 +15,9 @@ import { useAuth } from "@/hooks/auth";
 import { useLaravelBooking } from "@/hooks/booking";
 import axios from "@/lib/axios";
 import { Router } from "next/router";
-import { redirect } from "next/dist/server/api-utils";
 import { permanentRedirect } from "next/navigation";
 import Loading from "../Loading";
-import { useRouter } from "next/navigation";
+import { redirect } from 'next/navigation'
 
 
 
@@ -57,11 +56,13 @@ export default function Page() {
         contextHolder
     } = useLaravelBooking()
 
-    const router = useRouter()
 
     useEffect(() => {
         if (booking?.message === true && booking?.data.status === "PAID"){
-            router.push('/account')
+            redirect('/account')
+        }
+        if (booking?.message === true && booking?.data.transactionStatus === "CASH_PENDING"){
+            redirect('/account')
         }
     }, [booking])
 

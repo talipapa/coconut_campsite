@@ -4,14 +4,14 @@ import { useLaravelBooking } from "@/hooks/booking";
 import { Breadcrumb, Button, Radio, Skeleton } from "antd";
 import { usePrice } from "@/hooks/prices";
 import OnlinePayment from "./OnlinePayment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CashPayment from "./CashPayment";
+import { redirect } from 'next/navigation'
 
 export default function Page() {
-    
+
     const {booking} = useLaravelBooking()
     const {adultPrice, checkInDate, childPrice, tentPitchPrice, bonfireKitPrice, cabinPrice, calcPricePerUnit, calculateSubPrice} = usePrice()
-
     const [componentPaymentMethod, setComponentPaymentMethod] = useState("XENDIT")
 
     const paymentOptions = [
@@ -25,6 +25,7 @@ export default function Page() {
         },
     ]
 
+    
     if (!booking) {
         return (
             <>
@@ -34,6 +35,9 @@ export default function Page() {
             </>
         )
     }
+
+    console.log(booking)
+    
     
     return (
         <>
@@ -66,7 +70,7 @@ export default function Page() {
                         <h1 className="text-2xl font-semibold">Booking Summary</h1>
                         <div className="space-y-5">
                             <ul className="space-y-1">
-                                <li>Check In Date: {booking.data.check_in}</li>
+                                <li>Check In Date: {booking?.data?.check_in}</li>
                                 <li className="capitalize">Booking Type: {checkInDate}</li>
                             </ul>
                             <ul className="space-y-1">
