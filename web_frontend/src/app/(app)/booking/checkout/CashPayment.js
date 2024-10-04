@@ -29,7 +29,7 @@ const CashPayment = ({paymentType}) => {
     })
     .then((response) => {
       // console.log(response.data.data.)
-      router.push('/account')
+      router.push('/view-booking')
       
     })
   }
