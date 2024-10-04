@@ -51,3 +51,8 @@ The booking is verified by the manager/campsite_owner/caretaker
 3. in cmd, enter this command: ngrok http http:localhost:8000 --url=glorious-live-marten.ngrok-free.app 
 
 This lets the ngrok host application that listen to port 8000 which is the "Api server" of this project
+
+
+## BUGS & ISSUE JOURNAL
+
+1. Laravel Returns 401 when calling the api route in Next.JS server component | FIX: Referrer in header is missing, its stated in laravel documentation that Referrer must be included

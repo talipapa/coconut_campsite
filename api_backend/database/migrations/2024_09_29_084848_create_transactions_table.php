@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('status')->default('PENDING');
             $table->string('payment_type');
             $table->string('xendit_product_id')->nullable();
+            $table->softDeletes($column = 'deleted_at', $precision = 0);
             $table->timestamps();
         });
     }
