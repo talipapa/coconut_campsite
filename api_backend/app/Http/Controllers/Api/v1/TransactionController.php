@@ -9,6 +9,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\CampManager;
 use App\Models\Manager;
+use GlennRaya\Xendivel\Xendivel as OrigXendivel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
@@ -56,12 +57,18 @@ class TransactionController extends Controller
             'payment_type' => 'required',
         ]);
 
+
         // Check first if the booking doesn't have a transaction yet
         $transaction = Transaction::where('booking_id', $validated['booking_id'])->first();
         if ($transaction) {
-            return response()->json(['message' => 'Transaction already exists for this booking'], 400);
+            $transaction->status = 'CANCELLED';
+            $transaction->save();
+            // $response = OrigXendivel::getPayment('ewc_'.$transaction->xendit_product_id, 'ewallet')->getResponse();
+            // Log::info("Xendit response", [$response]);
+            $transaction->delete();
+	    
         }
-
+        
         switch ($validated['payment_type']) {
             case 'XENDIT':
                 // Create transaction
@@ -70,9 +77,8 @@ class TransactionController extends Controller
                     'booking_id' => $validated['booking_id'],
                     'price' => $validated['price'],
                     'payment_type' => $validated['payment_type'],
-                ]);
-                $transactionJsonObject = new TransactionResource($transaction);
-        
+                ]);    
+
                 try {
                     //code...
             
@@ -86,22 +92,38 @@ class TransactionController extends Controller
                         'channel_properties' => [
                             'success_redirect_url' => env('XENDIT_SUCCESS_URL'),
                             'failure_redirect_url' => env('XENDIT_FAILURE_URL'),
+                            'cancel_redirect_url' => env('XENDIT_CANCEL_URL'),
                         ],
                     ];
+
+                    // Error simulation
+                    // $xenditRequest = [
+                    //     'reference_id' => $transaction->id,
+                    //     'amount' => 20105,
+                    //     'currency' => 'PH',
+                    //     'checkout_method' => 'ONE_TIME_PAYMENT',
+                    //     'channel_code' => "PH_SHOpP",
+                    //     'channel_properties' => [
+                    //         'success_redirect_url' => env('XENDIT_SUCCESS_URL'),
+                    //         'failure_redirect_url' => env('XENDIT_FAILURE_URL'),
+                    //     ],
+                    // ];
         
-                    Log::info($xenditRequest);
-            
                     // Send payment request to XENDIT
-                    $response = Xendivel::payWithEwallet($xenditRequest)->getResponse();
+                    $response = Xendivel::payWithEwallet($xenditRequest)->getResponse();                    
+                    $transaction->xendit_product_id = substr($response->id, 4);
+                    $transaction->save();
                     return response()->json([
                         'message' => '[Online Payment] Booking Created Successfully',
                         'data' => $response
                     ], 201);
                     
                 } catch (\Throwable $th) {
-                    Log::error($th);
+                    Log::info($th);
                     $transaction->delete();
+                    return response()->json($th->getMessage(), 500);
                 }
+                break;
         
             case 'CASH':
                 # code...
@@ -118,6 +140,8 @@ class TransactionController extends Controller
                     'message' => '[Online Payment] Transaction Created Successfully',
                     'data' => new TransactionResource($transaction)
                 ], 201);
+
+                break;
             default:
                 return response()->json(['message' => 'Invalid payment type'], 400);
         }

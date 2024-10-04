@@ -48,11 +48,8 @@ class eWalletWebhookListener
         if($event->webhook_data['data']['status'] === 'SUCCEEDED'){
             // Get the transaction
             $transaction = Transaction::find($event->webhook_data['data']['reference_id']);
-            
-            // Bind xendit product ID to transaction
             $data = $event->webhook_data['data'];
-            $id = substr($data['id'], 4, -4);
-            $transaction->xendit_product_id = $id;
+            $id = $transaction->xendit_product_id;
 
             // Set the transaction status to success
             $transaction->status = $event->webhook_data['data']['status'];

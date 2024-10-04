@@ -31,6 +31,7 @@ class SuccessfulBookingResource extends JsonResource
             'note' => $this->note,
             'status' => $this->status,
             'transactionStatus' => $this->transaction->status,
+            'xendit_id' => $this->transaction->xendit_product_id,
             'created_at' => $this->created_at,
         ];
     }

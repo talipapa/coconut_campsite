@@ -58,14 +58,15 @@ class BookingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $bookings = Booking::all();
-        if ($bookings->isEmpty()) {
+        $bookings = Booking::where('user_id', $request->user()->id)->first();
+        Log::info($bookings);
+
+        if ($bookings === null) {
         return response()->json(['message' => 'No bookings found'], 404);
         }
-        return BookingResource::collection($bookings);   
-
+        return new SuccessfulBookingResource($bookings);   
     }
 
     /**
