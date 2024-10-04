@@ -15,9 +15,9 @@ export default function Layout({children}) {
             if (resolvedBooking.message === false) {
                 route.push('/booking');
             }
-            if (resolvedBooking.data && Object.keys(resolvedBooking.data).includes('transactionStatus')){
-                route.push('/view-booking');
-            }
+            // if (resolvedBooking.data && resolvedBooking.data.xendit_id !== null) {
+            //     route.push('/view-booking');
+            // }
         } catch (err) {
             console.error('Error fetching booking data:', err);
         }
