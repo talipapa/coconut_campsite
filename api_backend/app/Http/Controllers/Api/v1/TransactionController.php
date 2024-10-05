@@ -45,6 +45,16 @@ class TransactionController extends Controller
         return TransactionResource::collection(Transaction::where('user_id', $authenticatedUser->id)->get());
     }
 
+    public function findXenditTransaction(Request $request, $transactionId)
+    {
+
+        $response = OrigXendivel::getPayment('ewc_'.$transactionId, 'ewallet')->getResponse();
+        Log::info("Xendit response", [$response]);
+        
+        return response()->json($response);
+        
+    }
+
     /**
      * Store a newly created resource in storage.
      */
