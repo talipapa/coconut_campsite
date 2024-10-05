@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Price;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,9 +16,31 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
+
+        Price::factory()->create([
+            'name' => 'child',
+            'price' => 50.00,
+        ]);
+
+        Price::factory()->create([
+            'name' => 'adult',
+            'price' => 100.00,
+        ]);
+        Price::factory()->create([
+            'name' => 'tent_pitch',
+            'price' => 70.00,
+        ]);
+        Price::factory()->create([
+            'name' => 'bonfire',
+            'price' => 150.00,
+        ]);
+        Price::factory()->create([
+            'name' => 'cabin',
+            'price' => 650.00,
         ]);
     }
 }

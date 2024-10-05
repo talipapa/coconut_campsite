@@ -51,7 +51,7 @@ const CashPayment = ({paymentType}) => {
             </div>
             <div className='w-full flex flex-row justify-between text-slate-600'>
               <span>Xendit Fee</span>
-              <span>P {calculateFee(calculateSubPrice(), paymentMethodVal)}</span>
+              <span>P 0.00</span>
             </div>
           </div>
           <div className='w-full flex flex-row justify-between font-bold'>
