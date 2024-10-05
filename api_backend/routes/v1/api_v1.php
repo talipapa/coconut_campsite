@@ -15,6 +15,9 @@ Route::apiResource('/manager', ManagerController::class)->except(['update', 'des
 Route::apiResource('/price', PriceController::class)->only(['index', 'show']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    // Refund routes
+    Route::post('/booking/refund/{booking}', [BookingController::class, 'refundBooking']);
+    Route::get('/booking/refund/{xendit_refund_id}', [BookingController::class, 'checkRefundStatus']);
 
     Route::apiResource('/booking', BookingController::class)->except(['bookingListAll', 'viewOnyCampsiteBooking', 'destroy']);
     Route::get('/booking-check', [BookingController::class, 'showSelfBooking']);

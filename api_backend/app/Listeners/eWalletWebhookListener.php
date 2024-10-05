@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\eWalletEvents;
 use App\Models\Booking;
+use App\Models\Refund;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
@@ -40,29 +41,30 @@ class eWalletWebhookListener
 
 
 
-        // logger('Webhook data received: ', $event->webhook_data);
+        logger('Webhook data received: ', $event->webhook_data);
+
         
         // Event type
         Log::info($event->webhook_data['event']);
-
+        
         if($event->webhook_data['data']['status'] === 'SUCCEEDED'){
             // Get the transaction
             $transaction = Transaction::find($event->webhook_data['data']['reference_id']);
             $data = $event->webhook_data['data'];
             $id = $transaction->xendit_product_id;
-
+            
             // Set the transaction status to success
             $transaction->status = $event->webhook_data['data']['status'];
-
+            
             // Get the booking
             $booking = Booking::find($transaction->booking_id);
-
+            
             // Set the booking status to PAID
             $booking->status = 'PAID';
-
+            
             $booking->save();
             $transaction->save();
-
+            
             logger('Online payment succeeded!!', [
                 'email' => $booking->user->email,
                 'transaction_id' => $transaction->id,
@@ -72,7 +74,7 @@ class eWalletWebhookListener
                 'status' => $booking->status
             ]);
         }
-
+        
         if($event->webhook_data['data']['status'] === 'FAILED'){
             // Get the transaction
             $transaction = Transaction::find($event->webhook_data['data']['reference_id']);
@@ -86,7 +88,7 @@ class eWalletWebhookListener
                 'status' => $transaction->status
             ]);
         }
-
+        
         if ($event->webhook_data['event'] === 'ewallet.capture'){
             // Xendit product ID
             logger('Xendit ID', [$id]); 
@@ -97,11 +99,36 @@ class eWalletWebhookListener
             // Transaction status
             logger('Status', [$data['status']]); 
         }
+        
+        if($event->webhook_data['event'] === 'ewallet.void'){
+            // Get the transaction
+            $transaction = Transaction::find($event->webhook_data['data']['reference_id']);
+            $booking = Booking::find($transaction->booking_id);
+            $booking->status = 'VOIDED';
+            $booking->save();
+            
+            // Set the transaction status to void
+            $transaction->status = $event->webhook_data['data']['status'];
+            $transaction->save();
 
+            // Create refund data in refund table
+            // $refund = Refund::create([
+            //     'booking_id' => $transaction->booking_id,
+            //     'transaction_id' => $transaction->id,
+            //     'xendit_refund_id' => $event->webhook_data['data']['id']
+            // ]);
+            // $refund->save();
 
-
-
-
+            logger('Transaction status updated to void', [
+                'user email' => User::find($transaction->user_id)->email,
+                'transaction_id' => $transaction->id,
+                'status' => $transaction->status
+            ]);
+        }
+        
+        
+        
+        
 
 
 
