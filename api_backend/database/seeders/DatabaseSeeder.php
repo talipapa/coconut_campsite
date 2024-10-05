@@ -22,13 +22,12 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         Price::factory()->create([
-            'name' => 'child',
-            'price' => 50.00,
-        ]);
-
-        Price::factory()->create([
             'name' => 'adult',
             'price' => 100.00,
+        ]);
+        Price::factory()->create([
+            'name' => 'child',
+            'price' => 50.00,
         ]);
         Price::factory()->create([
             'name' => 'tent_pitch',

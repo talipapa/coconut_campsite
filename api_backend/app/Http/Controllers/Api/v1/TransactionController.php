@@ -49,7 +49,7 @@ class TransactionController extends Controller
     {
 
         $response = OrigXendivel::getPayment('ewc_'.$transactionId, 'ewallet')->getResponse();
-        Log::info("Xendit response", [$response]);
+        // Log::info("Xendit response", [$response]);
         
         return response()->json($response);
         
@@ -69,25 +69,27 @@ class TransactionController extends Controller
 
 
         // Check first if the booking doesn't have a transaction yet
-        $transaction = Transaction::where('booking_id', $validated['booking_id'])->first();
-        if ($transaction) {
-            $transaction->status = 'CANCELLED';
-            $transaction->save();
-            // $response = OrigXendivel::getPayment('ewc_'.$transaction->xendit_product_id, 'ewallet')->getResponse();
-            // Log::info("Xendit response", [$response]);
-            $transaction->delete();
+        // $transaction = Transaction::where('booking_id', $validated['booking_id'])->first();
+        // if ($transaction) {
+        //     $transaction->status = 'CANCELLED';
+        //     $transaction->save();
+        //     // $response = OrigXendivel::getPayment('ewc_'.$transaction->xendit_product_id, 'ewallet')->getResponse();
+        //     // Log::info("Xendit response", [$response]);
+        //     $transaction->delete();
 	    
-        }
+        // }
         
         switch ($validated['payment_type']) {
             case 'XENDIT':
                 // Create transaction
-                $transaction = Transaction::create([
-                    'user_id' => Auth::user()->id,
-                    'booking_id' => $validated['booking_id'],
-                    'price' => $validated['price'],
-                    'payment_type' => $validated['payment_type'],
-                ]);    
+                // $transaction = Transaction::create([
+                //     'user_id' => Auth::user()->id,
+                //     'booking_id' => $validated['booking_id'],
+                //     'price' => $validated['price'],
+                //     'payment_type' => $validated['payment_type'],
+                // ]);  
+                
+                $transaction = Transaction::where('booking_id', $validated['booking_id'])->first();
 
                 try {
                     //code...
@@ -166,6 +168,9 @@ class TransactionController extends Controller
         if ($transaction->user_id !== $authenticatedUser->id) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
+
+
+
         return new TransactionResource($transaction);
     }
 

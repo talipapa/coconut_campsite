@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\BookingResource;
 use App\Http\Resources\v1\SuccessfulBookingResource;
 use App\Models\Booking;
+use App\Models\Refund;
+use App\Models\Transaction;
 use App\Models\User;
 use Carbon\Carbon;
+use GlennRaya\Xendivel\Xendivel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
@@ -31,26 +34,124 @@ class BookingController extends Controller
     }
 
     public function showSelfBooking(Request $request){
-        $booking = Booking::where('user_id', $request->user()->id)->first();
-
+        // Check if user has existing booking
+        $booking = Booking::where('user_id', $request->user()->id)
+        ->where('status', '=', 'PENDING')
+        ->where('status', '=', 'PAID')
+        ->where('status', '=', 'SCANNED')
+        ->first();
+        
         if (!$booking) {
-            return response()->json(['message' => false], 201);
+            return response()->json(['message' => "Booking not found"], 404);
+        }
+        if ($booking->transaction && $booking->transaction->status === 'VOIDED'){
+            return response()->json(['message' => "Booking not found"], 404);
         }
 
         if ($booking->transaction) {
-            return response()->json(
-                ['message' => true, 
-                 'data' => new SuccessfulBookingResource($booking),], 201
-                );
+            return response()->json(new SuccessfulBookingResource($booking));
         } else{
-            return response()->json(
-                ['message' => true, 
-                 'data' => new BookingResource($booking)], 201
+            return response()->json(new BookingResource($booking), 201
             );
 
         }
 
         
+    }
+
+
+    // Refund booking
+    public function refundBooking(Request $request, Booking $booking){
+        // Verify if user has a booking
+        if (!$booking) {
+            return response()->json(['message' => 'Booking not found'], 404);
+        }
+
+        
+
+        $transaction = $booking->transaction;
+        // Check if the status of the transaction is SUCCEEDED
+        try {
+            if ($transaction->status !== 'SUCCEEDED') {
+                return response()->json(['message' => 'Transaction is not successful'], 400);
+            }
+    
+            // Fetch the xendit id and append "ewc_" to it
+            $xenditId = 'ewc_'.$booking->transaction->xendit_product_id;
+
+            // Call the Xendit API to get the charge info
+            // Prepare data conditions
+            $response = Xendivel::getPayment($xenditId, 'ewallet')->getResponse();
+    
+            $createdAt = Carbon::parse($response->created)->timezone('Asia/Manila');
+            $now = Carbon::now()->timezone('Asia/Manila');
+            // Xendit cutoff time for voiding charge
+            $cutOffTime = $createdAt->copy()->setTime(23, 50, 0); 
+            
+            // Log::info('Date info', ['Xendit created_at' => $createdAt, 'now' => $now]);
+            // Log::info('Xendit response:', [$response]);
+    
+    
+            // Void the charge, Check if the created_at is currently in the same day and is before 23:50:00.
+            if ($createdAt->isSameDay($now) && $createdAt->lte($cutOffTime)) {
+                $response = Xendivel::void($xenditId)->getResponse();
+                Log::info('Void response:', [$response]);
+            } else{
+                Log::info('Refund not possible');
+            }
+            // If not,
+            
+    
+    
+            // Update the booking status to REFUNDED
+            
+            // Create a new refund record to refund_table and store the refund status
+        } catch (\Throwable $th) {
+            //throw $th;
+            Log::info($th);
+        }
+
+
+        return response()->json(['message' => 'Refund request sent'], 201);
+    }
+
+
+
+    //TODO LIST: 1
+
+
+    // Check refund status if the refund is successfully processed or still processsing
+    public function checkRefundStatus(Request $request, Booking $booking){
+        // Verify if user has a booking
+        $refund = Refund::where('booking_id', $booking->id)->first();
+
+        // Check if the status of the transaction is REFUNDED
+
+
+        // Fetch the xendit id and append "ewc_" to it
+
+        // Call the Xendit API to check the refund status
+
+
+        // Fetch the Xendit response and return it to frontend
+
+    }
+
+    // TODO LIST: 2
+    // Reschedule booking & change booking type
+    public function rescheduleBooking(Request $request, Booking $booking){
+        // Verify if the booking exists
+
+
+        // Change value of date & booking type
+
+        // Create a new refund record to refund_table and store the refund status
+
+
+        // Save the changes
+        
+
+        return response()->json(['message' => 'Reschedule request sent'], 201);
     }
 
 
@@ -61,11 +162,16 @@ class BookingController extends Controller
     public function index(Request $request)
     {
         $bookings = Booking::where('user_id', $request->user()->id)->first();
-        Log::info($bookings);
+        // Log::info($bookings);
 
         if ($bookings === null) {
         return response()->json(['message' => 'No bookings found'], 404);
         }
+
+        if ($bookings->transaction && $bookings->transaction->status === 'VOIDED'){
+            return response()->json(['message' => false], 201);
+        }
+
         return new SuccessfulBookingResource($bookings);   
     }
 
@@ -74,11 +180,6 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-        // Check if user has existing booking
-        $existingBooking = Booking::where('user_id', $request->user()->id)->first();
-        if ($existingBooking) {
-            return response()->json(['message' => 'User already has an existing booking'], 400);
-        }
         $validated = $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
@@ -91,6 +192,7 @@ class BookingController extends Controller
             'tentPitchingCount' => 'required',
             'bonfireKitCount' => 'required',
             'isCabin' => 'required',
+            'price' => 'required',
         ]);
 
         $authenticatedUser = User::find($request->user()->id);
@@ -114,6 +216,13 @@ class BookingController extends Controller
                 'note' => $request->note,
                 'status' => 'PENDING',
             ]);
+
+            Transaction::create([
+                'user_id' => $request->user()->id,
+                'booking_id' => $booking->id,
+                'price' => $validated['price'],
+            ]);   
+
             $bookingJson = new BookingResource($booking);
         } catch (\Throwable $th) {
             $booking->delete();
@@ -122,7 +231,7 @@ class BookingController extends Controller
 
         
         
-        Log::info($booking);
+        // Log::info($booking);
         return [
             "Status" => "Booking Success",
             "data" => $bookingJson
@@ -131,9 +240,16 @@ class BookingController extends Controller
 
     /**
      * Display the specified resource.
+     * Only use for booking and checkout page
      */
     public function show(Booking $booking)
     {
+        if (!$booking) {
+            return response()->json(['message' => 'Booking not found'], 404);
+        }
+    
+        Log::info($booking);
+
         return new BookingResource($booking);
     }
 
