@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { Button, QRCode, Space } from 'antd';
+import { Button, QRCode, Space, Alert } from 'antd';
 
 function doDownload(url, fileName) {
   const a = document.createElement('a');
@@ -13,7 +13,7 @@ function doDownload(url, fileName) {
 }
 
 const QrCard = ({id}) => {
-    console.log(id)
+    // console.log(id)
 
     const downloadCanvasQRCode = () => {
         const canvas = document.getElementById('bookingqr')?.querySelector('canvas');
@@ -30,6 +30,12 @@ const QrCard = ({id}) => {
         <div className="w-full flex flex-col items-center space-y-4">
           <QRCode
             value={id}
+          />
+          <Alert
+            message="Important note!"
+            description="Download the QR code and scan it at the entrance of the campsite. Ask for assistance if you have trouble scanning the QR code."
+            type="info"
+            showIcon
           />
           <Button className="w-full" type="primary" onClick={downloadCanvasQRCode}>Download QR</Button>
         </div>

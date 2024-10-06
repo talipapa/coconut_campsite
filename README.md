@@ -39,6 +39,12 @@ The booking is unpaid
 PAID (Only for online transaction)
 The booking is paid using online payment methods
 
+VOIDED
+The booking is refunded
+
+REFUNDED
+The booking is refunded
+
 SCANNED
 The booking is scanned at KIOSK
 
@@ -48,7 +54,7 @@ The booking is verified by the manager/campsite_owner/caretaker
 ## NGROK tutorial
 1. In CMD, download ngrok.exe
 2. add the ngrok folder to environment variable PATH
-3. in cmd, enter this command: ngrok http http:localhost:8000 --url=glorious-live-marten.ngrok-free.app 
+3. in cmd, enter this command: ngrok http http://localhost:8000 --url=glorious-live-marten.ngrok-free.app
 
 This lets the ngrok host application that listen to port 8000 which is the "Api server" of this project
 

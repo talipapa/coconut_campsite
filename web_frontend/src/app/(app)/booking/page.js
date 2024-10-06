@@ -24,9 +24,9 @@ export default function Page() {
     const {
         booking,
         apiVersion,
+        error,
         mutate,
-    } = useLaravelBooking()
-    const [existBooking, setExistBooking] = useState()
+    } = useLaravelBooking({routeLink: '/api/v1/booking-check'})
     const [first_name, setFirstName] = useState(user.first_name)
     const [last_name, setLastName] = useState(user.last_name)
     const [email, setEmail] = useState(user.email)
@@ -40,32 +40,49 @@ export default function Page() {
     const [isCabin, setIsCabin] = useState(false)
     const [note, setNote] = useState('')
     const [errors, setErrors] = useState([])
+    const [price, setPrice] = useState(0)
 
-    
     useEffect(() => {
-        if (booking?.message === true && booking?.data.status === "PAID"){
+        if (!booking) return;
+        if (booking.status === "PAID"){
             router.push('/view-booking')
         }
         
-        if (booking?.message === true && booking?.data.transactionStatus === "CASH_PENDING"){
+        if (booking.transactionStatus === "CASH_PENDING"){
             router.push('/view-booking')
         }
 
-        if (booking?.message === true && booking?.data.status === "PENDING"){
-            setFirstName(booking?.data.first_name)
-            setLastName(booking?.data.last_name)
-            setEmail(booking?.data.email)
-            setTelNumber(booking?.data.tel_number)
-            setAdultCount(booking?.data.adult_count)
-            setChildCount(booking?.data.child_count)
-            setCheckInDate(dayjs(booking?.data.check_in))
-            setBookingType(booking?.data.booking_type)
-            setTentPitchingCount(booking?.data.tent_pitching_count)
-            setBonfireKitCount(booking?.data.bonfire_kit_count)
-            setIsCabin(booking?.data.is_cabin)
-            setNote(booking?.data.note)
+        if (booking.status === "PENDING"){
+            setFirstName(booking.first_name)
+            setLastName(booking.last_name)
+            setEmail(booking.email)
+            setTelNumber(booking.tel_number)
+            setAdultCount(booking.adult_count)
+            setChildCount(booking.child_count)
+            setCheckInDate(dayjs(booking.check_in))
+            setBookingType(booking.booking_type)
+            setTentPitchingCount(booking.tent_pitching_count)
+            setBonfireKitCount(booking.bonfire_kit_count)
+            setIsCabin(booking.is_cabin)
+            setNote(booking.note)
         } 
+        
     }, [booking])
+
+
+    const calculateSubPrice = () => {
+        const adultTotal = adultPrice * adultCount
+        const childTotal = childPrice * childCount
+        const tentPitchTotal = tentPitchPrice * tentPitchingCount
+        const bonfireKitTotal = bonfireKitPrice * bonfireKitCount
+        var cabinTotal = 0
+        
+        if (isCabin === true) {
+            cabinTotal = cabinPrice
+        }
+        return (adultTotal + childTotal + tentPitchTotal + bonfireKitTotal + cabinTotal).toFixed(2)
+    }
+
 
     // Display feedback notification
     const [api, contextHolder] = notification.useNotification();
@@ -104,10 +121,12 @@ export default function Page() {
     }
 
     const createBooking = async () => {
+        setPrice(calculateSubPrice())
         const bookingData = {
             first_name,
             last_name,
             email,
+            price,
             telNumber,
             adultCount,
             childCount,
@@ -124,13 +143,15 @@ export default function Page() {
         try {
             setErrors([])
             const response = await axios.post('api/' + apiVersion + "/booking", bookingData)
-            mutate('/api/v1/booking-check');
-            
+            mutate(`/api/v1/booking-check`);
+            debugger
             switch (response.status) {
                 case 200:
                     openSuccessNotification()
+                    
                     setTimeout(() => {
-                        router.push('/booking/checkout')
+                        
+                        router.push(`/booking/checkout/${response.data.transaction_id}`)
                     }, 300)
                     
                     break;
@@ -163,6 +184,8 @@ export default function Page() {
             switch (error.response.status) {
                 case 400:
                     openErrorExistingNotification()
+                    break;
+                case 404:
                     break;
                 case 422:
                     openErrorValidationNotification({errors: error.response.data.errors})
@@ -198,12 +221,12 @@ export default function Page() {
 
         try {
             setErrors([])
-            const response = await axios.patch('api/' + apiVersion + "/booking/" + booking?.data.id, bookingData)
+            const response = await axios.patch('api/' + apiVersion + "/booking/" + booking.id, bookingData)
             mutate();
             if (response.status === 200 || response.status === 201 || response.status === 203 || response.status === 204){
                 openSuccessNotification()
                 setTimeout(() => {
-                    router.push('/booking/checkout')
+                    router.push(`/booking/checkout/${response.data.transaction_id}`)
                 }, 2000)
             }
 
@@ -229,11 +252,13 @@ export default function Page() {
 
     const submitForm = event => {
         event.preventDefault()
-        if (booking['message'] === false) {
+        if (error) {
             createBooking()
+            
         } else{
             editBooking()
         }
+        
     }
 
     const bookingTypeOption = [
@@ -258,7 +283,7 @@ export default function Page() {
         },
     ];
 
-   
+ 
 
     return (
         <>
@@ -343,7 +368,6 @@ export default function Page() {
                                     // disabledTime={disabledDateTime}
                                 />
                                 <InputError messages={errors.checkInDate} className="mt-2" />
-
                             </div>
                             {/* Booking type field */}
                             <div className="space-y-2">

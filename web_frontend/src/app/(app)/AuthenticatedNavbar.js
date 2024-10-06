@@ -11,7 +11,7 @@ import { useLaravelBooking } from '@/hooks/booking'
 
 const AuthenticatedNavbar = ({user, currentPath}) => {
   const { logout } = useAuth() 
-  const { booking } = useLaravelBooking()
+  const { booking } = useLaravelBooking({routeLink: '/api/v1/booking-check'})
 
   const pathName = usePathname()
 

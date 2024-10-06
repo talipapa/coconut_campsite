@@ -5,7 +5,7 @@ import {Radio} from "antd";
 import OnlinePayment from './OnlinePayment';
 import CashPayment from './CashPayment';
 
-const CheckoutCard = () => {
+const CheckoutCard = ({totalPrice, booking_id}) => {
   const [componentPaymentMethod, setComponentPaymentMethod] = useState("XENDIT")
   const paymentOptions = [
       {
@@ -28,7 +28,7 @@ const CheckoutCard = () => {
         optionType="button"
         buttonStyle="solid"
     />
-    {componentPaymentMethod === "CASH" ? <CashPayment paymentType={componentPaymentMethod}/> : <OnlinePayment paymentType={componentPaymentMethod}/>}
+    {componentPaymentMethod === "CASH" ? <CashPayment paymentType={componentPaymentMethod} totalPrice={totalPrice} bookId={booking_id}/> : <OnlinePayment paymentType={componentPaymentMethod} totalPrice={totalPrice} bookId={booking_id}/>}
     
     </div>
   )
