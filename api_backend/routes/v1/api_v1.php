@@ -18,7 +18,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Refund routes
     Route::post('/booking/refund/{booking}', [BookingController::class, 'refundBooking']);
     Route::get('/booking/refund/{xendit_refund_id}', [BookingController::class, 'checkRefundStatus']);
-
+    
+    Route::get('/booking/confirmed/{booking}', [BookingController::class, 'confirmedBooking']);
     Route::apiResource('/booking', BookingController::class)->except(['bookingListAll', 'viewOnyCampsiteBooking', 'destroy']);
     Route::get('/booking-check', [BookingController::class, 'showSelfBooking']);
     Route::get('/xendit/{xendit_id}', [TransactionController::class, 'findXenditTransaction']);

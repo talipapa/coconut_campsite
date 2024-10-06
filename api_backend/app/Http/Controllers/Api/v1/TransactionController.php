@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\CustomVendors\Xendivel;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\TransactionResource;
+use App\Models\Booking;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\CampManager;
@@ -67,9 +68,22 @@ class TransactionController extends Controller
             'payment_type' => 'required',
         ]);
 
-
-        // Check first if the booking doesn't have a transaction yet
-        // $transaction = Transaction::where('booking_id', $validated['booking_id'])->first();
+        $transaction = Transaction::where('booking_id', $validated['booking_id'])->first();
+        $transaction->payment_type = $validated['payment_type'];
+        $transaction->price = $validated['price'];
+        $transaction->price = $validated['price'];
+        $transaction->save();
+        // if (!$transaction) {
+        //     // Create transaction
+        //     $transaction = Transaction::create([
+        //         'user_id' => Auth::user()->id,
+        //         'booking_id' => $validated['booking_id'],
+        //         'price' => $validated['price'],
+        //         'payment_type' => $validated['payment_type'],
+        //     ]);  
+        // }
+        // Log::info($validated['booking_id']);
+        // Log::info("Transaction", [$transaction]);
         // if ($transaction) {
         //     $transaction->status = 'CANCELLED';
         //     $transaction->save();
@@ -123,6 +137,7 @@ class TransactionController extends Controller
         
                     // Send payment request to XENDIT
                     $response = Xendivel::payWithEwallet($xenditRequest)->getResponse();                    
+                    Log::info("Xendit response", [$response->id]);
                     $transaction->xendit_product_id = substr($response->id, 4);
                     $transaction->save();
                     return response()->json([
@@ -139,13 +154,16 @@ class TransactionController extends Controller
         
             case 'CASH':
                 # code...
-                $transaction = Transaction::create([
-                    'user_id' => Auth::user()->id,
-                    'booking_id' => $validated['booking_id'],
-                    'price' => $validated['price'],
-                    'payment_type' => $validated['payment_type'],
-                    'status' => 'CASH_PENDING'
-                ]);
+                // $transaction = Transaction::create([
+                //     'user_id' => Auth::user()->id,
+                //     'booking_id' => $validated['booking_id'],
+                //     'price' => $validated['price'],
+                //     'payment_type' => $validated['payment_type'],
+                //     'status' => 'CASH_PENDING'
+                // ]);
+
+                $transaction = Transaction::where('booking_id', $validated['booking_id'])->first();
+
 
     
                 return response()->json([
@@ -168,10 +186,18 @@ class TransactionController extends Controller
         if ($transaction->user_id !== $authenticatedUser->id) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
+        
+        $booking = Booking::where('id', $transaction->booking_id)->first();
 
+        $transactionJson = new TransactionResource($transaction);
+        $BookingJson = $booking;
 
+        return [
+            'message' => 'Transaction found',
+            'transaction' => $transactionJson,
+            'booking' => $BookingJson,
 
-        return new TransactionResource($transaction);
+        ];
     }
 
     /**

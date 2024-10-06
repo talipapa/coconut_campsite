@@ -6,15 +6,15 @@ import { usePrice } from '@/hooks/prices'
 import { useLaravelBooking } from '@/hooks/booking'
 import axios from '@/lib/axios'
 
-const OnlinePayment = (componentPaymentMethod) => {
+const OnlinePayment = ({paymentType, totalPrice, bookId}) => {
   const { user } = useAuth({ middleware: 'auth' })
   const [invoiceEmail, setInvoiceEmail] = React.useState(user?.email)
   const [api, contextHolder] = notification.useNotification();
 
-  const {booking} = useLaravelBooking()
+  const {booking} = useLaravelBooking(`api/v1/booking/${bookId}`)
   const {calculateSubPrice, calculateFee, calculateTotalPrice} = usePrice()
   const [paymentMethodVal, setPaymentMethodVal] = React.useState("PH_GCASH")
-  const subTotal = calculateSubPrice()
+  const subTotal = totalPrice
 
   const openErrorValidationNotification = (errorContent, errorType) => {
     if (errorType === 'object'){
@@ -43,17 +43,20 @@ const OnlinePayment = (componentPaymentMethod) => {
 
   }
 
+
+
   // TODO LIST: REDIRECT TO SUCCESS PAYMENT ROUTE
   const confirmBooking = async () => {
+    console.log(bookId)
     axios.post('api/v1/transaction', {
-      email: invoiceEmail,
-      booking_id: booking.data.id,
-      price: calculateTotalPrice(subTotal, calculateFee(subTotal, paymentMethodVal)),
-      payment_type: componentPaymentMethod['paymentType'],
-      paymentMethod: paymentMethodVal
+      "email": invoiceEmail,
+      "price": calculateTotalPrice(subTotal, calculateFee(subTotal, paymentMethodVal)),
+      "payment_type": paymentType,
+      "booking_id": bookId,
+      "paymentMethod": paymentMethodVal
     })
     .then((response) => {
-      console.log(response.data.data)
+      // console.log(response.data.data)
       window.location.href = response.data.data.actions.desktop_web_checkout_url
     })
     .catch((error) => {
@@ -112,11 +115,11 @@ const OnlinePayment = (componentPaymentMethod) => {
             <div>
               <div className='w-full flex flex-row justify-between'>
                 <span>Subtotal</span>
-                <span>P {calculateSubPrice()}</span>
+                <span>P {subTotal}</span>
               </div>
               <div className='w-full flex flex-row justify-between text-slate-600'>
                 <span>Xendit Fee</span>
-                <span>P {calculateFee(calculateSubPrice(), paymentMethodVal)}</span>
+                <span>P {calculateFee(subTotal, paymentMethodVal)}</span>
               </div>
             </div>
             <div className='w-full flex flex-row justify-between font-bold'>

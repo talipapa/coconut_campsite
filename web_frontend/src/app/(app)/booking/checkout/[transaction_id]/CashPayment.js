@@ -8,23 +8,22 @@ import { useRouter } from "next/navigation";
 
 
 
-const CashPayment = ({paymentType}) => {
+const CashPayment = ({paymentType, totalPrice, bookId}) => {
   const { user } = useAuth({ middleware: 'auth' })
   const [invoiceEmail, setInvoiceEmail] = React.useState(user?.email)
   const router = useRouter()
-  
-  const {booking} = useLaravelBooking()
+  const {booking} = useLaravelBooking(`api/v1/booking/${bookId}`)
   const {calculateSubPrice, calculateFee, calculateTotalPrice} = usePrice()
   const [paymentMethodVal, setPaymentMethodVal] = React.useState("PH_GCASH")
-  const subTotal = calculateSubPrice()
+  const subTotal = totalPrice
 
   const confirmBooking = async () => {
     axios.post('api/v1/transaction', {
-      email: invoiceEmail,
-      booking_id: booking.data.id,
-      price: calculateTotalPrice(subTotal, calculateFee(subTotal, paymentMethodVal)),
-      payment_type: paymentType,
-      paymentMethod: "CASH_ARRIVAL"
+      "email": invoiceEmail,
+      "booking_id": bookId,
+      "price": calculateTotalPrice(subTotal, calculateFee(subTotal, paymentMethodVal)),
+      "payment_type": paymentType,
+      "paymentMethod": "CASH_ARRIVAL"
 
     })
     .then((response) => {
@@ -47,7 +46,7 @@ const CashPayment = ({paymentType}) => {
           <div>
             <div className='w-full flex flex-row justify-between'>
               <span>Subtotal</span>
-              <span>P {calculateSubPrice()}</span>
+              <span>P {totalPrice}</span>
             </div>
             <div className='w-full flex flex-row justify-between text-slate-600'>
               <span>Xendit Fee</span>

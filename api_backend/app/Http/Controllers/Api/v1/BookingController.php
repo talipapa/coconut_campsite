@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\BookingResource;
 use App\Http\Resources\v1\SuccessfulBookingResource;
+use App\Http\Resources\v1\TransactionResource;
 use App\Models\Booking;
 use App\Models\Refund;
 use App\Models\Transaction;
@@ -36,27 +37,18 @@ class BookingController extends Controller
     public function showSelfBooking(Request $request){
         // Check if user has existing booking
         $booking = Booking::where('user_id', $request->user()->id)
-        ->where('status', '=', 'PENDING')
-        ->where('status', '=', 'PAID')
-        ->where('status', '=', 'SCANNED')
+        ->whereNotIn('status', ['PENDING', 'VOIDED', 'REFUNDED'])
         ->first();
+
+        Log::info($booking);
         
         if (!$booking) {
             return response()->json(['message' => "Booking not found"], 404);
         }
-        if ($booking->transaction && $booking->transaction->status === 'VOIDED'){
-            return response()->json(['message' => "Booking not found"], 404);
-        }
+   
 
-        if ($booking->transaction) {
-            return response()->json(new SuccessfulBookingResource($booking));
-        } else{
-            return response()->json(new BookingResource($booking), 201
-            );
-
-        }
-
-        
+        return response()->json(new BookingResource($booking), 201);
+    
     }
 
 
@@ -198,6 +190,9 @@ class BookingController extends Controller
         $authenticatedUser = User::find($request->user()->id);
         $booking = null;
         $bookingJson = null;
+        $transaction = null;
+        $transactionId = null;
+        
         try {
             $booking = Booking::create([
                 'user_id' => $authenticatedUser->id,
@@ -217,15 +212,17 @@ class BookingController extends Controller
                 'status' => 'PENDING',
             ]);
 
-            Transaction::create([
+            $transaction = Transaction::create([
                 'user_id' => $request->user()->id,
                 'booking_id' => $booking->id,
                 'price' => $validated['price'],
-            ]);   
+            ]);  
 
+            $transactionId = $transaction->id;
             $bookingJson = new BookingResource($booking);
         } catch (\Throwable $th) {
-            $booking->delete();
+            $transaction->delete();
+            Log::info("Error", [$th]);
             throw $th;
         }
 
@@ -234,7 +231,8 @@ class BookingController extends Controller
         // Log::info($booking);
         return [
             "Status" => "Booking Success",
-            "data" => $bookingJson
+            "booking" => $bookingJson,
+            "transaction_id" => $transactionId
         ];
     }
 
@@ -247,11 +245,13 @@ class BookingController extends Controller
         if (!$booking) {
             return response()->json(['message' => 'Booking not found'], 404);
         }
-    
-        Log::info($booking);
+
+        
 
         return new BookingResource($booking);
     }
+
+
 
     /**
      * Update the specified resource in storage.
@@ -305,11 +305,14 @@ class BookingController extends Controller
 
         // Return response
         $bookingDataJson = new BookingResource($booking);
+        
         return response()->json([
             'message' => 'Booking updated successfully', 
             'old_data' => $oldData,
             'new_data' => $bookingDataJson,
+            'transaction_id' => $booking->transaction->id
         ], 200);
+        
     }
 
     /**
