@@ -163,7 +163,11 @@ class TransactionController extends Controller
                 // ]);
 
                 $transaction = Transaction::where('booking_id', $validated['booking_id'])->first();
-
+                $booking = Booking::where('id', $transaction->booking_id)->first();
+                $transaction->status = 'CASH_PENDING';
+                $booking->status = 'CASH_PENDING';
+                $transaction->save();
+                $booking->save();
 
     
                 return response()->json([

@@ -1,12 +1,15 @@
 'use client';
 
-import { Button, Modal, DatePicker, Radio } from 'antd';
+import { Button, Modal, DatePicker, Radio, notification,  } from 'antd';
 import { useState } from 'react';
 import dayjs from 'dayjs';
 import InputError from '@/components/InputError';
+import axios from '@/lib/axios';
+import { useRouter } from 'next/navigation';
 
 
-const RescheduleButton = ({checkIn, bookingType}) => {
+const RescheduleButton = ({checkIn, bookingType, bookingId}) => {
+    const router = useRouter()
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [checkInDate, setCheckInDate] = useState(dayjs(checkIn));
@@ -16,9 +19,41 @@ const RescheduleButton = ({checkIn, bookingType}) => {
       setOpen(true);
     };
 
+    const openSuccessNotification = () => {
+        api['success']({
+          message: 'Rescheduled successfully!',
+          placement: 'bottomRight',
+          description:
+            "Your booking will  be rescheduled shortly!"
+        });
+    }
+
+    const openErrorNotification = () => {
+        api['error']({
+          message: 'Oops!',
+          placement: 'bottomRight',
+          description:
+            "Something went wrong"
+        });
+    }
+
     const handleOk = () => {
         // Refund logic here
 
+        const payload = {
+            "check_in": checkInDate,
+            "booking_type": localBookingType
+        }
+
+        axios.patch('/api/v1/booking/reschedule/' + bookingId, payload)
+        .then((res) => {
+            openSuccessNotification()
+            router.refresh()
+        })
+        .catch((err) => {
+            console.log(err)
+            openErrorNotification()
+        })
 
 
         // Refund is successful in this state
@@ -45,9 +80,12 @@ const RescheduleButton = ({checkIn, bookingType}) => {
         },
     ];
     
+    const [api, contextHolder] = notification.useNotification();
+
 
     return (
     <>
+        {contextHolder}
         <Button color="default" variant="outlined" onClick={showModal}>
             Reschedule booking
         </Button>

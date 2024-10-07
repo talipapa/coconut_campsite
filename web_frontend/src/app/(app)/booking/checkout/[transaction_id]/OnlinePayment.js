@@ -9,9 +9,9 @@ import axios from '@/lib/axios'
 const OnlinePayment = ({paymentType, totalPrice, bookId}) => {
   const { user } = useAuth({ middleware: 'auth' })
   const [invoiceEmail, setInvoiceEmail] = React.useState(user?.email)
-  const [api, contextHolder] = notification.useNotification();
-
-  const {booking} = useLaravelBooking(`api/v1/booking/${bookId}`)
+  const [api, contextHolder] = notification.useNotification()
+  const [buttonLoading, setButtonLoading] = React.useState(false)
+  const {booking, mutate} = useLaravelBooking(`api/v1/booking/${bookId}`)
   const {calculateSubPrice, calculateFee, calculateTotalPrice} = usePrice()
   const [paymentMethodVal, setPaymentMethodVal] = React.useState("PH_GCASH")
   const subTotal = totalPrice
@@ -47,7 +47,7 @@ const OnlinePayment = ({paymentType, totalPrice, bookId}) => {
 
   // TODO LIST: REDIRECT TO SUCCESS PAYMENT ROUTE
   const confirmBooking = async () => {
-    console.log(bookId)
+    setButtonLoading(true)
     axios.post('api/v1/transaction', {
       "email": invoiceEmail,
       "price": calculateTotalPrice(subTotal, calculateFee(subTotal, paymentMethodVal)),
@@ -57,10 +57,14 @@ const OnlinePayment = ({paymentType, totalPrice, bookId}) => {
     })
     .then((response) => {
       // console.log(response.data.data)
+      mutate('/api/v1/booking-check')
       window.location.href = response.data.data.actions.desktop_web_checkout_url
+      setButtonLoading(true)
     })
     .catch((error) => {
+      setButtonLoading(false)
       var errorData
+      console.log(error)
       // check if errorData is string or object
       if (typeof error.response.data !== 'string') {
         errorData = JSON.parse(error.response.data)
@@ -132,7 +136,7 @@ const OnlinePayment = ({paymentType, totalPrice, bookId}) => {
 
 
         </div>
-        <Button className="w-full" type="primary" size='large' onClick={confirmBooking}>Confirm Booking</Button>
+        <Button className="w-full" type="primary" size='large' onClick={confirmBooking} loading={buttonLoading}>Confirm Booking</Button>
       </div>
     </>
   )

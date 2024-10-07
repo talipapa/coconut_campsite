@@ -32,6 +32,7 @@ class BookingResource extends JsonResource
             'note' => $this->note,
             'status' => $this->status,
             'created_at' => $this->created_at,
+            'transactionStatus' => $this->transaction->status,
         ];
     }
 }

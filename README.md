@@ -25,6 +25,9 @@ Payment transaction for specified charge_id is successfully
 FAILED
 Payment transaction for specified charge_id has failed, check failure codes for reasons
 
+CANCELLED
+Payment transaction is CANCELLED (status only available for cash payment method)
+
 VOIDED
 Payment transaction for specified charge_id has been voided
 
@@ -36,8 +39,14 @@ Payment transaction for specified charge_id has been either partially or fully r
 PENDING
 The booking is unpaid
 
+CASH_PENDING
+The booking is cash and is pending
+
 PAID (Only for online transaction)
 The booking is paid using online payment methods
+
+CASH_CANCELLED
+The booking is cancelled (status only available for cash payment method)
 
 VOIDED
 The booking is refunded

@@ -37,7 +37,7 @@ class BookingController extends Controller
     public function showSelfBooking(Request $request){
         // Check if user has existing booking
         $booking = Booking::where('user_id', $request->user()->id)
-        ->whereNotIn('status', ['PENDING', 'VOIDED', 'REFUNDED'])
+        ->whereNotIn('status', ['PENDING', 'CANCELLED'])
         ->first();
 
         Log::info($booking);
@@ -47,9 +47,46 @@ class BookingController extends Controller
         }
    
 
-        return response()->json(new BookingResource($booking), 201);
+        return response()->json(new SuccessfulBookingResource($booking), 201);
     
     }
+
+    // Cancel booking for cash payment
+    public function cancelBooking(Request $request, Booking $booking){
+        $transaction = $booking->transaction;
+
+        // Verify if user has a booking
+        if (!$booking) {
+            return response()->json(['message' => 'Booking not found'], 404);
+        }
+
+        // Check if the status of the booking is PENDING
+        if ($booking->status === 'PENDING') {
+            return response()->json(['message' => 'Booking is still pending'], 400);
+        }
+
+        // Check if the status of the booking is CANCELLED
+        if ($booking->status === 'CANCELLED') {
+            return response()->json(['message' => 'Booking is already cancelled'], 400);
+        }
+
+        // Update the status of the booking to CANCELLED
+        $booking->update([
+            'status' => 'CANCELLED',
+        ]);
+        
+        // Update the status of the booking to CASH_CANCELLED
+        $transaction->update([
+            'status' => 'CASH_CANCELLED',
+        ]);
+
+        $booking->save();
+        $transaction->save();
+        
+
+        return response()->json(['message' => 'Booking cancelled successfully'], 200);
+    }
+
 
 
     // Refund booking
@@ -91,25 +128,18 @@ class BookingController extends Controller
             } else{
                 Log::info('Refund not possible');
             }
-            // If not,
-            
-    
-    
-            // Update the booking status to REFUNDED
-            
-            // Create a new refund record to refund_table and store the refund status
+
+            return response()->json(['message' => 'Refund request sent'], 201);
         } catch (\Throwable $th) {
             //throw $th;
             Log::info($th);
+            return response()->json(['message' => 'Something went wrong'], 400);
         }
 
 
-        return response()->json(['message' => 'Refund request sent'], 201);
     }
 
 
-
-    //TODO LIST: 1
 
 
     // Check refund status if the refund is successfully processed or still processsing
@@ -134,6 +164,18 @@ class BookingController extends Controller
     public function rescheduleBooking(Request $request, Booking $booking){
         // Verify if the booking exists
 
+        $validated = $request->validate([
+            'booking_type' => 'required',
+            'check_in' => 'required',
+        ]);
+
+        $booking->update([
+            'booking_type' => $validated['booking_type'],
+            'check_in' => Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d'),
+            'check_out' => Carbon::parse($validated['check_in'])->addDay(1)->timezone('Asia/Manila')->format('Y-m-d'),
+        ]);
+
+        $booking->save();
 
         // Change value of date & booking type
 
@@ -143,7 +185,7 @@ class BookingController extends Controller
         // Save the changes
         
 
-        return response()->json(['message' => 'Reschedule request sent'], 201);
+        return response()->json(['message' => 'Reschedule request sent'], 200);
     }
 
 
@@ -153,18 +195,17 @@ class BookingController extends Controller
      */
     public function index(Request $request)
     {
-        $bookings = Booking::where('user_id', $request->user()->id)->first();
+        $booking = Booking::where('user_id', $request->user()->id)
+        ->whereNotIn('status', ['PENDING', 'CANCELLED'])
+        ->first();
+
         // Log::info($bookings);
 
-        if ($bookings === null) {
+        if ($booking === null) {
         return response()->json(['message' => 'No bookings found'], 404);
         }
 
-        if ($bookings->transaction && $bookings->transaction->status === 'VOIDED'){
-            return response()->json(['message' => false], 201);
-        }
-
-        return new SuccessfulBookingResource($bookings);   
+        return new SuccessfulBookingResource($booking);   
     }
 
     /**

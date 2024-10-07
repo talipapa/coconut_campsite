@@ -41,6 +41,7 @@ export default function Page() {
     const [note, setNote] = useState('')
     const [errors, setErrors] = useState([])
     const [price, setPrice] = useState(0)
+    const [buttonLoading, setButtonLoading] = useState(false)
 
     useEffect(() => {
         if (!booking) return;
@@ -121,6 +122,7 @@ export default function Page() {
     }
 
     const createBooking = async () => {
+        setButtonLoading(true)
         setPrice(calculateSubPrice())
         const bookingData = {
             first_name,
@@ -143,8 +145,7 @@ export default function Page() {
         try {
             setErrors([])
             const response = await axios.post('api/' + apiVersion + "/booking", bookingData)
-            mutate(`/api/v1/booking-check`);
-            debugger
+            mutate();
             switch (response.status) {
                 case 200:
                     openSuccessNotification()
@@ -179,7 +180,6 @@ export default function Page() {
                     openErrorValidationNotification({errors: "Something went wrong!"})
                     break;
             }
-
         } catch (error) {
             switch (error.response.status) {
                 case 400:
@@ -194,6 +194,8 @@ export default function Page() {
                 default:
                     throw error
             }
+            setButtonLoading(false)
+
         }
 
         
@@ -296,13 +298,13 @@ export default function Page() {
                         <Breadcrumb
                             items={[
                             {
-                                title: <a href="/">Home</a>,
+                                title: <a href="/" className="text-slate-400">Home</a>,
                             },
                             {
-                                title: <span className="text-black">Booking</span>,
+                                title: <span className="text-black cursor-pointer">Booking</span>,
                             },
                             {
-                                title: "Checkout",
+                                title: <a href="/booking" className="text-slate-400">Checkout</a>,
                             }
                             ]}
                         />
@@ -483,7 +485,7 @@ export default function Page() {
                     </div>
 
                     <div className="w-full flex flex-col">
-                        <Button type="primary" className="py-6" onClick={submitForm}>Submit</Button>
+                        <Button type="primary" className="py-6" onClick={submitForm} loading={buttonLoading}>Submit</Button>
 
                     </div>
 
