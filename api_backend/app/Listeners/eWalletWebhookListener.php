@@ -104,7 +104,7 @@ class eWalletWebhookListener
             // Get the transaction
             $transaction = Transaction::find($event->webhook_data['data']['reference_id']);
             $booking = Booking::find($transaction->booking_id);
-            $booking->status = 'VOIDED';
+            $booking->status = 'CANCELLED';
             $booking->save();
             
             // Set the transaction status to void

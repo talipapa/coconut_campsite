@@ -11,12 +11,11 @@ import { useLaravelBooking } from '@/hooks/booking'
 
 const AuthenticatedNavbar = ({user, currentPath}) => {
   const { logout } = useAuth() 
-  const { booking } = useLaravelBooking({routeLink: '/api/v1/booking-check'})
+  const { booking, error } = useLaravelBooking({routeLink: '/api/v1/booking-check'})
 
   const pathName = usePathname()
 
-
-  if (!booking && booking?.data == undefined) {
+  if (!booking && !error) {
     return (
         <nav className='bg-[#855139] p-[30px] text-white flex flex-row justify-between space-x-10 '>
             <div className='w-full flex flex-row items-end space-x-5'>
@@ -34,7 +33,6 @@ const AuthenticatedNavbar = ({user, currentPath}) => {
             </div>
         </nav>
     )
-
   }
 
   return (
@@ -49,7 +47,7 @@ const AuthenticatedNavbar = ({user, currentPath}) => {
             <ul className='flex flex-row space-x-6 text-sm'>
                 <Link href="/" className={`cursor-pointer font-semibold ${pathName === "/" ? 'text-[#FFC39E]' : ""}`}>Home</Link>
                 {
-                    booking.data && Object.keys(booking.data).includes('transactionStatus') ? (
+                    !error ? (
                         <Link href="/view-booking" className={`cursor-pointer font-semibold ${pathName === "/view-booking" ? 'text-[#FFC39E]' : ""}`}>View Booking </Link>
                     ) : (
                         <Link href="/booking" className={`cursor-pointer font-semibold ${pathName === "/booking" ? 'text-[#FFC39E]' : ""}`}>Booking</Link>

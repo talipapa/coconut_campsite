@@ -61,18 +61,19 @@ const getXenditData = async (xenditId) => {
 
 export default async function Page() {
     const {bookingData, pricesData} = await getData();
-    if (bookingData.message === false){
-        redirect("/booking")
-    }
 
     if (bookingData.message === "No bookings found"){
         redirect("/booking")
     }
 
+    
+    console.log(bookingData)
+
+
     var xenditData 
     
     if (bookingData && bookingData.data.xendit_id !== null){
-        xenditData = await getXenditData(bookingData.xendit_id)
+        xenditData = await getXenditData(bookingData.data.xendit_id)
         // console.log(xenditData)
         console.log(pricesData.data[1].price)
     }
@@ -93,11 +94,10 @@ export default async function Page() {
 
 
 
-
     return (
         <div className="p-[30px] w-full space-y-5">
             {/* CTA Buttons */}
-            <ActionButtons checkIn={bookingData.data.check_in} bookingType={bookingData.data.booking_type} bookingId={bookingData.data.id}/>
+            <ActionButtons checkIn={bookingData.data.check_in} bookingType={bookingData.data.booking_type} bookingId={bookingData.data.id} transactionStatus={bookingData.data.status}/>
 
             <div className="flex flex-col md:flex-row space-y-10 md:space-y-0 md:space-x-10">
                 <div className="flex-auto md:w-[70vw] xl:w-[50vw] space-y-5">

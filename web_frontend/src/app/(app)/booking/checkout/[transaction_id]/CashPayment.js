@@ -6,18 +6,22 @@ import { useLaravelBooking } from '@/hooks/booking'
 import axios from '@/lib/axios'
 import { useRouter } from "next/navigation";
 
+import { mutate } from 'swr'
+
 
 
 const CashPayment = ({paymentType, totalPrice, bookId}) => {
   const { user } = useAuth({ middleware: 'auth' })
   const [invoiceEmail, setInvoiceEmail] = React.useState(user?.email)
   const router = useRouter()
-  const {booking} = useLaravelBooking(`api/v1/booking/${bookId}`)
+  const {booking, mutate} = useLaravelBooking(`api/v1/booking/${bookId}`)
   const {calculateSubPrice, calculateFee, calculateTotalPrice} = usePrice()
+  const [buttonLoading, setButtonLoading] = React.useState(false)
   const [paymentMethodVal, setPaymentMethodVal] = React.useState("PH_GCASH")
   const subTotal = totalPrice
 
   const confirmBooking = async () => {
+    setButtonLoading(true)
     axios.post('api/v1/transaction', {
       "email": invoiceEmail,
       "booking_id": bookId,
@@ -27,8 +31,10 @@ const CashPayment = ({paymentType, totalPrice, bookId}) => {
 
     })
     .then((response) => {
-      // console.log(response.data.data.)
       router.push('/view-booking')
+    })
+    .finally(() => {
+      setButtonLoading(true)
       
     })
   }
@@ -60,7 +66,7 @@ const CashPayment = ({paymentType, totalPrice, bookId}) => {
         </div>
         
 
-      <Button className="w-full" type="primary" onClick={confirmBooking}>Confirm Booking</Button>
+      <Button className="w-full" type="primary" size="large" onClick={confirmBooking} loading={buttonLoading}>Confirm Booking</Button>
     </div>
   )
 }
