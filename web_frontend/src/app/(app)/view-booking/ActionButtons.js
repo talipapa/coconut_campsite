@@ -16,23 +16,19 @@ const ActionButtons = ({checkIn, bookingType, bookingId, transactionStatus}) => 
 
     const [api, contextHolder] = notification.useNotification()
 
-    const openSuccessNotification = () => {
-        api['success']({
-          message: 'Rescheduled successfully!',
-          placement: 'bottomRight',
-          description:
-            "Your booking will  be rescheduled shortly!"
-        })
-    }
+    api['success']({
+      message: 'Rescheduled successfully!',
+      placement: 'bottomRight',
+      description:
+        "Your booking will  be rescheduled shortly!"
+    })
 
-    const openErrorNotification = () => {
-        api['error']({
-          message: 'Oops!',
-          placement: 'bottomRight',
-          description:
-            "Something went wrong"
-        })
-    }
+    api['error']({
+      message: 'Oops!',
+      placement: 'bottomRight',
+      description:
+        "Something went wrong"
+    })
 
     const handleOk = () => {
         // Refund or Cancel logic here
