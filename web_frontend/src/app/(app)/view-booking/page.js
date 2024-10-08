@@ -39,7 +39,7 @@ const getData = async () => {
 
 const getXenditData = async (xenditId) => {
     let xenditFetchPath = process.env.NEXT_PUBLIC_BACKEND_URL + `/api/v1/xendit/${xenditId}`
-    await fetch("http://localhost:8000/sanctum/csrf-cookie")
+    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/sanctum/csrf-cookie`)
     
     const options = {
         method: "GET",
