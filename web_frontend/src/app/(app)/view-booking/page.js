@@ -22,7 +22,7 @@ const getData = async () => {
             'Referer' : process.env.APP_URL,
             "X-Requested-With": "XMLHttpRequest",
             "Content-Type": "application/json",
-            Cookie: "XSRF-TOKEN=" + cookies().get('XSRF-TOKEN').value + ";laravel_session="+cookies().get('laravel_session').value,
+            Cookie: "XSRF-TOKEN=" + cookies().get('XSRF-TOKEN').value + ";coconut_campsite_session="+cookies().get('coconut_campsite_session').value,
             Authorization: "Bearer " + cookies().get('XSRF-TOKEN').value
             
         },
@@ -49,7 +49,7 @@ const getXenditData = async (xenditId) => {
             'Referer' : process.env.APP_URL,
             "X-Requested-With": "XMLHttpRequest",
             "Content-Type": "application/json",
-            Cookie: "XSRF-TOKEN=" + cookies().get('XSRF-TOKEN').value + ";laravel_session="+cookies().get('laravel_session').value,
+            Cookie: "XSRF-TOKEN=" + cookies().get('XSRF-TOKEN').value + ";coconut_campsite_session="+cookies().get('coconut_campsite_session').value,
             Authorization: "Bearer " + cookies().get('XSRF-TOKEN').value
             
         },
