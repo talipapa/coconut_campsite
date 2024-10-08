@@ -1,19 +1,15 @@
 "use client"
 
-import { useLaravelBooking } from "@/hooks/booking";
-import Header from "../Header";
-import { useAuth } from '@/hooks/auth'
-
+import { Breadcrumb } from "antd"
 export default function Page() {
-    const { user } = useAuth({middleware: 'auth'})
-    const { booking } = useLaravelBooking()
+    // const { user } = useAuth({middleware: 'auth'})
+    // const { booking } = useLaravelBooking()
 
     return (
         <div>
-        <Header title="Account" />
-        <div className="m-[30px]">
-            Account setting page
+            <div className="m-[30px]">
+                Account setting page
+            </div>
         </div>
-    </div>
-    );
+    )
 }

@@ -1,27 +1,27 @@
 'use client'
 
 import React from 'react'
-import { Button, QRCode, Space, Alert } from 'antd';
+import { Button, QRCode, Space, Alert } from 'antd'
 
 function doDownload(url, fileName) {
-  const a = document.createElement('a');
-  a.download = fileName;
-  a.href = url;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  const a = document.createElement('a')
+  a.download = fileName
+  a.href = url
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
 }
 
 const QrCard = ({id}) => {
     // console.log(id)
 
     const downloadCanvasQRCode = () => {
-        const canvas = document.getElementById('bookingqr')?.querySelector('canvas');
+        const canvas = document.getElementById('bookingqr')?.querySelector('canvas')
         if (canvas) {
-          const url = canvas.toDataURL();
-          doDownload(url, 'QRCode.png');
+          const url = canvas.toDataURL()
+          doDownload(url, 'QRCode.png')
         }
-    };
+    }
 
     
   return (

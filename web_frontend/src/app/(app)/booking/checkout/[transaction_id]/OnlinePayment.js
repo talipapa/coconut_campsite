@@ -1,6 +1,5 @@
-import { Button, Radio, Input, Alert, notification } from 'antd'
+import { Button, Radio, Alert, notification } from 'antd'
 import React from 'react'
-import MailFilled from '@ant-design/icons/MailFilled'
 import { useAuth } from '@/hooks/auth'
 import { usePrice } from '@/hooks/prices'
 import { useLaravelBooking } from '@/hooks/booking'
@@ -8,11 +7,11 @@ import axios from '@/lib/axios'
 
 const OnlinePayment = ({paymentType, totalPrice, bookId}) => {
   const { user } = useAuth({ middleware: 'auth' })
-  const [invoiceEmail, setInvoiceEmail] = React.useState(user?.email)
+  const [invoiceEmail] = React.useState(user?.email)
   const [api, contextHolder] = notification.useNotification()
   const [buttonLoading, setButtonLoading] = React.useState(false)
-  const {booking, mutate} = useLaravelBooking(`api/v1/booking/${bookId}`)
-  const {calculateSubPrice, calculateFee, calculateTotalPrice} = usePrice()
+  const {mutate} = useLaravelBooking(`api/v1/booking/${bookId}`)
+  const {calculateFee, calculateTotalPrice} = usePrice()
   const [paymentMethodVal, setPaymentMethodVal] = React.useState("PH_GCASH")
   const subTotal = totalPrice
 
@@ -27,7 +26,7 @@ const OnlinePayment = ({paymentType, totalPrice, bookId}) => {
         <>
           {errorContent.message}
         </>
-      });
+      })
     } else{
       api['error']({
         message: 'Error',
@@ -38,7 +37,7 @@ const OnlinePayment = ({paymentType, totalPrice, bookId}) => {
         <>
           {errorContent}
         </>
-      });
+      })
     }
 
   }
@@ -64,7 +63,6 @@ const OnlinePayment = ({paymentType, totalPrice, bookId}) => {
     .catch((error) => {
       setButtonLoading(false)
       var errorData
-      console.log(error)
       // check if errorData is string or object
       if (typeof error.response.data !== 'string') {
         errorData = JSON.parse(error.response.data)

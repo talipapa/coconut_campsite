@@ -1,34 +1,32 @@
 'use client'
 
-import { useLaravelBooking } from "@/hooks/booking";
-import { Breadcrumb, Button, Skeleton } from "antd";
-import { usePrice } from "@/hooks/prices";
-import CheckoutCard from "./CheckoutCard";
-import axios from "@/lib/axios";
-import { useEffect, useState } from "react";
+import { useLaravelBooking } from "@/hooks/booking"
+import { Breadcrumb, Skeleton } from "antd"
+import { usePrice } from "@/hooks/prices"
+import CheckoutCard from "./CheckoutCard"
+import { useEffect, useState } from "react"
 
 
 export default function Page({params}) {
     const [totalPrice, setTotalPrice] = useState(0)
     const { booking, error } = useLaravelBooking({routeLink: `api/v1/transaction/${params.transaction_id}`})
-
     const {adultPrice, checkInDate, childPrice, tentPitchPrice, bonfireKitPrice, cabinPrice, calcPricePerUnit} = usePrice()
 
     useEffect(() => {
-        if (!booking) return;
-        var total = 0;
+        if (!booking) return
+        var total = 0
 
-        total += (adultPrice * booking.booking.adultCount);
-        total += (childPrice * booking.booking.childCount);
-        total += (tentPitchPrice * booking.booking.tent_pitching_count);
-        total += (bonfireKitPrice * booking.booking.bonfire_kit_count);
+        total += (adultPrice * booking.booking.adultCount)
+        total += (childPrice * booking.booking.childCount)
+        total += (tentPitchPrice * booking.booking.tent_pitching_count)
+        total += (bonfireKitPrice * booking.booking.bonfire_kit_count)
     
         // Add cabin price if applicable
         if (booking.booking.is_cabin) {
-            total += cabinPrice;
+            total += cabinPrice
         }
     
-        setTotalPrice(total.toFixed(2));
+        setTotalPrice(total.toFixed(2))
     }, [booking])
 
     if (error) {
@@ -113,5 +111,5 @@ export default function Page({params}) {
                 </div>
             </div>
         </>
-    );
+    )
 }

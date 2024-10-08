@@ -27,7 +27,6 @@ const AppLayout = ({ children }) => {
                 dangerShadow: '0 2px 0 rgba(255, 38, 5, 0.00)',
             
             borderRadius: '0.2em',
-                colorBgContainer: '#FFC39E',
 
                 // Alias Token
                 colorBgContainer: '#f6ffed',

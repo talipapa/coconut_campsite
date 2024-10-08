@@ -1,8 +1,8 @@
 'use client'
 import Link from 'next/link'
 import { useAuth } from '@/hooks/auth'
-import { FaCampground } from "react-icons/fa6";
-import { FaFacebookSquare } from "react-icons/fa";
+import { FaCampground } from "react-icons/fa6"
+import { FaFacebookSquare } from "react-icons/fa"
 import { Button } from 'antd'
 import { useRouter } from 'next/navigation'
 
@@ -12,7 +12,7 @@ const NavbarLoginLinks = () => {
     const router = useRouter()
 
   return (
-    <nav className='text-white flex flex-row justify-between space-x-10 '>
+    <nav className='text-white flex-row justify-between space-x-10 hidden md:flex'>
         <div className='w-full flex flex-row items-end space-x-5'>
                 <h1 className='text-2xl font-semibold'>Coconut Campsite</h1>
                 <div className='flex flex-row space-x-3'>

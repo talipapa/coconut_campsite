@@ -1,8 +1,8 @@
-import { cookies } from "next/headers";
-import QrCard from "./QrCard";
-import { Button } from "antd";
-import ActionButtons from "./ActionButtons";
-import { redirect } from "next/navigation";
+import { cookies } from "next/headers"
+import QrCard from "./QrCard"
+import ActionButtons from "./ActionButtons"
+import { redirect } from "next/navigation"
+import dayjs from "dayjs"
 
 
 const getData = async () => {
@@ -28,8 +28,8 @@ const getData = async () => {
         },
     }
     
-    const bookingRaw = await fetch(bookingFetchPath, options);
-    const pricesRaw = await fetch(priceFetchPath, options);
+    const bookingRaw = await fetch(bookingFetchPath, options)
+    const pricesRaw = await fetch(priceFetchPath, options)
     
     return {
         bookingData: await bookingRaw.json(),
@@ -54,28 +54,25 @@ const getXenditData = async (xenditId) => {
             
         },
     }
-    const xenditRaw = await fetch(xenditFetchPath, options);
+    const xenditRaw = await fetch(xenditFetchPath, options)
     return await xenditRaw.json()
 }
 
 
 export default async function Page() {
-    const {bookingData, pricesData} = await getData();
+    const {bookingData, pricesData} = await getData()
 
     if (bookingData.message === "No bookings found"){
         redirect("/booking")
     }
 
     
-    console.log(bookingData)
 
 
     var xenditData 
     
     if (bookingData && bookingData.data.xendit_id !== null){
         xenditData = await getXenditData(bookingData.data.xendit_id)
-        // console.log(xenditData)
-        console.log(pricesData.data[1].price)
     }
 
     
@@ -83,16 +80,6 @@ export default async function Page() {
     const calculateItem = (price, count) => {
         return (price * count).toFixed(2)
     }
-
-
-    const adultTotal = calculateItem(pricesData.data[0].price.toFixed(1), bookingData.data.adult_count)
-    const childTotal = calculateItem(pricesData.data[1].price.toFixed(1), bookingData.data.child_count)
-    const tentPitchingTotal = calculateItem(pricesData.data[3].price.toFixed(2), bookingData.data.tent_pitching_count)
-    const bonfireKitTotal = calculateItem(pricesData.data[3].price.toFixed(4), bookingData.data.bonfire_kit_count)
-    const cabinTotal = pricesData.data[4].price.toFixed(2)
-
-
-
 
     return (
         <div className="p-[30px] w-full space-y-5">
@@ -149,7 +136,7 @@ export default async function Page() {
                                     Check in
                                 </div>
                                 <div>
-                                    {bookingData.data.check_in}
+                                    {dayjs(bookingData.data.check_in).format("MMMM DD, YYYY")}
                                 </div>
                             </div>     
                             <div>
@@ -251,5 +238,5 @@ export default async function Page() {
                 </div>
             </div>
         </div>
-    );
+    )
 }

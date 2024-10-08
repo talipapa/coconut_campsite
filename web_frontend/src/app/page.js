@@ -1,13 +1,13 @@
 "use client"
 
-import { Button, ConfigProvider, Image, Carousel } from 'antd'
-import { BsBasketFill } from "react-icons/bs";
-import { MdOutlinePets } from "react-icons/md";
-import { IoPricetags } from "react-icons/io5";
-import Footer from '@/components/LargeComponents/Footer';
-import NavbarLoginLinks from './NavbarLoginLinks';
-import { usePrice } from '@/hooks/prices';
-
+import { Button, Image as AntImage, Carousel } from 'antd'
+import { BsBasketFill } from "react-icons/bs"
+import { MdOutlinePets } from "react-icons/md"
+import { IoPricetags } from "react-icons/io5"
+import Footer from '@/components/LargeComponents/Footer'
+import NavbarLoginLinks from './NavbarLoginLinks'
+import { usePrice } from '@/hooks/prices'
+import Image from 'next/image'
 
 
 
@@ -34,7 +34,10 @@ const Home = () => {
             {/* <LoginLinks /> */}
             {/* Hero */}
             <nav className='relative'>
-                <img src="/img/banner-dim.jpg" alt="hero" className="w-full h-[500px] object-cover" />
+                <div className="w-full h-[500px]">
+                    <Image src="/img/banner-dim.jpg" alt="hero" quality={100} fill={true} className="object-cover" />
+
+                </div>
                 <div className='top-0 left-0 absolute w-full h-full text-center'>
                     <div className='bg-[#00000075] bg-opacity-90 w-full flex flex-col justify-between h-full px-[30px] py-[40px]'>
                         <div className='flex flex-col items-center justify-center h-full space-y-5'>
@@ -64,7 +67,9 @@ const Home = () => {
                     </div>
 
                     <div className='w-full h-full hidden md:block'>
-                        <img src="/img/image1.jpg" alt="campsite" className='w-full h-[500px] object-center object-cover'/>
+                        <div className="relative w-full h-[500px]">
+                            <Image src="/img/image1.jpg" alt="campsite" fill={true} sizes="100vw" className="object-cover"/>
+                        </div>
                     </div>
 
                 </section>
@@ -115,15 +120,15 @@ const Home = () => {
                     <div className='flex flex-col space-y-10 items-center justify-center'>
                         <div className='flex flex-col space-y-1 items-center justify-center'>
                             <h3 className='text-[#555555]'>Essential Cost</h3>
-                            <table class="border-collapse w-[500px] table-fixed">
+                            <table className="border-collapse w-[500px] table-fixed">
                                 <tbody className='text-center'>
                                     <tr>
-                                        <td class="border-2 border-slate-600">Adult</td>
-                                        <td class="border-2 border-slate-600">₱ {adultPrice}</td>
+                                        <td className="border-2 border-slate-600">Adult</td>
+                                        <td className="border-2 border-slate-600">₱ {adultPrice}</td>
                                     </tr>
                                     <tr>
-                                        <td scope='col' class="border-2 border-slate-600">Children</td>
-                                        <td scope='col' class="border-2 border-slate-600">₱ {childPrice}</td>
+                                        <td scope='col' className="border-2 border-slate-600">Children</td>
+                                        <td scope='col' className="border-2 border-slate-600">₱ {childPrice}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -131,19 +136,19 @@ const Home = () => {
 
                         <div className='flex flex-col space-y-1 items-center justify-center'>
                             <h3 className='text-[#555555]'>Add Ons</h3>
-                            <table class="border-collapse border-2 border-slate-600 w-[500px] table-fixed">
+                            <table className="border-collapse border-2 border-slate-600 w-[500px] table-fixed">
                                 <tbody className='text-center '>
                                     <tr>
-                                        <td class="border-2 border-slate-600">Tent pitching</td>
-                                        <td class="border-2 border-slate-600">₱ {tentPitchPrice}</td>
+                                        <td className="border-2 border-slate-600">Tent pitching</td>
+                                        <td className="border-2 border-slate-600">₱ {tentPitchPrice}</td>
                                     </tr>
                                     <tr>
-                                        <td class="border-2 border-slate-600">Cabin (4-5 person)</td>
-                                        <td class="border-2 border-slate-600">₱ {cabinPrice}</td>
+                                        <td className="border-2 border-slate-600">Cabin (4-5 person)</td>
+                                        <td className="border-2 border-slate-600">₱ {cabinPrice}</td>
                                     </tr>
                                     <tr>
-                                        <td class="border-2 border-slate-600">Bonfire kit</td>
-                                        <td class="border-2 border-slate-600">₱ {bonfireKitPrice}</td>
+                                        <td className="border-2 border-slate-600">Bonfire kit</td>
+                                        <td className="border-2 border-slate-600">₱ {bonfireKitPrice}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -151,27 +156,27 @@ const Home = () => {
 
                         <div className='flex flex-col space-y-1 items-center justify-center'>
                             <h3 className='text-[#555555]'>Others</h3>
-                            <table class="border-collapse border-2 border-slate-600 w-[500px] table-fixed">
+                            <table className="border-collapse border-2 border-slate-600 w-[500px] table-fixed">
                                 <tbody className='text-center '>
                                     <tr>
-                                        <td class="border-2 border-slate-600">Water</td>
-                                        <td class="border-2 border-slate-600">FREE</td>
+                                        <td className="border-2 border-slate-600">Water</td>
+                                        <td className="border-2 border-slate-600">FREE</td>
                                     </tr>
                                     <tr>
-                                        <td class="border-2 border-slate-600">Comfort room / Toilet</td>
-                                        <td class="border-2 border-slate-600">FREE TO USE</td>
+                                        <td className="border-2 border-slate-600">Comfort room / Toilet</td>
+                                        <td className="border-2 border-slate-600">FREE TO USE</td>
                                     </tr>
                                     <tr>
-                                        <td class="border-2 border-slate-600">Night lamps</td>
-                                        <td class="border-2 border-slate-600">FREE TO USE</td>
+                                        <td className="border-2 border-slate-600">Night lamps</td>
+                                        <td className="border-2 border-slate-600">FREE TO USE</td>
                                     </tr>
                                     <tr>
-                                        <td class="border-2 border-slate-600">Wooden tables</td>
-                                        <td class="border-2 border-slate-600">FREE TO USE</td>
+                                        <td className="border-2 border-slate-600">Wooden tables</td>
+                                        <td className="border-2 border-slate-600">FREE TO USE</td>
                                     </tr>
                                     <tr>
-                                        <td class="border-2 border-slate-600">Wooden chairs</td>
-                                        <td class="border-2 border-slate-600">FREE TO USE</td>
+                                        <td className="border-2 border-slate-600">Wooden chairs</td>
+                                        <td className="border-2 border-slate-600">FREE TO USE</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -191,27 +196,40 @@ const Home = () => {
                     <div className=' min-h-[300px] w-full flex flex-col justify-between space-y-12 items-start'>
                         <div className='w-full h-auto bg-[#1b1b1b75] px-2 md:px-10 md:rounded- xl'>
                             <Carousel autoplay arrows adaptiveHeight>
-                                    <img className='w-full h-[400px] object-contain object-center' src="/img/gallery/gallery1.jpg"/>
-                                    <img className='w-full h-[400px] object-contain object-center' src="/img/gallery/gallery2.jpg"/>
-                                    <img className='w-full h-[400px] object-contain object-center' src="/img/gallery/gallery3.jpg"/>
-                                    <img className='w-full h-[400px] object-contain object-center' src="/img/gallery/gallery4.jpg"/>
-                                    <img className='w-full h-[400px] object-contain object-center' src="/img/gallery/gallery5.jpg"/>
+                                    <div className="relative w-full h-[400px]">
+                                        <Image className='object-contain object-center' fill={true}  sizes="100vw" src="/img/gallery/gallery1.jpg"/>
+                                    </div>
+                                    <div className="relative w-full h-[400px]">
+                                        <Image className='object-contain object-center' fill={true}  sizes="100vw" src="/img/gallery/gallery2.jpg"/>
+                                    </div>
+                                    <div className="relative w-full h-[400px]">
+                                        <Image className='object-contain object-center' fill={true}  sizes="100vw" src="/img/gallery/gallery3.jpg"/>
+                                    </div>
+                                    <div className="relative w-full h-[400px]">
+                                        <Image className='object-contain object-center' fill={true}  sizes="100vw" src="/img/gallery/gallery4.jpg"/>
+                                    </div>
+                                    <div className="relative w-full h-[400px]">
+                                        <Image className='object-contain object-center' fill={true}  sizes="100vw" src="/img/gallery/gallery5.jpg"/>
+                                    </div>
                             </Carousel>
                         </div>
                         <div className='hidden md:block columns-1 md:columns-3'>
-                            <Image  src="/img/gallery/gallery1.jpg" />
-                            <Image src="/img/gallery/gallery2.jpg" />
-                            <Image src="/img/gallery/gallery3.jpg" />
-                            <Image  src="/img/gallery/gallery4.jpg" />
-                            <Image  src="/img/gallery/gallery5.jpg" />
-                            <Image src="/img/gallery/gallery3.jpg" />
+                            <AntImage  src="/img/gallery/gallery1.jpg" />
+                            <AntImage src="/img/gallery/gallery2.jpg" />
+                            <AntImage src="/img/gallery/gallery3.jpg" />
+                            <AntImage  src="/img/gallery/gallery4.jpg" />
+                            <AntImage  src="/img/gallery/gallery5.jpg" />
+                            <AntImage src="/img/gallery/gallery3.jpg" />
         
                         </div>
                     </div>
                 </section>
 
-                <section className='relative '>
-                    <img src="/img/gallery/gallery3.jpg" className='w-full h-[400px] object-cover object-center'/>
+                <section className='relative'>
+                    <div className="w-full h-[400px]">
+                        <Image src="/img/gallery/gallery3.jpg" fill={true}  className='object-cover object-center'/>
+                    </div>
+
                     <div className='absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-[#000000ac] text-white space-y-5'>
                         <div className='text-center flex flex-col items-center justify-center'>
                             <h3 className='font-bold tracking-wider text-md text-[#BC7B5C]'>RESERVATION</h3>
@@ -228,7 +246,7 @@ const Home = () => {
                     </div>
 
                     <div className='w-full h-full'>
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13607.431373242382!2d121.18812472764765!3d14.72558446589735!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397bda85647cc8f%3A0xbd1a2f816c06b4c6!2sCoconut%20Campsite!5e0!3m2!1sen!2sph!4v1727672350142!5m2!1sen!2sph" width="100%" height="500px" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13607.431373242382!2d121.18812472764765!3d14.72558446589735!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397bda85647cc8f%3A0xbd1a2f816c06b4c6!2sCoconut%20Campsite!5e0!3m2!1sen!2sph!4v1727672350142!5m2!1sen!2sph" width="100%" height="500px" allowfullscreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
                     </div>
                 </section>
 

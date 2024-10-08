@@ -1,19 +1,19 @@
 "use client"
 
-import axios from "@/lib/axios";
-import Input from "antd/es/input/Input";
-import { UserOutlined } from '@ant-design/icons';
-import { useEffect, useState } from "react";
-import { MdOutlineEmail } from "react-icons/md";
-import { Button, DatePicker, InputNumber, Radio, notification, Space, Breadcrumb, message } from "antd";
+import axios from "@/lib/axios"
+import Input from "antd/es/input/Input"
+import { UserOutlined } from '@ant-design/icons'
+import { useEffect, useState } from "react"
+import { MdOutlineEmail } from "react-icons/md"
+import { Button, DatePicker, InputNumber, Radio, notification, Breadcrumb } from "antd"
 
-import { usePrice } from "@/hooks/prices";
-import dayjs from "dayjs";
-import TextArea from "antd/es/input/TextArea";
-import InputError from "@/components/InputError";
-import { useAuth } from "@/hooks/auth";
-import { useLaravelBooking } from "@/hooks/booking";
-import { useRouter } from 'next/navigation';
+import { usePrice } from "@/hooks/prices"
+import dayjs from "dayjs"
+import TextArea from "antd/es/input/TextArea"
+import InputError from "@/components/InputError"
+import { useAuth } from "@/hooks/auth"
+import { useLaravelBooking } from "@/hooks/booking"
+import { useRouter } from 'next/navigation'
 
 
 
@@ -44,7 +44,7 @@ export default function Page() {
     const [buttonLoading, setButtonLoading] = useState(false)
 
     useEffect(() => {
-        if (!booking) return;
+        if (!booking) return
         if (booking.status === "PAID"){
             router.push('/view-booking')
         }
@@ -86,7 +86,7 @@ export default function Page() {
 
 
     // Display feedback notification
-    const [api, contextHolder] = notification.useNotification();
+    const [api, contextHolder] = notification.useNotification()
     const openErrorValidationNotification = ({errors}) => {
         api['error']({
           message: 'Something is wrong!',
@@ -95,13 +95,13 @@ export default function Page() {
             <>
                 {Object.keys(errors).map((key) => (
                     <>
-                        {errors[key].map((error) => (
-                            <p>{error}</p>
+                        {errors[key].map((error, index) => (
+                            <p key={index}>{error}</p>
                         ))}
                     </>
                 ))}
             </>
-        });
+        })
     }
     const openErrorExistingNotification = () => {
         api['error']({
@@ -109,7 +109,7 @@ export default function Page() {
           placement: 'bottomRight',
           description: "You already have existing booking!"
           
-        });
+        })
     }
     
     const openSuccessNotification = () => {
@@ -118,7 +118,7 @@ export default function Page() {
           placement: 'bottomRight',
           description:
             "Thank you for booking with us!, You will be redirected to Payment page in a few seconds."
-        });
+        })
     }
 
     const createBooking = async () => {
@@ -145,7 +145,7 @@ export default function Page() {
         try {
             setErrors([])
             const response = await axios.post('api/' + apiVersion + "/booking", bookingData)
-            mutate();
+            mutate()
             switch (response.status) {
                 case 200:
                     openSuccessNotification()
@@ -155,42 +155,42 @@ export default function Page() {
                         router.push(`/booking/checkout/${response.data.transaction_id}`)
                     }, 300)
                     
-                    break;
+                    break
                 case 201:
                     openSuccessNotification()
                     setTimeout(() => {
                         router.push('/booking/checkout')
                     }, 300)
                     
-                    break;
+                    break
                 case 203:
                     openSuccessNotification()
                     setTimeout(() => {
                         router.push('/booking/checkout')
                     }, 300)
                     
-                    break;
+                    break
                 case 204:
                     openSuccessNotification()
                     setTimeout(() => {
                         router.push('/booking/checkout')
                     }, 300)
-                    break;
+                    break
                 default:
                     openErrorValidationNotification({errors: "Something went wrong!"})
-                    break;
+                    break
             }
         } catch (error) {
             switch (error.response.status) {
                 case 400:
                     openErrorExistingNotification()
-                    break;
+                    break
                 case 404:
-                    break;
+                    break
                 case 422:
                     openErrorValidationNotification({errors: error.response.data.errors})
                     setErrors(error.response.data.errors)
-                    break;
+                    break
                 default:
                     throw error
             }
@@ -224,7 +224,7 @@ export default function Page() {
         try {
             setErrors([])
             const response = await axios.patch('api/' + apiVersion + "/booking/" + booking.id, bookingData)
-            mutate();
+            mutate()
             if (response.status === 200 || response.status === 201 || response.status === 203 || response.status === 204){
                 openSuccessNotification()
                 setTimeout(() => {
@@ -233,15 +233,14 @@ export default function Page() {
             }
 
         } catch (error) {
-            console.log(error)
             switch (error.response?.status) {
                 case 400:
                     openErrorExistingNotification()
-                    break;
+                    break
                 case 422:
                     openErrorValidationNotification({errors: error.response.data.errors})
                     setErrors(error.response.data.errors)
-                    break;
+                    break
                 default:
                     throw error
             }
@@ -272,7 +271,7 @@ export default function Page() {
           label: 'Overnight',
           value: "overnight",
         },
-    ];
+    ]
 
     const cabinOption = [
         {
@@ -283,7 +282,7 @@ export default function Page() {
           label: 'Yes',
           value: true,
         },
-    ];
+    ]
 
  
 
@@ -492,5 +491,5 @@ export default function Page() {
                 </div>
             </div>
         </>
-    );
+    )
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaFacebookSquare } from "react-icons/fa";
+import { FaFacebookSquare } from "react-icons/fa"
 
 const Footer = () => {
   return (
@@ -7,7 +7,7 @@ const Footer = () => {
         <h2 className='font-bold text-2xl text-[#FFC39E]'>COCONUT CAMPSITE</h2>
         {/* Facebook page */}
         <div className='flex flex-col items-center space-y-1'>
-            <a href='https://www.facebook.com/profile.php?id=61558384738390' target='_blank' className='flex flex-row items-center space-x-2'>
+            <a href='https://www.facebook.com/profile.php?id=61558384738390' target='_blank' className='flex flex-row items-center space-x-2' rel="noreferrer">
                 <FaFacebookSquare className='text-2xl text-[#1877F2]'/>
                 <h3 className='text-[#3085f5]'>Follow us on Facebook</h3>
             </a>

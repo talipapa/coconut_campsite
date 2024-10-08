@@ -2,22 +2,17 @@ import React from 'react'
 import { Button, Alert } from 'antd'
 import { useAuth } from '@/hooks/auth'
 import { usePrice } from '@/hooks/prices'
-import { useLaravelBooking } from '@/hooks/booking'
 import axios from '@/lib/axios'
-import { useRouter } from "next/navigation";
-
-import { mutate } from 'swr'
-
+import { useRouter } from "next/navigation"
 
 
 const CashPayment = ({paymentType, totalPrice, bookId}) => {
   const { user } = useAuth({ middleware: 'auth' })
-  const [invoiceEmail, setInvoiceEmail] = React.useState(user?.email)
+  const [invoiceEmail] = React.useState(user?.email)
   const router = useRouter()
-  const {booking, mutate} = useLaravelBooking(`api/v1/booking/${bookId}`)
-  const {calculateSubPrice, calculateFee, calculateTotalPrice} = usePrice()
+  const {calculateFee, calculateTotalPrice} = usePrice()
   const [buttonLoading, setButtonLoading] = React.useState(false)
-  const [paymentMethodVal, setPaymentMethodVal] = React.useState("PH_GCASH")
+  const [paymentMethodVal] = React.useState("PH_GCASH")
   const subTotal = totalPrice
 
   const confirmBooking = async () => {
@@ -30,7 +25,7 @@ const CashPayment = ({paymentType, totalPrice, bookId}) => {
       "paymentMethod": "CASH_ARRIVAL"
 
     })
-    .then((response) => {
+    .then(() => {
       router.push('/view-booking')
     })
     .finally(() => {
