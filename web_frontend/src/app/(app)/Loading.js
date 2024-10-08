@@ -1,6 +1,4 @@
 import { Skeleton } from "antd"
-import Header from "./Header"
-import { FaFacebookSquare } from "react-icons/fa"
 import AuthenticatedFooter from "./AuthenticatedFooter"
 import AuthenticatedNavbar from "./AuthenticatedNavbar"
 

@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
-import {Radio} from "antd";
-import OnlinePayment from './OnlinePayment';
-import CashPayment from './CashPayment';
+import {Radio} from "antd"
+import OnlinePayment from './OnlinePayment'
+import CashPayment from './CashPayment'
 
 const CheckoutCard = ({totalPrice, booking_id}) => {
   const [componentPaymentMethod, setComponentPaymentMethod] = useState("XENDIT")

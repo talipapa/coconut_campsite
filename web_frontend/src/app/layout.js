@@ -2,7 +2,6 @@ import { Hahmlet } from 'next/font/google'
 import { ConfigProvider } from 'antd'
 
 import '@/app/global.css'
-import { Suspense } from 'react'
 
 const hahmlet = Hahmlet({
     subsets: ['latin'],
@@ -22,12 +21,9 @@ const RootLayout = ({ children }) => {
                     colorBorderSecondary: '#FFC39E',
                     dangerShadow: '0 2px 0 rgba(255, 38, 5, 0.00)',
                     colorBgTextHover: '#5CBCB6',
-                
                     borderRadius: '0.2em',
-                    colorBgContainer: '#FFC39E',
-
-                    // Alias Token
                     colorBgContainer: '#f6ffed',
+                    
                 },
                 
                 

@@ -1,22 +1,20 @@
 'use client'
 
 import { Button, Popconfirm, notification  } from 'antd'
-import RescheduleButton from './ButtonComponent/RescheduleButton';
-import { QuestionCircleOutlined } from '@ant-design/icons';
-import { useState } from 'react';
-import axios from '@/lib/axios';
-import { useLaravelBooking } from '@/hooks/booking';
+import RescheduleButton from './ButtonComponent/RescheduleButton'
+import { QuestionCircleOutlined } from '@ant-design/icons'
+import { useState } from 'react'
+import axios from '@/lib/axios'
 
 
 const ActionButtons = ({checkIn, bookingType, bookingId, transactionStatus}) => {
-    const [open, setOpen] = useState(false);
-    const [confirmLoading, setConfirmLoading] = useState(false);
+    const [open, setOpen] = useState(false)
+    const [confirmLoading, setConfirmLoading] = useState(false)
     const showPopconfirm = () => {
-        setOpen(true);
-    };
-    const {mutate} = useLaravelBooking(`api/v1/booking-check`)
+        setOpen(true)
+    }
 
-    const [api, contextHolder] = notification.useNotification();
+    const [api, contextHolder] = notification.useNotification()
 
     const openSuccessNotification = () => {
         api['success']({
@@ -24,7 +22,7 @@ const ActionButtons = ({checkIn, bookingType, bookingId, transactionStatus}) => 
           placement: 'bottomRight',
           description:
             "Your booking will  be rescheduled shortly!"
-        });
+        })
     }
 
     const openErrorNotification = () => {
@@ -33,7 +31,7 @@ const ActionButtons = ({checkIn, bookingType, bookingId, transactionStatus}) => 
           placement: 'bottomRight',
           description:
             "Something went wrong"
-        });
+        })
     }
 
     const handleOk = () => {
@@ -41,43 +39,41 @@ const ActionButtons = ({checkIn, bookingType, bookingId, transactionStatus}) => 
         switch (transactionStatus) {
             case 'CASH_PENDING':
                 axios.post('/api/v1/booking/cancel/' + bookingId, bookingId)
-                .then((res) => {
+                .then(() => {
                     window.location.reload()
                 })
                 .catch(() => {
                     window.location.reload()
                 })
-                break;
+                break
             case 'PAID':
                 axios.post('/api/v1/booking/refund/' + bookingId, bookingId)
-                .then((res) => {
+                .then(() => {
                     window.location.reload()
                 })
                 .catch(() => {
                     window.location.reload()
                 })
-                break;
+                break
             default:
 
-                break;
+                break
         }
         // Refund is successful in this state
-        setConfirmLoading(true);
+        setConfirmLoading(true)
         setTimeout(() => {
-        setOpen(false);
-        setConfirmLoading(false);
-        }, 2000);
-    };
+        setOpen(false)
+        setConfirmLoading(false)
+        }, 2000)
+    }
     const handleCancel = () => {
-        console.log('Clicked cancel button');
-        setOpen(false);
-    };
-`1`
+        setOpen(false)
+    }
     return (
         <>
             {contextHolder}
             <div className="space-x-4">
-                <Button color="primary" variant="solid"><a href="https://www.facebook.com/profile.php?id=61558384738390" target="_blank">Contact Campsite</a></Button>
+                <Button color="primary" variant="solid"><a href="https://www.facebook.com/profile.php?id=61558384738390" target="_blank" rel="noreferrer">Contact Campsite</a></Button>
                 <RescheduleButton checkIn={checkIn} bookingType={bookingType} bookingId={bookingId}/>
                 <Popconfirm
                     open={open}

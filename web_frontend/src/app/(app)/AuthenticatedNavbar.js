@@ -9,7 +9,7 @@ import { Button, Skeleton } from 'antd'
 import { usePathname } from 'next/navigation'
 import { useLaravelBooking } from '@/hooks/booking'
 
-const AuthenticatedNavbar = ({user, currentPath}) => {
+const AuthenticatedNavbar = ({user}) => {
   const { logout } = useAuth() 
   const { booking, error } = useLaravelBooking({routeLink: '/api/v1/booking-check'})
 

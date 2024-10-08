@@ -1,23 +1,22 @@
-'use client';
+'use client'
 
-import { Button, Modal, DatePicker, Radio, notification,  } from 'antd';
-import { useState } from 'react';
-import dayjs from 'dayjs';
-import InputError from '@/components/InputError';
-import axios from '@/lib/axios';
-import { useRouter } from 'next/navigation';
+import { Button, Modal, DatePicker, Radio, notification,  } from 'antd'
+import { useState } from 'react'
+import dayjs from 'dayjs'
+import axios from '@/lib/axios'
+import { useRouter } from 'next/navigation'
 
 
 const RescheduleButton = ({checkIn, bookingType, bookingId}) => {
     const router = useRouter()
-    const [open, setOpen] = useState(false);
-    const [confirmLoading, setConfirmLoading] = useState(false);
-    const [checkInDate, setCheckInDate] = useState(dayjs(checkIn));
-    const [localBookingType, setLocalBookingType] = useState(bookingType);
+    const [open, setOpen] = useState(false)
+    const [confirmLoading, setConfirmLoading] = useState(false)
+    const [checkInDate, setCheckInDate] = useState(dayjs(checkIn))
+    const [localBookingType, setLocalBookingType] = useState(bookingType)
 
     const showModal = () => {
-      setOpen(true);
-    };
+      setOpen(true)
+    }
 
     const openSuccessNotification = () => {
         api['success']({
@@ -25,7 +24,7 @@ const RescheduleButton = ({checkIn, bookingType, bookingId}) => {
           placement: 'bottomRight',
           description:
             "Your booking will  be rescheduled shortly!"
-        });
+        })
     }
 
     const openErrorNotification = () => {
@@ -34,7 +33,7 @@ const RescheduleButton = ({checkIn, bookingType, bookingId}) => {
           placement: 'bottomRight',
           description:
             "Something went wrong"
-        });
+        })
     }
 
     const handleOk = () => {
@@ -46,28 +45,26 @@ const RescheduleButton = ({checkIn, bookingType, bookingId}) => {
         }
 
         axios.patch('/api/v1/booking/reschedule/' + bookingId, payload)
-        .then((res) => {
+        .then(() => {
             openSuccessNotification()
             router.refresh()
         })
-        .catch((err) => {
-            console.log(err)
+        .catch(() => {
             openErrorNotification()
         })
 
 
         // Refund is successful in this state
-        setConfirmLoading(true);
+        setConfirmLoading(true)
         setTimeout(() => {
-            setOpen(false);
-            setConfirmLoading(false);
-        }, 2000);
-    };
+            setOpen(false)
+            setConfirmLoading(false)
+        }, 2000)
+    }
 
     const handleCancel = () => {
-      console.log('Clicked cancel button');
-      setOpen(false);
-    };
+      setOpen(false)
+    }
 
     const bookingTypeOption = [
         {
@@ -78,9 +75,9 @@ const RescheduleButton = ({checkIn, bookingType, bookingId}) => {
           label: 'Overnight',
           value: "overnight",
         },
-    ];
+    ]
     
-    const [api, contextHolder] = notification.useNotification();
+    const [api, contextHolder] = notification.useNotification()
 
 
     return (

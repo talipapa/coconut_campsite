@@ -1,9 +1,5 @@
 'use client'
 
-import useSWR from 'swr'
-import axios from '@/lib/axios'
-import { useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useLaravelBooking } from './booking'
 
@@ -64,6 +60,14 @@ export const usePrice = () => {
         calcPricePerUnit,
         calculateSubPrice,
         calculateFee,
-        calculateTotalPrice
+        calculateTotalPrice,
+        setAdultPrice,
+        setChildPrice,
+        setTentPitchPrice,
+        setBonfireKitPrice,
+        setCabinPrice,
+        setEWalletFee,
+        subPrice,
+        setSubPrice
     }
 }
