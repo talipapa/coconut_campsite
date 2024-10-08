@@ -65,6 +65,7 @@ const OnlinePayment = ({paymentType, totalPrice, bookId}) => {
       var errorData
       // check if errorData is string or object
       if (typeof error.response.data !== 'string') {
+        console.log(error.response.data)
         errorData = JSON.parse(error.response.data)
         openErrorValidationNotification(errorData, 'object')
       } else{
