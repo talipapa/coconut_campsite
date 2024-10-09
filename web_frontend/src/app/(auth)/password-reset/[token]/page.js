@@ -37,7 +37,7 @@ const PasswordReset = () => {
     }, [searchParams.get('email')])
 
     return (
-        <>
+        <div className="w-full sm:max-w-md px-6 py-4 bg-white shadow-2xl overflow-hidden sm:rounded-lg">
             {/* Session Status */}
             <AuthSessionStatus className="mb-4" status={status} />
 
@@ -104,7 +104,7 @@ const PasswordReset = () => {
                     <Button>Reset Password</Button>
                 </div>
             </form>
-        </>
+        </div>
     )
 }
 

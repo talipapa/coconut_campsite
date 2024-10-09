@@ -7,13 +7,13 @@ import { useState } from 'react'
 const Page = () => {
     const { logout, resendEmailVerification } = useAuth({
         middleware: 'auth',
-        redirectIfAuthenticated: '/dashboard',
+        redirectIfAuthenticated: '/',
     })
 
     const [status, setStatus] = useState(null)
 
     return (
-        <>
+        <div className="w-full sm:max-w-md px-6 py-4 bg-white shadow-2xl overflow-hidden sm:rounded-lg">
             <div className="mb-4 text-sm text-gray-600">
                 Thanks for signing up! Before getting started, could you verify
                 your email address by clicking on the link we just
@@ -40,7 +40,7 @@ const Page = () => {
                     Logout
                 </button>
             </div>
-        </>
+        </div>
     )
 }
 
