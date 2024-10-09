@@ -73,3 +73,4 @@ This lets the ngrok host application that listen to port 8000 which is the "Api 
 1. Laravel Returns 401 when calling the api route in Next.JS server component | FIX: Referrer in header is missing, its stated in laravel documentation that Referrer must be included
 
 2. The website (specifically /view-booking page) will always assume and pull a price from the database. Which causes an error if the database is not populated. Make sure to run "php artisan db:seed" to generate default prices.
+
