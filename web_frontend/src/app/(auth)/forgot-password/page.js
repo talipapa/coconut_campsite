@@ -17,11 +17,12 @@ const Page = () => {
     const [email, setEmail] = useState('')
     const [errors, setErrors] = useState([])
     const [status, setStatus] = useState(null)
+    const [buttonLoading, setButtonLoading] = useState(false)
 
     const submitForm = event => {
         event.preventDefault()
-
-        forgotPassword({ email, setErrors, setStatus })
+        setButtonLoading(true)
+        forgotPassword({ setButtonLoading, email, setErrors, setStatus })
     }
 
     return (
@@ -54,7 +55,7 @@ const Page = () => {
                 </div>
 
                 <div className="flex items-center justify-end mt-4">
-                    <Button>Email Password Reset Link</Button>
+                    <Button disabled={buttonLoading}>Email Password Reset Link</Button>
                 </div>
             </form>
         </div>
