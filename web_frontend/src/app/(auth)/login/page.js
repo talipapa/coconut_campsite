@@ -9,9 +9,6 @@ import { useAuth } from '@/hooks/auth'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import AuthSessionStatus from '@/app/(auth)/AuthSessionStatus'
-import AuthenticatedFooter from '@/app/(app)/AuthenticatedFooter'
-import NavbarLoginLinks from '@/app/NavbarLoginLinks'
-import PublicNavbar from '../PublicNavbar'
 
 const Login = () => {
     const router = useRouter()
@@ -26,6 +23,7 @@ const Login = () => {
     const [shouldRemember, setShouldRemember] = useState(false)
     const [errors, setErrors] = useState([])
     const [status, setStatus] = useState(null)
+    const [buttonLoading, setButtonLoading] = useState(false)
 
     useEffect(() => {
         if (router.reset?.length > 0 && errors.length === 0) {
@@ -37,14 +35,16 @@ const Login = () => {
 
     const submitForm = async event => {
         event.preventDefault()
-
+        setButtonLoading(true)
         login({
             email,
             password,
             remember: shouldRemember,
+            setButtonLoading: setButtonLoading,
             setErrors,
             setStatus,
         })
+
     }
 
     return (
@@ -125,7 +125,7 @@ const Login = () => {
                             Forgot your password?
                         </Link>
 
-                        <Button className="ml-3">Login</Button>
+                        <Button className="ml-3" disabled={buttonLoading}>Login</Button>
                     </div>
                 </form>
             </div>

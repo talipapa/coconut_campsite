@@ -22,7 +22,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
     const csrf = () => axios.get('/sanctum/csrf-cookie')
 
-    const register = async ({ setErrors, ...props }) => {
+    const register = async ({ setButtonLoading, setErrors, ...props }) => {
         await csrf()
 
         setErrors([])
@@ -32,28 +32,33 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
             .then(() => mutate())
             .catch(error => {
                 if (error.response.status !== 422) throw error
-
                 setErrors(error.response.data.errors)
+            })
+            .finally(() => {
+                setButtonLoading(false)
             })
     }
 
-    const login = async ({ setErrors, setStatus, ...props }) => {
+    const login = async ({ setButtonLoading, setErrors, setStatus, ...props }) => {
         await csrf()
-
         setErrors([])
         setStatus(null)
-
         axios
             .post('/login', props)
-            .then(() => mutate())
+            .then(() => {
+                mutate()
+            })
             .catch(error => {
                 if (error.response.status !== 422) throw error
 
                 setErrors(error.response.data.errors)
             })
+            .finally(() => {
+                setButtonLoading(false)
+            })
     }
 
-    const forgotPassword = async ({ setErrors, setStatus, email }) => {
+    const forgotPassword = async ({ setButtonLoading, setErrors, setStatus, email }) => {
         await csrf()
 
         setErrors([])
@@ -66,6 +71,9 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
                 if (error.response.status !== 422) throw error
 
                 setErrors(error.response.data.errors)
+            })
+            .finally(() => {
+                setButtonLoading(false)
             })
     }
 

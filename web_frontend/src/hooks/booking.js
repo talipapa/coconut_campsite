@@ -11,10 +11,9 @@ export const useLaravelBooking = ({ routeLink } = {}) => {
             const response = await axios.get(url)
             // console.log('Response status: ', response.status); // Add this
             return response.data
-
-        } catch (res) {
+        } catch (err) {
             const error = new Error('An error occurred while fetching the data')
-            error.info = await res.message
+            error.info = await err.message
             throw error
         }
     

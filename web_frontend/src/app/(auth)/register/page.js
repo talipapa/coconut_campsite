@@ -20,14 +20,16 @@ const Page = () => {
     const [password, setPassword] = useState('')
     const [passwordConfirmation, setPasswordConfirmation] = useState('')
     const [errors, setErrors] = useState([])
+    const [buttonLoading, setButtonLoading] = useState(false)
 
     const submitForm = event => {
         event.preventDefault()
-
+        setButtonLoading(true)
         register({
             firstName,
             lastName,
             email,
+            setButtonLoading,
             password,
             password_confirmation: passwordConfirmation,
             setErrors,
@@ -137,7 +139,7 @@ const Page = () => {
                         Already registered?
                     </Link>
 
-                    <Button className="ml-4">Register</Button>
+                    <Button className="ml-4" disabled={buttonLoading}>Register</Button>
                 </div>
             </form>
         </div>
