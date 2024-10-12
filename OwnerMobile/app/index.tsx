@@ -4,7 +4,7 @@ export default function Index() {
   return (
     <View>
       <Text className="text-3xl">
-        Hello world !!!
+        Hello world
       </Text>
     </View>
   );
