@@ -126,7 +126,9 @@ class BookingController extends Controller
                 $response = Xendivel::void($xenditId)->getResponse();
                 Log::info('Void response:', [$response]);
             } else{
-                Log::info('Refund not possible');
+
+                // Temporary solution for refunding
+                return response()->json(['message' => 'Refund not possible'], 400);
             }
 
             return response()->json(['message' => 'Refund request sent'], 201);
