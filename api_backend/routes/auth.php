@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\v1\TokenBasedAuthController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -35,3 +36,10 @@ Route::post('/email/verification-notification', [EmailVerificationNotificationCo
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth')
     ->name('logout');
+
+
+    // Authentication for
+Route::post('login', [TokenBasedAuthController::class, 'login']);
+Route::middleware(['auth:sanctum'])->group(function (){
+    Route::post('logout', [TokenBasedAuthController::class, 'logout']);   
+});
