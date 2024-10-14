@@ -1,7 +1,9 @@
 import { View, Text, Image } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import AuthContext, { useGlobalContext } from '@/Context/GlobalProvider'
 import { loadUser } from '@/utils/AuthService'
+
+
 
 interface MainHeaderProps {
   fullName: string
@@ -17,6 +19,7 @@ const MainHeader:React.FC<MainHeaderProps> = ({fullName}) => {
           <Text className='text-white text-md font-bold'>{`${fullName}`}</Text>
         </View>
       </View>
+      <Text className='text-white text-md font-semibold'></Text>
     </View>
   )
 }
