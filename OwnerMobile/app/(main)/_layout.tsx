@@ -1,6 +1,7 @@
 import { View, Text, Image } from 'react-native'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Slot, Stack, Tabs, router } from 'expo-router'
+import { useGlobalContext } from '@/Context/GlobalProvider'
 
 const _layout = () => {
   
@@ -13,6 +14,12 @@ const _layout = () => {
 
 
   const TabIcon:React.FC<TabIconProps> = ({ icon, color, name, focused}) => {
+    const { isLoggedIn, isLoading } = useGlobalContext();
+    if (!isLoading && !isLoggedIn) {
+      router.navigate('/')
+    }
+
+
     return (
       <View className='flex flex-col items-center space-y-1'>
         <Image 
