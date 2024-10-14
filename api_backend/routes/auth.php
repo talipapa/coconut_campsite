@@ -38,8 +38,3 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->name('logout');
 
 
-    // Authentication for
-Route::post('login', [TokenBasedAuthController::class, 'login']);
-Route::middleware(['auth:sanctum'])->group(function (){
-    Route::post('logout', [TokenBasedAuthController::class, 'logout']);   
-});

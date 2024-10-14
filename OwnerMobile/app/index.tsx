@@ -1,26 +1,31 @@
 import { Button, Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { router, useRootNavigationState } from "expo-router";
+import { Redirect, router, useRootNavigationState } from "expo-router";
 import { Header } from "react-native/Libraries/NewAppScreen";
-import { useEffect, useState } from "react";
-
+import { useContext, useEffect, useState } from "react";
+import { loadUser } from "@/utils/AuthService";
+import AuthContext, { useGlobalContext } from "@/Context/GlobalProvider";
 
 export default function Index() {
   const rootNavigationState = useRootNavigationState()
   const navigatorReady = rootNavigationState?.key != null
-  
-  useEffect(() => {
-    if (!navigatorReady) return
-    // It is ready! Navigate code here!
-    router.replace('/login')
-  }, [navigatorReady])
 
-  const handleRoute = () => {
-    if (false) {
-      router.replace('/home')
-    } else{
-      router.replace('/login')
-    }
+  const { isLoading, isLoggedIn } = useGlobalContext();
+
+  // Handle loading state
+  if (isLoading) {
+    return (
+      <SafeAreaView className="h-full bg-[#FFFFFF] flex items-center justify-center">
+        <Text>Loading...</Text>
+      </SafeAreaView>
+    );
+  }
+
+  // // Redirect based on authentication state
+  if (!isLoading && isLoggedIn) {
+    return <Redirect href="/home" />;
+  } else if (!isLoading && !isLoggedIn) {
+    return <Redirect href="/login" />;
   }
 
   return (
@@ -36,7 +41,7 @@ export default function Index() {
             </View>
           </View>
         </View>
-        <TouchableOpacity className="bg-[#5CBCB6] py-3 w-full rounded-lg" onPress={handleRoute}>
+        <TouchableOpacity className="bg-[#5CBCB6] py-3 w-full rounded-lg" onPress={() => <Redirect href={"/login"}/>}>
           <Text className="text-white text-xl font-semibold tracking-widest text-center">Continue</Text>
         </TouchableOpacity>
       </View>

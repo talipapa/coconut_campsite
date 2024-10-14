@@ -1,7 +1,7 @@
 import axiosLab from 'axios';
 
 const axios = axiosLab.create({
-    baseURL: 'http://localhost:3000/api/v1',
+    baseURL: 'http://192.168.2.106:8000/api/v1',
     headers: {
         'Accept': 'application/json',
     }

@@ -7,14 +7,17 @@ interface FormFieldProps {
     value: string;
     otherStyles?: string;
     handleChangeText: (e: string) => void;
+    errors?: any;
 }
 
-const FormField: React.FC<FormFieldProps> = ({ title, placeholder, value, handleChangeText, otherStyles, ...props }) => {
+const FormField: React.FC<FormFieldProps> = ({ title, placeholder, value, handleChangeText, otherStyles, errors = [], ...props }) => {
     const [showPassword, setShowPassword] = useState(false);
-
     return (
         <View className={`space-y-2 ${otherStyles}`}>
             <Text className='text-base text-gray-800 font-medium'>{title}</Text>
+            {errors.map((error:string) => {
+                return <Text key={error}>{error}</Text>
+            })}
 
             <View className="w-full h-16 px-4 bg-black-100 rounded-2xl border-2 border-black-200 focus:border-[#BC7B5C] flex flex-row items-center">
                 <TextInput
@@ -26,6 +29,8 @@ const FormField: React.FC<FormFieldProps> = ({ title, placeholder, value, handle
                 secureTextEntry={title === "Password" && !showPassword}
                 {...props}
                 />
+
+                
 
                 {title === "Password" && (
                 <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>

@@ -1,28 +1,39 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, Platform } from 'react-native'
 import { useContext, useState } from 'react'
-import axios from '@/utils/axios'
 import FormField from '@/components/FormField'
 import CustomButton from '@/components/CustomButton'
+import axios from '@/utils/axios'
+import { login, loadUser } from '@/utils/AuthService'
+import { router } from 'expo-router'
+import { useGlobalContext } from '@/Context/GlobalProvider'
 
 const index = () => {
+    const [ errors, setErrors ] = useState<{ email?: string; password?: string }>({})
     const [form, setForm] = useState({
         email: '',
         password: ''
     })
 
+    const { setIsLoggedIn, setUser } = useGlobalContext();
+
     const handleLogin = async () => {
-        // Print baseUrl
-        axios.get('/mobile/login', {
-            data: {
-                email: 'asdasd'
+        setErrors({})
+        try {
+            await login({
+                email: form.email,
+                password: form.password,
+                device_name: `${Platform.OS} ${Platform.Version}`
+            })
+            const user = await loadUser();
+            setIsLoggedIn(true)
+            setUser(user)
+            router.navigate('/home')
+        } catch (error: any) {
+            if (error.response?.status === 422) {
+                setErrors(error.response.data.errors)
             }
-        })
-        .then(() => {
-            console.log('Login success')
-        })
-        .catch((err) => {
-            console.log(err.message)
-        })
+            console.log(error.response.data)
+        }
     }
 
     return (
@@ -38,7 +49,8 @@ const index = () => {
                         title='Email'
                         placeholder='Enter your email'
                         value={form.email}
-                        handleChangeText={(e) => setForm({...form, email: e})} 
+                        handleChangeText={(e) => setForm({...form, email: e})}
+                        errors={errors.email} 
                     />
                     <FormField
                         title='Password'
@@ -46,6 +58,7 @@ const index = () => {
                         value={form.password}
                         handleChangeText={(e) => setForm({...form, password: e})} 
                         otherStyles='mt-3'
+                        errors={errors.password}
                     />
                 </View>
                 <CustomButton title="Submit" handlePress={handleLogin} containerStyles='bg-[#5CBCB6] mt-12' />
