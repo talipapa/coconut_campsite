@@ -31,6 +31,10 @@ class TokenBasedAuthController extends Controller
         ]);
     }
 
+    public function user(Request $request){
+        return response()->json($request->user()->only('id', 'first_name', 'last_name', 'email'));
+    }
+
     public function logout(Request $request){
         $request->user()->currentAccessToken()->delete();
         return response()->json([

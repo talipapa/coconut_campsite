@@ -1,29 +1,18 @@
 import { View, Text } from 'react-native'
-import React, { useContext, useState } from 'react'
-import { Slot, Stack } from 'expo-router'
-import AuthContext from '@/Context/AuthProvider'
-import AuthProvider from "@/Context/AuthProvider";
+import React, { useContext, useEffect, useState } from 'react'
+import { Slot, Stack, useRootNavigationState, router } from 'expo-router'
+import { loadUser } from '@/utils/AuthService';
+import GlobalProvider from '@/Context/GlobalProvider';
 
 const _layout = () => {
-    const [ user, setUser ] = useState({
-        email: "John Davila"
-    })
 
+    const rootNavigationState = useRootNavigationState()
+    const navigatorReady = rootNavigationState?.key != null
+        
     return (
-        <AuthProvider.Provider value={{ user: user, setUser: setUser }}>
-            <Stack>
-                <Stack.Screen name="index" options={{
-                    headerShown: false,    
-                }} 
-                />
-                <Stack.Screen name="(main)" options={{
-                    headerShown: false
-                }} />
-                <Stack.Screen name="(auth)" options={{
-                    headerShown: false
-                }} />
-            </Stack>
-        </AuthProvider.Provider>
+        <GlobalProvider>
+            <Slot/>
+        </GlobalProvider>
     )
 }
 
