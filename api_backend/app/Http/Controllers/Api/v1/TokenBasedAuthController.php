@@ -26,8 +26,9 @@ class TokenBasedAuthController extends Controller
             ], 401);
         }
 
+        $plainTextToken = $user->createToken($request->device_name)->plainTextToken;
         return response()->json([
-            'token' => $user->createToken($request->device_name)->plainTextToken
+            'token' => $plainTextToken
         ]);
     }
 
@@ -35,6 +36,7 @@ class TokenBasedAuthController extends Controller
         return response()->json($request->user()->only('id', 'first_name', 'last_name', 'email'));
     }
 
+    // Logout user
     public function logout(Request $request){
         $request->user()->currentAccessToken()->delete();
         return response()->json([
