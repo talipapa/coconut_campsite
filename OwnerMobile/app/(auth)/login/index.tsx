@@ -4,9 +4,9 @@ import FormField from '@/components/FormField'
 import CustomButton from '@/components/CustomButton'
 import axios from '@/utils/axios'
 import { login, loadUser } from '@/utils/AuthService'
-import { router } from 'expo-router'
 import { useGlobalContext } from '@/Context/GlobalProvider'
 import { showToast } from '@/components/ToastMessage'
+import { router } from 'expo-router'
 
 const index = () => {
     const [ errors, setErrors ] = useState<{ email?: string; password?: string }>({})
@@ -33,7 +33,7 @@ const index = () => {
             setIsLoggedIn(true)
             setUser(user)
             setTimeout(() => {
-                router.navigate('/home')
+                router.replace('/home')
             }, 2000)
         } catch (error: any) {
             if (error.response?.status === 422) {

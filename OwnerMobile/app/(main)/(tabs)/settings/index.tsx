@@ -24,17 +24,18 @@ const index = () => {
     } catch (error) {
       console.log("Error logging out", error)
       showToast('error', 'Error logging out', (error as Error).toString())
-    } finally {
       setIsLoading(false)
-    }
+    } 
   }
 
   return (
     <ScrollView>
       <MainHeader fullName={`${user?.first_name} ${user?.last_name}`} />
       <ContentBody>
-        <Text>Setting screen</Text>
-        <CustomButton title="Submit" handlePress={() => handleLogout()} containerStyles='bg-[#5CBCB6] mt-12' isLoading={isLoading}/>
+        <View className='min-h-[65vh] flex flex-col justify-between'>
+          <Text>lorem5090</Text>
+          <CustomButton title="Logout" handlePress={() => handleLogout()} containerStyles='bg-red-500 mt-12 w-24' textStyles='text-xs' isLoading={isLoading}/>
+        </View>
       </ContentBody>
     </ScrollView>
   )
