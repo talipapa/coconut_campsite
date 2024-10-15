@@ -1,19 +1,14 @@
-import { View, Text } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
-import { Slot, Stack, useRootNavigationState, router } from 'expo-router'
-import { loadUser } from '@/utils/AuthService';
+import React from 'react'
+import { Slot } from 'expo-router'
 import GlobalProvider from '@/Context/GlobalProvider';
 import Toast from 'react-native-toast-message';
 
 const _layout = () => {
 
-    const rootNavigationState = useRootNavigationState()
-    const navigatorReady = rootNavigationState?.key != null
-        
     return (
         <GlobalProvider>
             <Slot/>
-            <Toast />
+            <Toast/>
         </GlobalProvider>
     )
 }

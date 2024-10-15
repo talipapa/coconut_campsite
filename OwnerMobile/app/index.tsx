@@ -12,19 +12,14 @@ export default function Index() {
 
   const { isLoading, isLoggedIn } = useGlobalContext();
 
-  // Handle loading state
-  if (isLoading) {
-    return (
-      <SafeAreaView className="h-full bg-[#FFFFFF] flex items-center justify-center">
-        <Text>Loading...</Text>
-      </SafeAreaView>
-    );
-  }
+  useEffect(() => {
+
+    if (!isLoading && isLoggedIn) {
+      <Redirect href="/home" />
+    } 
+  }, [isLoading, isLoggedIn])
 
   // // Redirect based on authentication state
-  if (!isLoading && isLoggedIn) {
-    return <Redirect href="/home" />;
-  } 
 
   return (
     <SafeAreaView className="h-full bg-[#FFFFFF] flex items-center justify-center p-10">
