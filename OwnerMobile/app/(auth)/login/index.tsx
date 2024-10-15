@@ -16,8 +16,11 @@ const index = () => {
 
     const { setIsLoggedIn, setUser } = useGlobalContext();
 
+    const [isLoading, setIsLoading] = useState(false)
+
     const handleLogin = async () => {
         setErrors({})
+        setIsLoading(true)
         try {
             await login({
                 email: form.email,
@@ -33,6 +36,8 @@ const index = () => {
                 setErrors(error.response.data.errors)
             }
             console.log(error.response.data)
+        } finally{
+            setIsLoading(false)
         }
     }
 
@@ -61,7 +66,7 @@ const index = () => {
                         errors={errors.password}
                     />
                 </View>
-                <CustomButton title="Submit" handlePress={handleLogin} containerStyles='bg-[#5CBCB6] mt-12' />
+                <CustomButton title="Submit" handlePress={handleLogin} containerStyles='bg-[#5CBCB6] mt-12' isLoading={isLoading}/>
             </View>
         </View>
     )

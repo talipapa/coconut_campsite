@@ -5,6 +5,7 @@ import ContentBody from '@/components/ContentBody'
 import { useGlobalContext } from '@/Context/GlobalProvider'
 import CustomButton from '@/components/CustomButton'
 import { logout } from '@/utils/AuthService'
+import { router } from 'expo-router'
 
 const index = () => {
   const { isLoggedIn, setIsLoggedIn, user, setUser, isLoading, setIsLoading } = useGlobalContext();
@@ -15,6 +16,7 @@ const index = () => {
       await logout()
       setIsLoggedIn(false)
       setUser(null)
+      router.navigate('/login');
     } catch (error) {
       console.log("Error logging out", error)
     } finally {
@@ -27,7 +29,7 @@ const index = () => {
       <MainHeader fullName={`${user?.first_name} ${user?.last_name}`} />
       <ContentBody>
         <Text>Setting screen</Text>
-        <CustomButton title="Submit" handlePress={() => handleLogout()} containerStyles='bg-[#5CBCB6] mt-12' />
+        <CustomButton title="Submit" handlePress={() => handleLogout()} containerStyles='bg-[#5CBCB6] mt-12' isLoading={isLoading}/>
       </ContentBody>
     </ScrollView>
   )

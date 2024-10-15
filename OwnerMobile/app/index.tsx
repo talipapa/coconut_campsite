@@ -24,9 +24,7 @@ export default function Index() {
   // // Redirect based on authentication state
   if (!isLoading && isLoggedIn) {
     return <Redirect href="/home" />;
-  } else if (!isLoading && !isLoggedIn) {
-    return <Redirect href="/login" />;
-  }
+  } 
 
   return (
     <SafeAreaView className="h-full bg-[#FFFFFF] flex items-center justify-center p-10">
@@ -41,7 +39,7 @@ export default function Index() {
             </View>
           </View>
         </View>
-        <TouchableOpacity className="bg-[#5CBCB6] py-3 w-full rounded-lg" onPress={() => <Redirect href={"/login"}/>}>
+        <TouchableOpacity className="bg-[#5CBCB6] py-3 w-full rounded-lg" onPress={() => router.push("/login")}>
           <Text className="text-white text-xl font-semibold tracking-widest text-center">Continue</Text>
         </TouchableOpacity>
       </View>

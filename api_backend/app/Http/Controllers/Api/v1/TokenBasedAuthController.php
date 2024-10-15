@@ -20,6 +20,13 @@ class TokenBasedAuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
+        
+        if (!$user || !$user->owner) {
+            return response()->json([
+                'message' => 'You are not authorized to login.'
+            ], 401);
+        }
+
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'message' => 'The provided credentials are incorrect.'
