@@ -1,5 +1,6 @@
 import axios from "@/utils/axios";
 import { getToken, setToken } from "./TokenService";
+import { config } from "@/components/ui/gluestack-ui-provider/config";
 
 interface credentialsIE {
     email: string;
@@ -20,4 +21,16 @@ export async function loadUser() {
     }})
 
     return user;
+}
+
+export async function logout() {
+    const token = await getToken();
+    const {data: data} = await axios.post('/mobile/logout', null, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    
+    await setToken(null);
+    return data;
 }
