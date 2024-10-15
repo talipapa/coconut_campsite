@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Slot, Stack, useRootNavigationState, router } from 'expo-router'
 import { loadUser } from '@/utils/AuthService';
 import GlobalProvider from '@/Context/GlobalProvider';
+import Toast from 'react-native-toast-message';
 
 const _layout = () => {
 
@@ -12,6 +13,7 @@ const _layout = () => {
     return (
         <GlobalProvider>
             <Slot/>
+            <Toast />
         </GlobalProvider>
     )
 }

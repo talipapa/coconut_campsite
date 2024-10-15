@@ -6,6 +6,7 @@ import axios from '@/utils/axios'
 import { login, loadUser } from '@/utils/AuthService'
 import { router } from 'expo-router'
 import { useGlobalContext } from '@/Context/GlobalProvider'
+import { showToast } from '@/components/ToastMessage'
 
 const index = () => {
     const [ errors, setErrors ] = useState<{ email?: string; password?: string }>({})
@@ -28,14 +29,17 @@ const index = () => {
                 device_name: `${Platform.OS} ${Platform.Version}`
             })
             const user = await loadUser();
+            showToast('success', 'Login successful', 'You will be redirected to the home screen')
             setIsLoggedIn(true)
             setUser(user)
-            router.navigate('/home')
+            setTimeout(() => {
+                router.navigate('/home')
+            }, 2000)
         } catch (error: any) {
             if (error.response?.status === 422) {
                 setErrors(error.response.data.errors)
             }
-            console.log(error.response.data)
+            showToast('error', 'Incorrect credentials', error.response?.data.message)
         } finally{
             setIsLoading(false)
         }

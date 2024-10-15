@@ -15,9 +15,7 @@ const FormField: React.FC<FormFieldProps> = ({ title, placeholder, value, handle
     return (
         <View className={`space-y-2 ${otherStyles}`}>
             <Text className='text-base text-gray-800 font-medium'>{title}</Text>
-            {errors.map((error:string) => {
-                return <Text key={error}>{error}</Text>
-            })}
+
 
             <View className="w-full h-16 px-4 bg-black-100 rounded-2xl border-2 border-black-200 focus:border-[#BC7B5C] flex flex-row items-center">
                 <TextInput
@@ -29,19 +27,20 @@ const FormField: React.FC<FormFieldProps> = ({ title, placeholder, value, handle
                 secureTextEntry={title === "Password" && !showPassword}
                 {...props}
                 />
-
-                
-
+       
                 {title === "Password" && (
-                <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                    <Image
-                    source={!showPassword ? require('@/assets/icons/eye.png') : require('@/assets/icons/eye-hide.png')}
-                    className="w-6 h-6"
-                    resizeMode="contain"
-                    />
-                </TouchableOpacity>
+                    <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                        <Image
+                        source={!showPassword ? require('@/assets/icons/eye.png') : require('@/assets/icons/eye-hide.png')}
+                        className="w-6 h-6"
+                        resizeMode="contain"
+                        />
+                    </TouchableOpacity>
                 )}
             </View>
+            {errors.map((error:string) => {
+            return <Text key={error} className='text-red-400'>{error}</Text>
+            })}
         </View>
     )
 }

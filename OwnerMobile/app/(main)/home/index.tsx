@@ -21,7 +21,7 @@ const index = () => {
           <View className='w-full h-full bg-[#BC7B5C] rounded-xl p-3 flex flex-row items-center justify-around'>
             <View className='space-y-1'>
               <View>
-                <Text className='text-slate-100 text-xs'>Total Revenue</Text>
+                <Text className='text-slate-100 text-xs'>Wallet</Text>
                 <Text className='text-[#e5ffb1] text-xl font-bold'>₱ 1,000.00</Text>
               </View>
               <View>
