@@ -13,7 +13,7 @@ class MakeOwner extends Command
      *
      * @var string
      */
-    protected $signature = 'app:make-owner {password?}';
+    protected $signature = 'app:make-owner {email?} {password?}';
 
     /**
      * The console command description.
@@ -40,13 +40,14 @@ class MakeOwner extends Command
         }
 
         $generatedUser = User::factory()->create([
-            "name" => "Admin." . rand(),
-            "email" => "admin." . rand() . "@lakbaycampsite.com",
+            "first_name" => "Admin." . rand(),
+            "last_name" => "Admin." . rand(),
+            "email" => $this->argument('email') ? $this->argument('email') : "admin." . rand() . "@lakbaycampsite.com",
             "password" => bcrypt($generatedPassword),
         ]);
 
         Owner::factory()->create([
-            "user_id" => $generatedUser->id,
+            "user_id" => $generatedUser->id
         ]);
 
         $this->info("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");

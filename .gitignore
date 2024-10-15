@@ -46,6 +46,7 @@ api_backend/public/storage
 api_backend/storage/*.key
 api_backend/vendor
 api_backend/.env
+api_backend/bootstrap/cache/*
 api_backend/.env.local
 api_backend/.env.backup
 api_backend/.env.production
