@@ -5,11 +5,11 @@
   14 => 'view',
   'app' => 
   array (
-    'name' => 'Laravel',
+    'name' => 'Coconut Campsite',
     'env' => 'local',
     'debug' => true,
-    'url' => 'http://localhost',
-    'frontend_url' => 'http://localhost:3000',
+    'url' => 'http://192.168.2.106:8000',
+    'frontend_url' => 'http://192.168.2.106:3000',
     'asset_url' => NULL,
     'timezone' => 'UTC',
     'locale' => 'en',
@@ -220,8 +220,8 @@
     ),
     'allowed_origins' => 
     array (
-      0 => 'http://localhost:3000',
-      1 => 'http://localhost:3000',
+      0 => 'http://192.168.2.106:3000',
+      1 => 'http://192.168.2.106:3000',
     ),
     'allowed_origins_patterns' => 
     array (
@@ -238,14 +238,14 @@
   ),
   'database' => 
   array (
-    'default' => 'sqlite',
+    'default' => 'mysql',
     'connections' => 
     array (
       'sqlite' => 
       array (
         'driver' => 'sqlite',
         'url' => NULL,
-        'database' => 'E:\\coconut_campsite\\api_backend\\database\\database.sqlite',
+        'database' => 'coconutcampsite',
         'prefix' => '',
         'foreign_key_constraints' => true,
         'busy_timeout' => NULL,
@@ -258,7 +258,7 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'laravel',
+        'database' => 'coconutcampsite',
         'username' => 'root',
         'password' => '',
         'unix_socket' => '',
@@ -268,10 +268,9 @@
         'prefix_indexes' => true,
         'strict' => true,
         'engine' => NULL,
-        'ssl_mode' => NULL,
+        'sslmode' => 'prefer',
         'options' => 
         array (
-          1009 => 'E:\\coconut_campsite\\api_backend',
         ),
       ),
       'mariadb' => 
@@ -280,7 +279,7 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'laravel',
+        'database' => 'coconutcampsite',
         'username' => 'root',
         'password' => '',
         'unix_socket' => '',
@@ -299,8 +298,8 @@
         'driver' => 'pgsql',
         'url' => NULL,
         'host' => '127.0.0.1',
-        'port' => '5432',
-        'database' => 'laravel',
+        'port' => '3306',
+        'database' => 'coconutcampsite',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
@@ -313,9 +312,9 @@
       array (
         'driver' => 'sqlsrv',
         'url' => NULL,
-        'host' => 'localhost',
-        'port' => '1433',
-        'database' => 'laravel',
+        'host' => '127.0.0.1',
+        'port' => '3306',
+        'database' => 'coconutcampsite',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
@@ -334,7 +333,7 @@
       'options' => 
       array (
         'cluster' => 'redis',
-        'prefix' => 'laravel_database_',
+        'prefix' => 'coconut_campsite_database_',
       ),
       'default' => 
       array (
@@ -372,7 +371,7 @@
       array (
         'driver' => 'local',
         'root' => 'E:\\coconut_campsite\\api_backend\\storage\\app/public',
-        'url' => 'http://localhost/storage',
+        'url' => 'http://192.168.2.106:8000/storage',
         'visibility' => 'public',
         'throw' => false,
       ),
@@ -507,7 +506,7 @@
         'username' => NULL,
         'password' => NULL,
         'timeout' => NULL,
-        'local_domain' => 'localhost',
+        'local_domain' => '192.168.2.106',
       ),
       'ses' => 
       array (
@@ -557,7 +556,7 @@
     'from' => 
     array (
       'address' => 'hello@example.com',
-      'name' => 'Laravel',
+      'name' => 'Coconut Campsite',
     ),
     'markdown' => 
     array (
@@ -570,7 +569,7 @@
   ),
   'queue' => 
   array (
-    'default' => 'database',
+    'default' => 'sync',
     'connections' => 
     array (
       'sync' => 
@@ -618,13 +617,13 @@
     ),
     'batching' => 
     array (
-      'database' => 'sqlite',
+      'database' => 'mysql',
       'table' => 'job_batches',
     ),
     'failed' => 
     array (
       'driver' => 'database-uuids',
-      'database' => 'sqlite',
+      'database' => 'mysql',
       'table' => 'failed_jobs',
     ),
   ),
@@ -640,8 +639,8 @@
       5 => '127.0.0.1:8000',
       6 => '::1',
       7 => '',
-      8 => 'localhost',
-      9 => 'localhost',
+      8 => '192.168.2.106:8000',
+      9 => '192.168.2.106',
     ),
     'guard' => 
     array (
@@ -696,12 +695,12 @@
       0 => 2,
       1 => 100,
     ),
-    'cookie' => 'laravel_session',
+    'cookie' => 'coconut_campsite_session',
     'path' => '/',
     'domain' => NULL,
-    'secure' => true,
+    'secure' => false,
     'http_only' => true,
-    'same_site' => 'lax',
+    'same_site' => 'Lax',
     'partitioned' => false,
   ),
   'xendivel' => 
@@ -717,7 +716,7 @@
   ),
   'broadcasting' => 
   array (
-    'default' => 'log',
+    'default' => 'null',
     'connections' => 
     array (
       'reverb' => 
