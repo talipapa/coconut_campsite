@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Api\v1\Mobile;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\SuccessfulBookingResource;
 use App\Models\Booking;
+use Hamcrest\Type\IsNumeric;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
     //
-    function showList(Request $request){
+    function showList(Request $request, $page){
         // Identify if account is owner
         if (!$request->user()->owner){
             return response()->json([
@@ -19,10 +20,20 @@ class BookingController extends Controller
         }
 
         // Get all bookings
-        // Get booking if booking->transaction_id is not null
-        $bookings = Booking::all()->filter(function($booking){
-            return $booking->transaction !== null;
-        });
+        $bookings = [];
+        
+        // Check if $page is number
+        
+        if (is_numeric($page) && $page > 0){
+            $bookings = Booking::whereHas('transaction') 
+            ->paginate($page);
+        } else {
+            $bookings = Booking::all()->filter(function($booking){
+                return $booking->transaction !== null;
+            });
+    
+        }
+
 
         // Return all bookings with successful bookingresource
         return response()->json([

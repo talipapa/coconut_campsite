@@ -37,7 +37,7 @@ const _layout = () => {
         height: 80,
         backgroundColor: '#5CBCB6',
       },
-      tabBarActiveTintColor: '#256560',
+      tabBarActiveTintColor: '#BC7B5C',
       tabBarInactiveTintColor: '#cccccc',
       
       tabBarShowLabel: false,

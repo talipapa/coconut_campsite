@@ -22,9 +22,9 @@ class TransactionFactory extends Factory
             'user_id' => User::factory()->create()->id,
             'booking_id' => Booking::factory()->create()->id,
             'price' => $this->faker->randomFloat(2, 0, 100),
-            'status' => $this->faker->name,
+            'status' => 'CASH_PENDING',
             'payment_type' => $this->faker->name,
-            'xendit_transaction_id' => $this->faker->name,
+            'xendit_product_id' => $this->faker->name,
         ];
     }
 }

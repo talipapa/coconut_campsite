@@ -39,9 +39,6 @@ Payment transaction for specified charge_id has been either partially or fully r
 PENDING
 The booking is unpaid
 
-CASH_PENDING
-The booking is cash and is pending
-
 PAID (Only for online transaction)
 The booking is paid using online payment methods
 

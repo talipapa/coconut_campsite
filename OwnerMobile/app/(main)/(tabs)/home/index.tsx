@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Button } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MainHeader from '@/components/MainHeader'
@@ -28,6 +28,7 @@ const index = () => {
 
   const [walletSummary, setWalletSummary] = useState<walletSummaryType | undefined>()
 
+  
   useEffect(() => {
     fetchWalletDetails()
       .then((data) => {
@@ -44,18 +45,18 @@ const index = () => {
       <MainHeader fullName={`${user?.first_name} ${user?.last_name}`} />
       <View className='bg-[#5CBCB6] h-[10vh] px-5 py-3 flex flex-col relative'>
         <View className='absolute bottom-[-40px]  w-[100vw] h-24 px-3'>
-          <View className='w-full h-full bg-[#BC7B5C] rounded-xl p-3 flex flex-row items-end justify-around'>
+          <View className='w-full h-full bg-[#256560] rounded-xl p-3 flex flex-row items-end justify-around'>
             <View className='space-y-1'>
               <View>
                 <Text className='text-slate-100 text-xs'>₱ {Number(walletSummary?.pendingCash).toFixed(2)} (Pending) | {walletSummary?.pendingTotalBookingCount} bookings </Text>
-              </View>
-              <View>
+              </View> 
+              <View>  
                 <Text className='text-slate-100 text-md'>Wallet</Text>
                 <Text className='text-[#e5ffb1] text-xl font-bold'>₱ {walletSummary?.wallet}</Text>
               </View>
             </View>
             <View>
-              <CustomButton handlePress={() => router.push('/settings')} title='Cash out' containerStyles='bg-[#256560] px-6' textStyles='text-white text-sm' />
+              <CustomButton handlePress={() => router.push('/settings')} title='Cash out' containerStyles='bg-[#BC7B5C] px-6' textStyles='text-white text-sm' />
             </View>
           </View>
         </View>
@@ -66,10 +67,12 @@ const index = () => {
             <View>
               <Text className='text-xs text-slate-400'>Your recent bookings</Text>
             </View>
-            <View className='flex flex-row items-center justify-between'>
-              <Text className='text-lg font-semibold'>Bookings</Text>
-              {/* <Link className='text-blue-500 font-semibold text-md tracking-widest' href={"/home/bookings" as Href}>See all</Link> */}
-              <Link className='text-blue-500 font-semibold text-md tracking-widest' href="/bookings">See all</Link>
+            <View className='flex flex-col'>
+              <View className='flex flex-row items-center justify-between'>
+                <Text className='text-lg font-semibold'>Bookings</Text>
+                {/* <Link className='text-blue-500 font-semibold text-md tracking-widest' href={"/home/bookings" as Href}>See all</Link> */}
+                <Link className='text-blue-500 font-semibold text-md tracking-widest' href="/bookings">See all</Link>
+              </View>
             </View>
           </View>
           <BookingList/>
