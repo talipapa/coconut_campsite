@@ -10,8 +10,8 @@ export const showToast = (type: "success" | "error" | "info", title:string, body
         Toast.hide();
       },
       swipeable: true,
-      position: 'bottom',
-      bottomOffset: 100,
+      position: 'top',
+      topOffset: 70,
       visibilityTime: 1500,
     });
 }

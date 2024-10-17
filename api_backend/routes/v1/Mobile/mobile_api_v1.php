@@ -11,6 +11,6 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::get('user', [TokenBasedAuthController::class, 'user']);   
     Route::post('logout', [TokenBasedAuthController::class, 'logout']);  
     // Booking controller for mobile
-    Route::get('bookings', [BookingController::class, 'showList']);
+    Route::get('bookings/{page}', [BookingController::class, 'showList']);
     Route::get('wallet-summary', [BookingController::class, 'getSummaryWallet']);
 });

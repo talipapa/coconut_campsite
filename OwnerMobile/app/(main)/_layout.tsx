@@ -7,6 +7,7 @@ const _layout = () => {
     <Stack>
         <Stack.Screen name="(tabs)" options={{
             headerShown: false,
+
         }}/>
         <Stack.Screen
             name="booking/[id]"
@@ -19,6 +20,18 @@ const _layout = () => {
             headerStyle: {
                 backgroundColor: "#5CBCB6"
             }
+        }}/>
+        <Stack.Screen
+            name="bookings"
+            options={{
+            presentation: 'modal',
+            headerTitle: 'Bookings',
+            headerTitleStyle:{
+                color: 'white'
+            },
+            headerStyle: {
+                backgroundColor: "#5CBCB6"
+            },
         }}/>
     </Stack>
   )

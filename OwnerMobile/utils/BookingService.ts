@@ -3,9 +3,9 @@ import { BookingType } from '@/types/BookingType'
 import axios from '@/utils/axios'
 import { getToken } from '@/utils/TokenService'
 
-export const fetchBookings = async () => {
+export const fetchBookings = async (page:number) => {
     const token = await getToken()
-    const response = await axios.get('/mobile/bookings', {headers:{
+    const response = await axios.get(`/mobile/bookings/${page}`, {headers:{
     'Authorization': `Bearer ${token}`
     }})
     return Object.values(response.data)[0] as BookingType[]

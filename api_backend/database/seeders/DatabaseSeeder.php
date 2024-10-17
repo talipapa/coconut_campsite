@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Booking;
 use App\Models\Price;
+use App\Models\Transaction;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -20,7 +22,6 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-
         Price::factory()->create([
             'name' => 'adult',
             'price' => 100.00,
@@ -41,5 +42,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'cabin',
             'price' => 650.00,
         ]);
+        Transaction::factory(20)->create();
+
     }
 }

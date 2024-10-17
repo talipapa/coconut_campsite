@@ -6,16 +6,15 @@ import Toast from 'react-native-toast-message'
 import { useGlobalContext } from '@/Context/GlobalProvider'
 import { BookingType } from '@/types/BookingType'
 import { fetchBookings } from '@/utils/BookingService'
+import CustomButton from '../CustomButton'
 
 const BookingList = () => {
-    const { user } = useGlobalContext();
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [bookings, setBookings] = useState<BookingType[]>([]);
 
-
-    useEffect(() => {
+    const refreshPageBooking = () => {
         setIsLoading(true)
-        fetchBookings()
+        fetchBookings(10)
             .then((data) => {
                 setBookings(data)
             })
@@ -28,17 +27,29 @@ const BookingList = () => {
             })
             .finally(() => {
                 setIsLoading(false)
-            })
+            }
+        )
+    }
+
+
+    useEffect(() => {
+        refreshPageBooking()
     }, [])
 
     if (isLoading) {
-        return <Text>Loading...</Text>
+        return (
+            <>
+                <CustomButton title='Refresh' containerStyles='bg-[#BC7B5C] mt-5 rounded-none' textStyles='text-white text-xs' handlePress={() => refreshPageBooking()}/>
+                <Text className='mt-4 text-center'>Loading...</Text>
+            </>
+        )
     }
 
 
     return (
         <>
             {/* <Button title="Refresh" onPress={() => fetchBookings()} /> */}
+            <CustomButton title='Refresh' containerStyles='bg-[#BC7B5C] mt-5 rounded-none' textStyles='text-white text-xs' handlePress={() => refreshPageBooking()}/>
             {bookings.map((booking: BookingType, index: number) => (
                 <BookingCard key={index} containerStyle="mt-4" booking={booking} />
             ))}
