@@ -1,7 +1,7 @@
 import axiosLab from 'axios';
 
 const axios = axiosLab.create({
-    baseURL: 'http://192.168.2.106:8000/api/v1',
+    baseURL: `${process.env.EXPO_PUBLIC_BACKEND_API_URL}/api/${process.env.EXPO_PUBLIC_BACKEND_API_VERSION}`,
     headers: {
         'Accept': 'application/json',
     }
