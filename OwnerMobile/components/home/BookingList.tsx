@@ -1,4 +1,4 @@
-import { View, Text, Button } from 'react-native'
+import { View, Text, Button, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
 import BookingCard from '@/components/BookingCard'
@@ -40,7 +40,7 @@ const BookingList = () => {
         return (
             <>
                 <CustomButton title='Refresh' containerStyles='bg-[#BC7B5C] mt-5 rounded-none' textStyles='text-white text-xs' handlePress={() => refreshPageBooking()}/>
-                <Text className='mt-4 text-center'>Loading...</Text>
+                <ActivityIndicator size="large" className='mt-10'/>
             </>
         )
     }

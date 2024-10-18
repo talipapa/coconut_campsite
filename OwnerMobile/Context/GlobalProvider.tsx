@@ -1,4 +1,7 @@
+import ToastMessage from '@/components/ToastMessage';
 import { loadUser } from '@/utils/AuthService';
+import { fetchPrice } from '@/utils/PriceService';
+import { getToken } from '@/utils/TokenService';
 import { router } from 'expo-router';
 import {createContext, ReactNode, useContext, useEffect, useState} from 'react';
 
@@ -10,6 +13,11 @@ type User = {
     last_name: string;
 }
 
+type PriceType = {
+    name: string,
+    price: number,
+}
+
 type AuthContextType = {
     isLoggedIn: boolean;
     user: User | null;
@@ -19,7 +27,10 @@ type AuthContextType = {
     setIsLoading: (setIsLoading: boolean) => void;
     test: string;
     setTest: (test: string) => void;
+    prices: PriceType[];
+    setPrices: (prices: PriceType[]) => void;
 };
+
 
 const GlobalContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -37,24 +48,48 @@ const GlobalProvider = ({children}: {children: ReactNode}) => {
     const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [test, setTest] = useState('unflag')
+    const [prices, setPrices] = useState<PriceType[]>([])
 
     useEffect(() => {
         setIsLoading(true)
-        loadUser().then((data) => {
-            setUser(data)
-            setIsLoggedIn(true)
-            setTest('flag')
-        }).catch((error) => {
-            console.log("Failed to load user", error);
-            setUser(null)
-            setIsLoggedIn(false)
-        }).finally(() => {
-            setIsLoading(false)
-        })
+        loadUser()
+            .then((data) => {
+                console.log("data is loaded")
+                setUser(data)
+                setIsLoggedIn(true)
+            }).catch((error) => {
+                console.log("Failed to load user", error);
+                setUser(null)
+                setIsLoggedIn(false)
+            }).finally(() => {
+                setIsLoading(false)
+            })
+    }, [])
+
+    useEffect(() => {
+        fetchPrice()
+            .then((res) => {
+                setPrices(res.data)
+            })
+            .catch((err) => {
+                console.log(err)
+                ToastMessage("error", "Error", JSON.stringify(err))
+            })
     }, [])
 
     return (
-        <GlobalContext.Provider value={{isLoggedIn, setIsLoggedIn, user, setUser, isLoading, setIsLoading, test, setTest}}>
+        <GlobalContext.Provider value={{
+            isLoggedIn, 
+            setIsLoggedIn, 
+            user, 
+            setUser, 
+            isLoading, 
+            setIsLoading, 
+            test, 
+            setTest,
+            prices,
+            setPrices
+        }}>
             {children}
         </GlobalContext.Provider>
     );

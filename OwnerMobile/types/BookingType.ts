@@ -27,6 +27,9 @@ export interface BookingType {
   // Payment status
   transaction_id: string;
   transactionStatus: string;
+  transactionType: string;
   xendit_id: string | null;
   price: string;
 }
+
+

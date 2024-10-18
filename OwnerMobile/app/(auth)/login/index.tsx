@@ -5,8 +5,8 @@ import CustomButton from '@/components/CustomButton'
 import axios from '@/utils/axios'
 import { login, loadUser } from '@/utils/AuthService'
 import { useGlobalContext } from '@/Context/GlobalProvider'
-import { showToast } from '@/components/ToastMessage'
 import { router } from 'expo-router'
+import ToastMessage from '@/components/ToastMessage'
 
 const index = () => {
     const [ errors, setErrors ] = useState<{ email?: string; password?: string }>({})
@@ -29,7 +29,7 @@ const index = () => {
                 device_name: `${Platform.OS} ${Platform.Version}`
             })
             const user = await loadUser();
-            showToast('success', 'Login successful', 'You will be redirected to the home screen')
+            ToastMessage('success', 'Login successful', 'You will be redirected to the home screen')
             setIsLoggedIn(true)
             setUser(user)
             setTimeout(() => {
@@ -39,7 +39,7 @@ const index = () => {
             if (error.response?.status === 422) {
                 setErrors(error.response.data.errors)
             }
-            showToast('error', 'Incorrect credentials', error.response?.data.message)
+            ToastMessage('error', 'Incorrect credentials', error.response?.data.message)
         } finally{
             setIsLoading(false)
         }
