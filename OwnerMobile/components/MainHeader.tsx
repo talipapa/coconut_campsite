@@ -20,7 +20,7 @@ const MainHeader:React.FC<MainHeaderProps> = ({fullName}) => {
             
               <View className='flex flex-col items-start'>
                 {/* Limit the name in case the letters exceeds over 12 */}
-                <Text className='text-white text-md font-semibold'>{fullName.length > 15 ? fullName.substring(0, 10) + '...' : fullName}</Text>
+                <Text className='text-white text-md font-semibold'>{fullName.length > 30 ? fullName.substring(0, 16) + '...' : fullName}</Text>
                 <Text className='text-[#256560] text-sm font-semibold'>Owner</Text>
               </View>
             </View>

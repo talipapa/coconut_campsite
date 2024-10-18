@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Button } from 'react-native'
+import { View, Text, StyleSheet, Button, RefreshControl } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MainHeader from '@/components/MainHeader'
@@ -19,7 +19,7 @@ interface walletSummaryType {
 }
 
 const index = () => {
-  const { user } = useGlobalContext();
+  const { user, isLoading, setIsLoading } = useGlobalContext();
   const redirectCashout = () => {
     router.navigate('/wallet')
   }
@@ -28,8 +28,8 @@ const index = () => {
 
   const [walletSummary, setWalletSummary] = useState<walletSummaryType | undefined>()
 
-  
-  useEffect(() => {
+  const refreshWalletSummary = () => {
+    setIsLoading(true)
     fetchWalletDetails()
       .then((data) => {
         setWalletSummary(data)
@@ -37,11 +37,20 @@ const index = () => {
       .catch((error) => {
         console.log(error)
       })
+      .finally(() => {
+        setIsLoading(false)
+      })
+
+  }
+
+
+  useEffect(() => {
+    refreshWalletSummary()
   }, [])
 
 
   return (
-    <ScrollView>
+    <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshWalletSummary}/>}>
       <MainHeader fullName={`${user?.first_name} ${user?.last_name}`} />
       <View className='bg-[#5CBCB6] h-[10vh] px-5 py-3 flex flex-col relative'>
         <View className='absolute bottom-[-40px]  w-[100vw] h-24 px-3'>

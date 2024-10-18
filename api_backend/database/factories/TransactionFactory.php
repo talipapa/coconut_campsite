@@ -23,7 +23,7 @@ class TransactionFactory extends Factory
             'booking_id' => Booking::factory()->create()->id,
             'price' => $this->faker->randomFloat(2, 0, 100),
             'status' => 'CASH_PENDING',
-            'payment_type' => $this->faker->name,
+            'payment_type' => $this->faker->randomElement(['XENDIT', 'CASH']),
             'xendit_product_id' => $this->faker->name,
         ];
     }

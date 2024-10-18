@@ -1,21 +1,22 @@
-import { Button, Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Redirect, router, useRootNavigationState } from "expo-router";
-import { Header } from "react-native/Libraries/NewAppScreen";
-import { useContext, useEffect, useState } from "react";
-import { loadUser } from "@/utils/AuthService";
-import AuthContext, { useGlobalContext } from "@/Context/GlobalProvider";
+import { useEffect } from "react";
+
+import{ useGlobalContext } from "@/Context/GlobalProvider";
+import ToastMessage from "@/components/ToastMessage";
 
 export default function Index() {
   const rootNavigationState = useRootNavigationState()
   const navigatorReady = rootNavigationState?.key != null
 
-  const { isLoading, isLoggedIn } = useGlobalContext();
+  const { isLoading, isLoggedIn, user } = useGlobalContext();
+
 
   useEffect(() => {
-
+    // ToastMessage("error", "debugging", user?.first_name); // Debugging purpose
     if (!isLoading && isLoggedIn) {
-      <Redirect href="/home" />
+      router.replace("/home")
     } 
   }, [isLoading, isLoggedIn])
 

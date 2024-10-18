@@ -22,27 +22,27 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        Price::factory()->create([
-            'name' => 'adult',
-            'price' => 100.00,
-        ]);
-        Price::factory()->create([
-            'name' => 'child',
-            'price' => 50.00,
-        ]);
-        Price::factory()->create([
-            'name' => 'tent_pitch',
-            'price' => 70.00,
-        ]);
-        Price::factory()->create([
-            'name' => 'bonfire',
-            'price' => 150.00,
-        ]);
-        Price::factory()->create([
-            'name' => 'cabin',
-            'price' => 650.00,
-        ]);
-        Transaction::factory(20)->create();
+        // Price::factory()->create([
+        //     'name' => 'adult',
+        //     'price' => 100.00,
+        // ]);
+        // Price::factory()->create([
+        //     'name' => 'child',
+        //     'price' => 50.00,
+        // ]);
+        // Price::factory()->create([
+        //     'name' => 'tent_pitch',
+        //     'price' => 70.00,
+        // ]);
+        // Price::factory()->create([
+        //     'name' => 'bonfire',
+        //     'price' => 150.00,
+        // ]);
+        // Price::factory()->create([
+        //     'name' => 'cabin',
+        //     'price' => 650.00,
+        // ]);
+        Transaction::factory(100)->create();
 
     }
 }

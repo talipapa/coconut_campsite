@@ -13,4 +13,12 @@ Route::middleware(['auth:sanctum'])->group(function (){
     // Booking controller for mobile
     Route::get('bookings/{page}', [BookingController::class, 'showList']);
     Route::get('wallet-summary', [BookingController::class, 'getSummaryWallet']);
+    Route::get('booking/{booking}', [BookingController::class, 'getBookingSummary']);
+
+    // If xendit
+    Route::post('/refund/{booking}', [BookingController::class, 'refundBooking']);
+    // If cash
+    Route::post('/cancel/{booking}', [BookingController::class, 'cancelBooking']);
+
+    Route::patch('/reschedule/{booking}', [BookingController::class, 'rescheduleBooking']);
 });

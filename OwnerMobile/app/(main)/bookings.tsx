@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, ActivityIndicator, RefreshControl } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useGlobalContext } from '@/Context/GlobalProvider';
 import { router, useNavigation } from 'expo-router';
@@ -14,12 +14,19 @@ const bookings = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [bookings, setBookings] = useState<BookingType[]>([]);
     const [filteredBookings, setFilteredBookings] = useState<BookingType[]>([]);
+
     const refreshPageBooking = () => {
         setIsLoading(true)
-        fetchBookings(0)
+        fetchBookings(10)
             .then((data) => {
-                setBookings(data)
-                setFilteredBookings(data)
+                if (Array.isArray(data)){
+                    setBookings(data)
+                    setFilteredBookings(data)
+                    setIsLoading(false)
+                } else {
+                    setBookings([])
+                    setFilteredBookings([])
+                }
             })
             .catch((error) => {
                 Toast.show({
@@ -27,75 +34,76 @@ const bookings = () => {
                     text1: 'Error',
                     text2: `Something went wrong: ${JSON.stringify(error)}`,
                 })
-            })
-            .finally(() => {
                 setIsLoading(false)
+            })
+    }
+
+    useEffect(() => {
+        refreshPageBooking()
+    }, [])
+
+    const handleFilter = (searchText: string | undefined) => {
+        setIsLoading(true)
+        if (searchText === undefined) {
+            return
+        }
+
+        if (searchText.length === 0) {
+            setFilteredBookings(bookings)
+        } else {
+            setFilteredBookings(
+                bookings.filter((booking: BookingType) => {
+                    return booking.full_name.toUpperCase().includes(searchText.toUpperCase())
+                })
+            )
+        }
+        setIsLoading(false)
+    }
+
+    useEffect(() => {
+        // Ensure handleFilter is available when setting options
+
+        navigation.setOptions({
+            headerSearchBarOptions: {
+                placeholder: "Search name",
+                onChangeText: (e: any) => {
+                    handleFilter(e.nativeEvent.text)
+                }
             }
+        })
+    }, [navigation, bookings])
+
+
+    if (isLoading) {
+        return (
+            <ContentBody>
+                <ActivityIndicator size="large" className='mt-10' />
+            </ContentBody>
+        )
+    }
+    
+    if (!isLoading && filteredBookings.length === 0){
+        return (
+            <ContentBody>
+                <Text>Not found</Text>
+            </ContentBody>
         )
     }
 
-
-
-  useEffect(() => {
-      refreshPageBooking()
-  }, [])
-
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-        headerSearchBarOptions:{
-            placeholder: "Search name",
-            onChangeText: (e: any) => {
-                handleFilter(e.nativeEvent.text)
-            } 
-        }
-    })
-  })
-
-  const handleFilter = (searchText:string) => {
-    if (isLoading) {
-        setFilteredBookings([])
-    }
-
-    if (searchText.length == 0){
-        setFilteredBookings(bookings)
-    }
-
-    setFilteredBookings(
-        bookings.filter((booking: BookingType) => {
-            return booking.full_name.toUpperCase().includes(searchText.toUpperCase())
-        })
-    )
-  }
-
-  const ActionHeaders = () => {
     return (
-        <>
-            <CustomButton title='Refresh' containerStyles='bg-[#BC7B5C] rounded-none' textStyles='text-white text-xs' handlePress={() => refreshPageBooking()}/>
-        </>
+        <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshPageBooking}/>}>
+            <ContentBody>
+                {filteredBookings.length <= 0 ? (
+                    <Text>Booking not found</Text>
+                )
+                    :
+                    filteredBookings.map((booking: BookingType, index: number) => (
+                        <BookingCard key={index} containerStyle="mb-4" booking={booking} />
+                    ))
+                }
+            </ContentBody>
+        </ScrollView>
     )
-  }
-
-
-  if (isLoading) {
-      return (
-          <ContentBody>
-                <ActionHeaders/>
-                <Text className='mt-4 text-center'>Loading...</Text>
-          </ContentBody>
-      )
-  }
-
-  return (
-    <ScrollView>
-      <ContentBody>
-          {/* <Button title="Refresh" onPress={() => fetchBookings()} /> */}
-          <ActionHeaders/>
-            {filteredBookings.map((booking: BookingType, index: number) => (
-                <BookingCard key={index} containerStyle="mt-4" booking={booking} />
-            ))}
-      </ContentBody>
-    </ScrollView>
-)
 }
 
-export default bookings
+export default bookings;

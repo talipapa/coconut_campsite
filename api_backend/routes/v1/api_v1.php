@@ -14,6 +14,7 @@ Route::apiResource('/user', UserController::class)->except(['store', 'update', '
 // Route::apiResource('/campsite/settings/picture', CampsitePictureController::class)->except(['store', 'destroy']);
 Route::apiResource('/price', PriceController::class)->only(['index', 'show']);
 
+
 Route::middleware(['auth:sanctum'])->group(function () {
     // Refund routes
     Route::patch('/user/{user}', [UserController::class, 'update']);
