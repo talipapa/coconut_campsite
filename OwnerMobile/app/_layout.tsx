@@ -1,9 +1,24 @@
-import { Stack } from "expo-router";
+import React from 'react'
+import { Slot } from 'expo-router'
+import GlobalProvider from '@/Context/GlobalProvider';
+import Toast from 'react-native-toast-message';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
-export default function RootLayout() {
-  return (
-    <Stack>
-      <Stack.Screen name="index" />
-    </Stack>
-  );
+const _layout = () => {
+
+    return (
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <BottomSheetModalProvider>
+                <GlobalProvider>
+                    <Slot/>
+                    <Toast/>
+                </GlobalProvider>
+            </BottomSheetModalProvider>
+        </GestureHandlerRootView>
+    )
+
+    
 }
+
+export default _layout

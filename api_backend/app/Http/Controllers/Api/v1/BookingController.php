@@ -95,6 +95,11 @@ class BookingController extends Controller
         if (!$booking) {
             return response()->json(['message' => 'Booking not found'], 404);
         }
+        
+        // Check if the user in request owns the booking or is an owner/manager
+        // if ($booking->user_id != $request->user()->id){
+        //     return response()->json(['message' => "Unauthorized access"], 401);
+        // }
 
         
 
