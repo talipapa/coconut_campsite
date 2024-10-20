@@ -61,8 +61,8 @@ class BookingController extends Controller
             ], 401);
         }
 
-        // Sum all price of transaction with 'SUCCEEDED' status
-        $summaryData['wallet'] = Booking::where('status', 'SUCCEEDED')->get()->sum(function($booking){
+        // Sum all price of transaction with 'VERIFIED' status
+        $summaryData['wallet'] = Booking::where('status', ['VERIFIED', 'PAID'])->get()->sum(function($booking){
             return $booking->transaction->price;
         });
         
