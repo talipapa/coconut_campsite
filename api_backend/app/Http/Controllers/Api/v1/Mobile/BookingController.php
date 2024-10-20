@@ -62,7 +62,7 @@ class BookingController extends Controller
         }
 
         // Sum all price of transaction with 'VERIFIED' status
-        $summaryData['wallet'] = Booking::where('status', ['VERIFIED', 'PAID'])->get()->sum(function($booking){
+        $summaryData['wallet'] = Booking::whereIn('status', ['VERIFIED', 'PAID'])->get()->sum(function($booking){
             return $booking->transaction->price;
         });
         
@@ -70,7 +70,7 @@ class BookingController extends Controller
         $summaryData['successfullTotalBookingCount'] = Booking::where('status', 'PAID')->get()->count();
         
         // Sum all price of transaction with 'CASH_PENDING & PENDING' status using where
-        $summaryData['pendingCash'] = Booking::whereIn('status', ['CASH_PENDING', 'PENDING', 'PAID'])->get()->sum(function($booking) {
+        $summaryData['pendingCash'] = Booking::whereIn('status', ['CASH_PENDING', 'PENDING'])->get()->sum(function($booking) {
             if ($booking->transaction === null){
                 return 0;
             }
