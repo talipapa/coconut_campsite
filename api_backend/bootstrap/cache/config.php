@@ -8,8 +8,8 @@
     'name' => 'Coconut Campsite',
     'env' => 'local',
     'debug' => true,
-    'url' => 'http://192.168.2.106:8000',
-    'frontend_url' => 'http://192.168.2.106:3000',
+    'url' => 'http://localhost:8000',
+    'frontend_url' => 'http://localhost:3000',
     'asset_url' => NULL,
     'timezone' => 'UTC',
     'locale' => 'en',
@@ -220,7 +220,7 @@
     ),
     'allowed_origins' => 
     array (
-      0 => 'http://192.168.2.106:3000',
+      0 => 'http://localhost:3000',
       1 => 'http://192.168.2.106:3000',
     ),
     'allowed_origins_patterns' => 
@@ -268,7 +268,7 @@
         'prefix_indexes' => true,
         'strict' => true,
         'engine' => NULL,
-        'sslmode' => 'prefer',
+        'ssl_mode' => 'none',
         'options' => 
         array (
         ),
@@ -289,8 +289,10 @@
         'prefix_indexes' => true,
         'strict' => true,
         'engine' => NULL,
+        'ssl_mode' => NULL,
         'options' => 
         array (
+          1009 => 'E:\\coconut_campsite\\api_backend',
         ),
       ),
       'pgsql' => 
@@ -371,7 +373,7 @@
       array (
         'driver' => 'local',
         'root' => 'E:\\coconut_campsite\\api_backend\\storage\\app/public',
-        'url' => 'http://192.168.2.106:8000/storage',
+        'url' => 'http://localhost:8000/storage',
         'visibility' => 'public',
         'throw' => false,
       ),
@@ -506,7 +508,7 @@
         'username' => NULL,
         'password' => NULL,
         'timeout' => NULL,
-        'local_domain' => '192.168.2.106',
+        'local_domain' => 'localhost',
       ),
       'ses' => 
       array (
@@ -639,8 +641,8 @@
       5 => '127.0.0.1:8000',
       6 => '::1',
       7 => '',
-      8 => '192.168.2.106:8000',
-      9 => '192.168.2.106',
+      8 => 'localhost:8000',
+      9 => 'localhost',
     ),
     'guard' => 
     array (
