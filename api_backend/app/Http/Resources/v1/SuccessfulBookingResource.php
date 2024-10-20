@@ -16,6 +16,7 @@ class SuccessfulBookingResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'full_name' => $this->first_name. " ". $this->last_name,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'email' => $this->email,
@@ -30,9 +31,11 @@ class SuccessfulBookingResource extends JsonResource
             'is_cabin' => $this->is_cabin,
             'note' => $this->note,
             'status' => $this->status,
-            'transaction_id' => $this->transaction->id,
-            'transactionStatus' => $this->transaction->status,
-            'xendit_id' => $this->transaction->xendit_product_id,
+            'transaction_id' => $this->transaction ?  $this->transaction->id : null,
+            'transactionType' => $this->transaction ?  $this->transaction->payment_type : null,
+            'price' => $this->transaction ? $this->transaction->price : null,
+            'transactionStatus' => $this->transaction ? $this->transaction->status : null,
+            'xendit_id' => $this->transaction ? $this->transaction->xendit_id : null,
             'created_at' => $this->created_at,
         ];
     }
