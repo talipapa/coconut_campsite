@@ -75,8 +75,4 @@ This lets the ngrok host application that listen to port 8000 which is the "Api 
 2. The website (specifically /view-booking page) will always assume and pull a price from the database. Which causes an error if the database is not populated. Make sure to run "php artisan db:seed" to generate default prices.
 
 ## Building react native
-1. for android you can run
-
-2. npx expo prebuild
-
-3. cd android && ./gradlew assembleRelease
+https://docs.expo.dev/develop/development-builds/create-a-build/

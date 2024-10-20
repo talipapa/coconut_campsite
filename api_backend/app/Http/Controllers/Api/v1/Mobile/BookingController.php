@@ -39,7 +39,7 @@ class BookingController extends Controller
                 return $booking->transaction !== null && in_array($booking->transaction->status, ['CASH_PENDING', 'SUCCEEDED']);
             })->sortByAsc('check_in');
         }
-        
+
 
 
 

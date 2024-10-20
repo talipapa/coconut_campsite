@@ -1,12 +1,16 @@
-import { View, Text, ActivityIndicator, Image, ScrollView, RefreshControl } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { View, Text, ActivityIndicator, Image, ScrollView, RefreshControl, StyleSheet } from 'react-native'
+import React, { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
 import ToastMessage from '@/components/ToastMessage'
-import { fetchSingleBooking } from '@/utils/BookingService'
+import { fetchSingleBooking, rescheduleBooking } from '@/utils/BookingService'
 import ContentBody from '@/components/ContentBody'
 import { useGlobalContext } from '@/Context/GlobalProvider'
 import CashBookingButtons from './CashBookingButtons'
 import XenditBookingButtons from './XenditBookingButtons'
+
+import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
+import CustomButton from '@/components/CustomButton'
+import RescheduleComponent from './RescheduleComponent'
 
 export interface transactionDetailType {
   booking_id: string,
@@ -57,6 +61,33 @@ const index = () => {
   const [totalFare, setTotalFare] = useState<number>(0);
   const [isVoidEligible, setIsVoidEligible] = useState<boolean>(false);
   
+  
+  // ref
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
+  // callbacks
+  const handlePresentModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.present()
+
+  }, []);
+  const handleSheetChanges = useCallback((index: number) => {
+    // console.log('handleSheetChanges', index);
+  }, []);
+
+  const renderBackdrop = useCallback(
+    (props: BottomSheetBackdropProps) => (
+      <BottomSheetBackdrop
+      {...props}
+        style={props.style}
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
+        opacity={0.7}
+        pressBehavior="close"
+      />
+    ),
+    [],
+  )
+
   const refreshData = () => {
     setIsLoading(true)
     const bookingId = Array.isArray(id) ? id[0] : id;
@@ -91,6 +122,8 @@ const index = () => {
     )
   }
 
+
+
   const DetailField = ({title, body}: {title: string, body:string}) => {
     return (
       <View className='space-y-1 mt-4'>
@@ -119,14 +152,29 @@ const index = () => {
 
   }
 
+  
+  const showBottomSheetModal = () => {
+    handlePresentModalPress()
+  }
+
+
+
+
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshData}/>}>
       <ContentBody>
-        {booking.transaction.payment_type === "XENDIT" ? (
-          <XenditBookingButtons id={booking.id} refresh={() => refreshData()} type={booking.booking_type} check_in={booking.check_in}/>
-        ) : (
-          <CashBookingButtons id={booking.id} refresh={() => refreshData()} type={booking.booking_type} check_in={booking.check_in}/>
-        )}
+        <View className='flex flex-row justify-start'>
+          <CustomButton 
+              title='Reschedule' 
+              textStyles='text-xs text-white' 
+              containerStyles='bg-[#BC7B5C] px-3' 
+              handlePress={showBottomSheetModal}/>
+          {booking.transaction.payment_type === "XENDIT" ? (
+            <XenditBookingButtons id={booking.id} refresh={() => refreshData()} type={booking.booking_type} check_in={booking.check_in}/>
+          ) : (
+            <CashBookingButtons id={booking.id} refresh={() => refreshData()} type={booking.booking_type} check_in={booking.check_in}/>
+          )}
+        </View>
         <View className='bg-white shadow-black shadow-xl flex items-center w-full p-3 space-y-4 mt-4'>
           <View className='flex items-center space-y-2'>
             <View>
@@ -171,6 +219,21 @@ const index = () => {
             <DetailField title="Full name" body={`${booking.first_name} ${booking.last_name}`}/>
             <DetailField title="Email" body={booking.email}/>
             <DetailField title="Phone number" body={`0${booking.tel_number}`}/>
+          </View>
+          <View className='w-full border-green-300 border-t-2 pt-4 flex items-start'>
+            <View className={`px-4 rounded-lg flex-row items-center
+                  ${booking.booking_type === "overnight" ? 'bg-[#434343] text-white' : 'bg-yellow-200'}`}>
+                {
+                  booking.booking_type === 'overnight' ?
+                  <Image tintColor="#FFFFFF"  source={require('@/assets/icons/moon.png')} className='w-5 h-5'/>
+                  :
+                  <Image source={require('@/assets/icons/sunny-day.png')} className='w-5 h-5'/>
+                }
+                <Text className={`px-4 py-2 rounded-lg flex-row capitalize text-md 
+                  ${booking.booking_type === "overnight" &&'text-white'}`}>
+                    {booking.booking_type}
+                </Text>
+            </View>
           </View>
           {booking.transaction.payment_type === "XENDIT" && (
             <View className='w-full border-green-300 border-t-2 pt-4 flex items-center'>
@@ -228,9 +291,26 @@ const index = () => {
           </View>
         </View>
 
+
+
       </ContentBody>
+      <BottomSheetModal
+          ref={bottomSheetModalRef}
+          onChange={handleSheetChanges}
+          backdropComponent={renderBackdrop}
+        >
+          <BottomSheetView>
+            <View className='h-[50vh] mx-5 my-6'>
+              <RescheduleComponent id={booking.id} bookingType={booking.booking_type} checkInDate={booking.check_in} refreshData={refreshData}/>
+            </View>    
+          </BottomSheetView>
+      </BottomSheetModal>
+
     </ScrollView>
   )
 }
+
+
+
 
 export default index
