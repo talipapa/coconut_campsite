@@ -38,8 +38,10 @@ const index = () => {
         } catch (error: any) {
             if (error.response?.status === 422) {
                 setErrors(error.response.data.errors)
+                ToastMessage('error', 'Incorrect credentials', error.response?.data.message)
+            } else{
+                ToastMessage('error', 'Something went wrong', error.response?.data.message)
             }
-            ToastMessage('error', 'Incorrect credentials', error.response?.data.message)
         } finally{
             setIsLoading(false)
         }
