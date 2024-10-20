@@ -40,9 +40,6 @@ class BookingController extends Controller
             })->sortByAsc('check_in');
         }
 
-
-
-
         // Return all bookings with successful bookingresource
         return response()->json([
             'bookings' => SuccessfulBookingResource::collection($bookings)
@@ -70,7 +67,7 @@ class BookingController extends Controller
         });
         
         // Sum all count of transaction with 'SUCCEEDED' status
-        $summaryData['successfullTotalBookingCount'] = Booking::where('status', 'SUCCEEDED')->get()->count();
+        $summaryData['successfullTotalBookingCount'] = Booking::where('status', 'PAID')->get()->count();
         
         // Sum all price of transaction with 'CASH_PENDING & PENDING' status using where
         $summaryData['pendingCash'] = Booking::whereIn('status', ['CASH_PENDING', 'PENDING', 'PAID'])->get()->sum(function($booking) {
@@ -82,7 +79,7 @@ class BookingController extends Controller
         
 
         // Sum all count of transaction with 'CASH_PENDING & PENDING' status
-        $summaryData['pendingTotalBookingCount'] = Booking::whereIn('status', ['CASH_PENDING', 'PENDING'])->whereHas('transaction')->count();
+        $summaryData['pendingTotalBookingCount'] = Booking::whereIn('status', ['CASH_PENDING', 'PENDING', 'PAID'])->whereHas('transaction')->count();
 
         return response()->json([
             'summary' => $summaryData
