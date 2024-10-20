@@ -5,11 +5,11 @@ This project includes a web application, desktop application, mobile application
 Can be found in app -> CustomVendors
 
 ## BOOKING PAYMENT TYPE KEY
-XENDIT
-Booking is transacted with online payment
+OVERNIGHT
+Booking is for overnight
 
-CASH
-Booking is transacted via CASH on SITE
+DAYTOUR
+Booking is for day tour
 
 
 ## TRANSACTION & XENDIT STATUS KEY
