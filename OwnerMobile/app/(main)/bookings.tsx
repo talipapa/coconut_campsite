@@ -17,7 +17,7 @@ const bookings = () => {
 
     const refreshPageBooking = () => {
         setIsLoading(true)
-        fetchBookings(10)
+        fetchBookings(30)
             .then((data) => {
                 if (Array.isArray(data)){
                     setBookings(data)

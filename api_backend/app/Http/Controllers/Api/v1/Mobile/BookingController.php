@@ -79,7 +79,7 @@ class BookingController extends Controller
         
 
         // Sum all count of transaction with 'CASH_PENDING & PENDING' status
-        $summaryData['pendingTotalBookingCount'] = Booking::whereIn('status', ['CASH_PENDING', 'PENDING', 'PAID'])->whereHas('transaction')->count();
+        $summaryData['pendingTotalBookingCount'] = Booking::whereIn('status', ['CASH_PENDING', 'PENDING'])->whereHas('transaction')->count();
 
         return response()->json([
             'summary' => $summaryData
