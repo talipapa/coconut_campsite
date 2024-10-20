@@ -59,7 +59,7 @@ const index = () => {
   const [booking, setBooking] = useState<bookingSingleDetailType>()
   const { isLoading, setIsLoading, prices } = useGlobalContext();
   const [totalFare, setTotalFare] = useState<number>(0);
-  const [isVoidEligible, setIsVoidEligible] = useState<boolean>(false);
+  const [isVoidEligible, setIsVoidEligible] = useState<boolean>();
   
   
   // ref
@@ -94,6 +94,7 @@ const index = () => {
     fetchSingleBooking(bookingId)
       .then((res) => {
         setBooking(res.data.booking_detail)
+        setIsVoidEligible(res.data.isVoidEligible)
       })
       .catch((err) => {
         if (err.response.status === 404){
