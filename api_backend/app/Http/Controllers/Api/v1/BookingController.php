@@ -251,7 +251,7 @@ class BookingController extends Controller
                 'adultCount' => $validated['adultCount'],
                 'childCount' => $validated['childCount'],
                 'check_in' => Carbon::parse($validated['checkInDate'])->timezone('Asia/Manila')->format('Y-m-d'),
-                'check_out' => $validated['bookingType'] === 'OVERNIGHT' ? Carbon::parse($validated['checkInDate'])->addDay(1)->timezone('Asia/Manila')->format('Y-m-d') : Carbon::parse($validated['checkInData'])->timezone('Asia/Manila'),
+                'check_out' => $validated['bookingType'] === 'OVERNIGHT' ? Carbon::parse($validated['checkInDate'])->addDay(1)->timezone('Asia/Manila')->format('Y-m-d') : Carbon::parse($validated['checkInDate'])->timezone('Asia/Manila'),
                 'booking_type' => $validated['bookingType'],
                 'tent_pitching_count' => $validated['tentPitchingCount'],
                 'bonfire_kit_count' => $validated['bonfireKitCount'],
