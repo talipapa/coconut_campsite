@@ -42,7 +42,6 @@ const BookingCard:React.FC<BookingCardProps> = ({containerStyle, booking}) => {
                                 <Text className='text-xs text-slate-400'>Check in</Text>
                                 <Text className='text-xs'>{new Date(booking.check_in).toDateString()}</Text>
                             </View>
-
                         </View>
                         <View className='relative h-6'>
                             <Image source={require('../assets/icons/dots.png')} className='w-5 h-5'/>
@@ -58,8 +57,8 @@ const BookingCard:React.FC<BookingCardProps> = ({containerStyle, booking}) => {
                     <View className='flex flex-col justify-between space-y-5'>
                         <View>
                             <Text>{`${booking.adult_count} adult | ${booking.child_count} children`}</Text>
-                            <Text>{`${booking.transactionType}`}</Text>
-                            <Text>{`${booking.transactionStatus}`}</Text>
+                            <Text>{`${booking.transactionType === "XENDIT" ? "E-WALLET" : "CASH"}`}</Text>
+                            {/* <Text>{`${booking.transactionStatus}`}</Text> */}
                         </View>
                         <View className='space-y-1'>
                             <Text className='text-white bg-slate-500 rounded-full text-center'>{booking.booking_type}</Text>

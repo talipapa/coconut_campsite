@@ -221,21 +221,6 @@ const index = () => {
             <DetailField title="Email" body={booking.email}/>
             <DetailField title="Phone number" body={`0${booking.tel_number}`}/>
           </View>
-          <View className='w-full border-green-300 border-t-2 pt-4 flex items-start'>
-            <View className={`px-4 rounded-lg flex-row items-center
-                  ${booking.booking_type === "overnight" ? 'bg-[#434343] text-white' : 'bg-yellow-200'}`}>
-                {
-                  booking.booking_type === 'overnight' ?
-                  <Image tintColor="#FFFFFF"  source={require('@/assets/icons/moon.png')} className='w-5 h-5'/>
-                  :
-                  <Image source={require('@/assets/icons/sunny-day.png')} className='w-5 h-5'/>
-                }
-                <Text className={`px-4 py-2 rounded-lg flex-row capitalize text-md 
-                  ${booking.booking_type === "overnight" &&'text-white'}`}>
-                    {booking.booking_type}
-                </Text>
-            </View>
-          </View>
           {booking.transaction.payment_type === "XENDIT" && (
             <View className='w-full border-green-300 border-t-2 pt-4 flex items-center'>
               {isVoidEligible === true ? (
@@ -251,6 +236,21 @@ const index = () => {
               )}
             </View>
           )}
+          <View className='w-full border-green-300 border-t-2 pt-4 flex items-start'>
+            <View className={`px-4 rounded-lg flex-row items-center
+                  ${booking.booking_type === "overnight" ? 'bg-[#434343] text-white' : 'bg-yellow-200'}`}>
+                {
+                  booking.booking_type === 'overnight' ?
+                  <Image tintColor="#FFFFFF"  source={require('@/assets/icons/moon.png')} className='w-5 h-5'/>
+                  :
+                  <Image source={require('@/assets/icons/sunny-day.png')} className='w-5 h-5'/>
+                }
+                <Text className={`px-4 py-2 rounded-lg flex-row capitalize text-md 
+                  ${booking.booking_type === "overnight" &&'text-white'}`}>
+                    {booking.booking_type}
+                </Text>
+            </View>
+          </View>
         </View>
 
         <View className='mt-5 text-white shadow-black shadow-xl bg-yellow-100 p-3 space-y-1'>
