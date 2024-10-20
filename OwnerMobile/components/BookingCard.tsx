@@ -59,6 +59,7 @@ const BookingCard:React.FC<BookingCardProps> = ({containerStyle, booking}) => {
                         <View>
                             <Text>{`${booking.adult_count} adult | ${booking.child_count} children`}</Text>
                             <Text>{`${booking.transactionType}`}</Text>
+                            <Text>{`${booking.transactionStatus}`}</Text>
                         </View>
                         <View className='space-y-1'>
                             <Text className='text-white bg-slate-500 rounded-full text-center'>{booking.booking_type}</Text>
