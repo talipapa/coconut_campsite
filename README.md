@@ -74,5 +74,8 @@ This lets the ngrok host application that listen to port 8000 which is the "Api 
 
 2. The website (specifically /view-booking page) will always assume and pull a price from the database. Which causes an error if the database is not populated. Make sure to run "php artisan db:seed" to generate default prices.
 
+3. Due to CORS error in local machine: Mobile can't connect to localhost:8000 but works with 192.168.2.106(local ip address), Website can connect to localhost:8000 but won't connect with 192.168.2.106(local ip address).
+
+
 ## Building react native
 https://docs.expo.dev/develop/development-builds/create-a-build/

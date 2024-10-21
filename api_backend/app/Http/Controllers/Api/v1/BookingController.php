@@ -39,13 +39,11 @@ class BookingController extends Controller
         $booking = Booking::where('user_id', $request->user()->id)
         ->whereNotIn('status', ['PENDING', 'CANCELLED'])
         ->first();
+    
 
-        Log::info($booking);
-        
         if (!$booking) {
             return response()->json(['message' => "Booking not found"], 404);
         }
-   
 
         return response()->json(new SuccessfulBookingResource($booking), 201);
     
@@ -100,15 +98,22 @@ class BookingController extends Controller
         // if ($booking->user_id != $request->user()->id){
         //     return response()->json(['message' => "Unauthorized access"], 401);
         // }
-
         
-
+        
+        
+        
         $transaction = $booking->transaction;
+        if ($transaction->status === "REFUND_PENDING"){
+            return response()->json(['message' => "Transaction currently has pending refund"], 422);
+        }
         // Check if the status of the transaction is SUCCEEDED
         try {
             if ($transaction->status !== 'SUCCEEDED') {
                 return response()->json(['message' => 'Transaction is not successful'], 400);
             }
+
+            $transaction->status = "REFUND_PENDING";
+            $transaction->save();
     
             // Fetch the xendit id and append "ewc_" to it
             $xenditId = 'ewc_'.$booking->transaction->xendit_product_id;
@@ -129,7 +134,7 @@ class BookingController extends Controller
             // Void the charge, Check if the created_at is currently in the same day and is before 23:50:00.
             if ($createdAt->isSameDay($now) && $createdAt->lte($cutOffTime)) {
                 $response = Xendivel::void($xenditId)->getResponse();
-                Log::info('Void response:', [$response]);
+                // Log::info('Void response:', [$response->]);
             } else{
 
                 // Temporary solution for refunding

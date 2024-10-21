@@ -26,7 +26,7 @@ const AccountDetails = () => {
         axios.patch('api/v1/user/' + user.id, {
             first_name: first_name,
             last_name: last_name,
-            email: email,
+            // email: email,
         })
         .then(() => {
             setErrors([])
@@ -66,8 +66,8 @@ const AccountDetails = () => {
                         </div>
                         <div>
                             <label htmlFor="email">Email</label>
-                            <Input size="large" value={email} onChange={event=>setEmail(event.target.value)} prefix={<UserOutlined/>} id="email" placeholder="Enter your email"/>
-                            <InputError messages={errors.email} className="mt-2" />
+                            <Input size="large" value={email} onChange={event=>setEmail(event.target.value)} prefix={<UserOutlined/>} id="email" placeholder="Enter your email" disabled/>
+                            <InputError messages={errors.email} className="mt-2"  />
                         </div>
 
                     </div>

@@ -46,11 +46,11 @@ export default function Page() {
     useEffect(() => {
         if (!booking) return
         if (booking.status === "PAID"){
-            router.push('/view-booking')
+            window.location.href = "/view-booking"
         }
         
         if (booking.transactionStatus === "CASH_PENDING"){
-            router.push('/view-booking')
+            window.location.href = "/view-booking"
         }
 
         if (booking.status === "PENDING"){

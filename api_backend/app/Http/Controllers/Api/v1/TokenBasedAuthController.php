@@ -19,7 +19,6 @@ class TokenBasedAuthController extends Controller
         ]);
 
         $user = User::where('email', $request->email)->first();
-
         
         if (!$user || !$user->owner) {
             return response()->json([

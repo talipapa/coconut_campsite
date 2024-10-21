@@ -10,6 +10,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\CampManager;
 use App\Models\Manager;
+use Exception;
 use GlennRaya\Xendivel\Xendivel as OrigXendivel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -109,6 +110,7 @@ class TransactionController extends Controller
                     //code...
             
                     // Prepare payment request body
+
                     $xenditRequest = [
                         'reference_id' => $transaction->id,
                         'amount' => floatval($validated['price']),
@@ -116,9 +118,9 @@ class TransactionController extends Controller
                         'checkout_method' => 'ONE_TIME_PAYMENT',
                         'channel_code' => $validated['paymentMethod'],
                         'channel_properties' => [
-                            'success_redirect_url' => env('XENDIT_SUCCESS_URL'),
-                            'failure_redirect_url' => env('XENDIT_FAILURE_URL'),
-                            'cancel_redirect_url' => env('XENDIT_CANCEL_URL'),
+                            'success_redirect_url' => config('xendivel.xendit_success_url'),
+                            'failure_redirect_url' => config('xendivel.xendit_failure_url'),
+                            'cancel_redirect_url' => config('xendivel.xendit_cancel_url'),
                         ],
                     ];
 
@@ -161,7 +163,7 @@ class TransactionController extends Controller
                 //     'payment_type' => $validated['payment_type'],
                 //     'status' => 'CASH_PENDING'
                 // ]);
-
+                
                 $transaction = Transaction::where('booking_id', $validated['booking_id'])->first();
                 $booking = Booking::where('id', $transaction->booking_id)->first();
                 $transaction->status = 'CASH_PENDING';

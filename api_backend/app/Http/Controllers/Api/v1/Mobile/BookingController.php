@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1\Mobile;
 
+use App\CustomVendors\Xendivel as CustomVendorsXendivel;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\SuccessfulBookingResource;
 use App\Models\Booking;
@@ -62,9 +63,9 @@ class BookingController extends Controller
         }
 
         // Sum all price of transaction with 'VERIFIED' status
-        $summaryData['wallet'] = Booking::whereIn('status', ['VERIFIED', 'PAID'])->get()->sum(function($booking){
-            return $booking->transaction->price;
-        });
+        $response = CustomVendorsXendivel::getBalance()->getResponse();
+        $summaryData['wallet'] = json_decode(json_encode($response), true)['balance'];
+
         
         // Sum all count of transaction with 'SUCCEEDED' status
         $summaryData['successfullTotalBookingCount'] = Booking::where('status', 'PAID')->get()->count();

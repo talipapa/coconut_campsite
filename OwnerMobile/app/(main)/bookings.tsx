@@ -91,7 +91,7 @@ const bookings = () => {
     }
 
     return (
-        <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshPageBooking}/>}>
+        <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshPageBooking} progressViewOffset={50}/>}>
             <ContentBody>
                 {filteredBookings.length <= 0 ? (
                     <Text>Booking not found</Text>
