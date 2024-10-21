@@ -1,8 +1,6 @@
 import ToastMessage from '@/components/ToastMessage';
 import { loadUser } from '@/utils/AuthService';
 import { fetchPrice } from '@/utils/PriceService';
-import { getToken } from '@/utils/TokenService';
-import { router } from 'expo-router';
 import {createContext, ReactNode, useContext, useEffect, useState} from 'react';
 
 
