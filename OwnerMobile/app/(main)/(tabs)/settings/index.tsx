@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native'
 import React, { useEffect } from 'react'
 import MainHeader from '@/components/MainHeader'
 import ContentBody from '@/components/ContentBody'
@@ -29,13 +29,27 @@ const index = () => {
     }
   }
 
+  const fullName = `${user?.first_name} ${user?.last_name}`
+
+
   return (
     <ScrollView>
-      <MainHeader fullName={`${user?.first_name} ${user?.last_name}`} />
+      <View className=' min-h-[15vh] bg-[#64bdb7] rounded-3xl flex flex-row items-end justify-center px-5 pb-3'>
+          <Text className='text-center text-black text-lg font-semibold'>Settings</Text>
+      </View>
       <ContentBody>
-        <View className='min-h-[65vh] flex flex-col justify-between'>
-          <Text>lorem5090</Text>
-          <CustomButton title="Logout" handlePress={() => handleLogout()} containerStyles='bg-red-500 mt-12 w-24' textStyles='text-xs' isLoading={isLoading}/>
+        <View className='min-h-[70vh] flex flex-col justify-between'>
+            <TouchableOpacity onPress={() => router.push("/profile")} className='flex flex-row bg-[#114844] rounded-xl items-center space-x-5 p-5 bg-slate-20'>
+              <Image source={require('@/assets/logo.jpg')} className='w-12 h-12 rounded-full'/>
+              <View>
+                <Text className='text-slate-200'>{fullName.length > 20 ? fullName.substring(0, 20) + '...' : fullName}</Text>
+                <Text className='font-bold text-white'>View Personal Info</Text>
+              </View>
+            </TouchableOpacity>
+
+          
+            <CustomButton title="Logout" handlePress={() => handleLogout()} containerStyles='bg-red-500 mt-10 w-full' textStyles='text-xs text-white' isLoading={isLoading}/>
+
         </View>
       </ContentBody>
     </ScrollView>

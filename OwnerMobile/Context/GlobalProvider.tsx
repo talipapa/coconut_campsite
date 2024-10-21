@@ -54,7 +54,6 @@ const GlobalProvider = ({children}: {children: ReactNode}) => {
         setIsLoading(true)
         loadUser()
             .then((data) => {
-                console.log("data is loaded")
                 setUser(data)
                 setIsLoggedIn(true)
             }).catch((error) => {

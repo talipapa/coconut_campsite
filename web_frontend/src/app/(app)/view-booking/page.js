@@ -81,6 +81,8 @@ export default async function Page() {
         return (price * count).toFixed(2)
     }
 
+    console.log(bookingData)
+
     return (
         <div className="p-[30px] w-full space-y-5">
             {/* CTA Buttons */}
@@ -127,6 +129,33 @@ export default async function Page() {
                                 </div>
                             </div>   
                         </div>
+                    </div>
+                    <div className="bg-white shadow-lg p-7 rounded-2xl space-y-5">
+                        <h1 className="uppercase font-bold">Transaction Details</h1>
+                        <div>
+                            <div className="text-[#555555]">
+                                Transaction id
+                            </div>
+                            <div>
+                                {bookingData.data.transaction_id}
+                            </div>
+                        </div>  
+                        <div>
+                            <div className="text-[#555555]">
+                                Payment gateway
+                            </div>
+                            <div>
+                                {bookingData.data.transactionType}
+                            </div>
+                        </div>    
+                        <div>
+                            <div className="text-[#555555]">
+                                Status
+                            </div>
+                            <div className="capitalize">
+                                {bookingData.data.transactionStatus}
+                            </div>
+                        </div>   
                     </div>
                     <div className="w-full flex flex-col space-y-5 bg-white shadow-lg p-7 rounded-2xl divide-y-2">
                         <h1 className="uppercase font-bold">Booking details</h1>

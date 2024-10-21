@@ -19,7 +19,7 @@ export interface transactionDetailType {
   id: string,
   payment_type: "XENDIT" | "CASH",
   price: number,
-  status: "CASH_PENDING" | "PENDING" | "SUCCEEDED" | "FAILED" | "CANCELLED" | "VOIDED" | "REFUNDED",
+  status: ["CASH_PENDING", "PENDING", "SUCCEEDED", "FAILED", "CANCELLED", "VOIDED", "REFUNDED"],
   updated_at: Date,
   user_id: string,
   xendit_product_id: string
@@ -46,7 +46,7 @@ export interface bookingSingleDetailType {
   last_name: string,
   tel_number: string,
   
-  status: "PENDING" | "PAID" | "CASH_CANCELLED" | "VOIDED" | "REFUNDED" | "SCANNED" | "VERIFIED"
+  status: ["PENDING", "PAID", "CASH_CANCELLED", "VOIDED", "REFUNDED", "SCANNED", "VERIFIED"]
   note: string|null,
 
   updated_at: Date,
@@ -179,7 +179,7 @@ const index = () => {
         <View className='bg-white shadow-black shadow-xl flex items-center w-full p-3 space-y-4 mt-4'>
           <View className='flex items-center space-y-2'>
             <View>
-              <Text className='text-center bg-yellow-200 p-1 rounded-md'>{booking.transaction.status === 'SUCCEEDED' ? "E-WALLET PAID" : booking.transaction.status}</Text>
+              <Text className='text-center bg-yellow-200 p-1 rounded-md'>{booking.status}</Text>
             </View>
             <View>
               <View>

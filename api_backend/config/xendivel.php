@@ -112,4 +112,14 @@ return [
     */
 
     'webhook_verification_token' => env('XENDIT_WEBHOOK_VERIFICATION_TOKEN', ''),
+
+    'xendit_success_url' => env("XENDIT_SUCCESS_URL", "http://localhost:3000/view-booking"),
+
+    'xendit_failure_url' => env("XENDIT_FAILURE_URL", "http://localhost:3000/booking"),
+
+    'xendit_cancel_url' => env("XENDIT_CANCEL_URL", "http://localhost:3000/booking"),
+
+
+    'business_id' => env("XENDIT_BUSINESS_ID")
+
 ];

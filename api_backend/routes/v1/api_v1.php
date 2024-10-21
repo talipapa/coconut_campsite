@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\v1\BookingController;
 use App\Http\Controllers\Api\v1\ManagerController;
+use App\Http\Controllers\Api\v1\Mobile\WalletController;
 use App\Http\Controllers\Api\v1\TransactionController;
 use App\Http\Controllers\Api\v1\UserController;
 use App\Http\Controllers\Api\v1\PriceController;
@@ -15,11 +16,16 @@ Route::apiResource('/user', UserController::class)->except(['store', 'update', '
 Route::apiResource('/price', PriceController::class)->only(['index', 'show']);
 
 
+
+
+
+
 Route::middleware(['auth:sanctum'])->group(function () {
     // Refund routes
     Route::patch('/user/{user}', [UserController::class, 'update']);
     Route::patch('/user/change-password/{user}', [UserController::class, 'changePassword']);
 
+    
     Route::post('/booking/cancel/{booking}', [BookingController::class, 'cancelBooking']);
     Route::post('/booking/refund/{booking}', [BookingController::class, 'refundBooking']);
     Route::get('/booking/refund/{xendit_refund_id}', [BookingController::class, 'checkRefundStatus']);

@@ -50,7 +50,7 @@ const index = () => {
 
 
   return (
-    <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshWalletSummary}/>}>
+    <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshWalletSummary} progressViewOffset={50}/>}>
       <MainHeader fullName={`${user?.first_name} ${user?.last_name}`} />
       <View className='bg-[#5CBCB6] h-[10vh] px-5 py-3 flex flex-col relative'>
         <View className='absolute bottom-[-40px]  w-[100vw] h-24 px-3'>
@@ -60,12 +60,12 @@ const index = () => {
                 <Text className='text-slate-100 text-xs'>₱ {Number(walletSummary?.pendingCash).toFixed(2)} (Pending) | {walletSummary?.pendingTotalBookingCount} bookings </Text>
               </View> 
               <View>  
-                <Text className='text-slate-100 text-md'>Wallet</Text>
-                <Text className='text-[#e5ffb1] text-xl font-bold'>₱ {walletSummary?.wallet}</Text>
+                <Text className='text-slate-100 text-md'>Xendit Wallet</Text>
+                <Text className='text-[#e5ffb1] text-xl font-bold'>₱ {(walletSummary?.wallet)?.toFixed(2)}</Text>
               </View>
             </View>
             <View>
-              <CustomButton handlePress={() => router.push('/settings')} title='Cash out' containerStyles='bg-[#BC7B5C] px-6' textStyles='text-white text-sm' />
+              <CustomButton handlePress={() => router.push('/cashout')} title='Cash out' containerStyles='bg-[#BC7B5C] px-6' textStyles='text-white text-sm' />
             </View>
           </View>
         </View>

@@ -7,6 +7,7 @@ use App\Models\Booking;
 use App\Models\Refund;
 use App\Models\Transaction;
 use App\Models\User;
+use GlennRaya\Xendivel\Xendivel;
 use Illuminate\Support\Facades\Log;
 
 class eWalletWebhookListener
@@ -41,11 +42,11 @@ class eWalletWebhookListener
 
 
 
-        logger('Webhook data received: ', $event->webhook_data);
+        // logger('Webhook data received: ', $event->webhook_data);
 
         
         // Event type
-        Log::info($event->webhook_data['event']);
+        // Log::info($event->webhook_data['event']);
         
         if($event->webhook_data['data']['status'] === 'SUCCEEDED'){
             // Get the transaction
@@ -58,21 +59,27 @@ class eWalletWebhookListener
             
             // Get the booking
             $booking = Booking::find($transaction->booking_id);
+
+            $email_invoice = new Xendivel();
             
             // Set the booking status to PAID
             $booking->status = 'PAID';
             
             $booking->save();
             $transaction->save();
+
             
             logger('Online payment succeeded!!', [
                 'email' => $booking->user->email,
                 'transaction_id' => $transaction->id,
-                'xendit_product_id' => $transaction->xendit_product_id,
-                'status' => $transaction->status,
-                'booking_id' => $booking->id,
-                'status' => $booking->status
             ]);
+            try {
+                
+
+                Log::error("Invoice succeeded?", ['Invoice' => ""]);
+            } catch (\Throwable $th) {
+                Log::error("Invoicing email error", ['Error' => $th->getMessage()]);
+            }
         }
         
         if($event->webhook_data['data']['status'] === 'FAILED'){
