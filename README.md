@@ -57,6 +57,9 @@ The booking is refunded
 SCANNED
 The booking is scanned at KIOSK
 
+FAILED
+The booking is not refunded, voided or cash_cancelled (NO SHOW)
+
 VERIFIED
 The booking is verified by the manager/campsite_owner/caretaker
 

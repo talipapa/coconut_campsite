@@ -34,7 +34,7 @@ class BookingFactory extends Factory
             "bonfire_kit_count" => rand(1, 10),
             "is_cabin" => false,
             "note" => "test",
-            "status" => "PENDING"
+            "status" => "SCANNED"
         ];
     }
 }
