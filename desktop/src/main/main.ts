@@ -15,6 +15,7 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
+
 class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
@@ -30,6 +31,15 @@ ipcMain.on('ipc-example', async (event, arg) => {
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
 });
+
+ipcMain.on('set-window-size', (event, width, height) => {
+  mainWindow?.setSize(width, height);
+  mainWindow?.center();
+})
+
+ipcMain.on('set-window-full-screen', (event, shouldFullscreen) => {
+  mainWindow?.setFullScreen(shouldFullscreen);
+})
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -71,9 +81,11 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728,
-    icon: getAssetPath('icon.png'),
+    minWidth: 500,
+    minHeight: 650,
+    autoHideMenuBar: true,
+    icon: getAssetPath('logo.jpg'),
+  
     webPreferences: {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')

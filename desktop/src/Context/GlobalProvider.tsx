@@ -58,6 +58,12 @@ const GlobalProvider = ({children}: {children: ReactNode}) => {
             }).finally(() => {
                 setIsLoading(false)
             })
+
+        if (!isLoading && !isLoggedIn) {
+            console.log('User is not logged in')
+            window.electron.ipcRenderer.setWindowFullScreen(false)
+        }
+
     }, [])
 
     return (

@@ -19,9 +19,6 @@ class ManagerFactory extends Factory
     {
         return [
             'user_id' => User::factory()->create()->id,
-            'service_facebook' => $this->faker->name,
-            'service_email' => $this->faker->text,
-            'service_dialnumber' => $this->faker->randomFloat(2, 0, 100),
         ];
     }
 }
