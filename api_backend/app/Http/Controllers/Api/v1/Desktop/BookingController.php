@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class BookingController extends Controller
 {
@@ -15,23 +16,48 @@ class BookingController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
         try {
-            //code...
-            // data that i need [dashboard]
             // total earnings of current year
-            $totalYearEarnings = Transaction::whereYear('created_at', date('Y'))->where('status', 'VERIFIED')->sum('price');
+            $totalYearEarnings = Transaction::whereYear('updated_at', Carbon::now()->year)
+            ->where('status', 'SUCCEEDED')
+            ->sum('price');
+
             // total earnings this month
-            $totalMonthEarnings = Transaction::whereYear('created_at', date('Y'))->where('status', 'VERIFIED')->whereMonth('created_at', date('m'))->sum('price');
+            $totalMonthEarnings = Transaction::whereYear('updated_at', Carbon::now()->year)
+            ->whereMonth('updated_at', Carbon::now()->month)
+            ->where('status', 'SUCCEEDED')
+            ->sum('price');
+
             // total earnings from previous month
-            $totalPreviousMonthEarnings = Transaction::whereYear('created_at', date('Y'))->where('status', 'VERIFIED')->whereMonth('created_at', date('m', strtotime('-1 month')))->sum('price');
-    
+            $totalPreviousMonthEarnings = Transaction::whereYear('updated_at', Carbon::now()->subMonth()->year)
+            ->whereMonth('updated_at', Carbon::now()->subMonth(1)->month)
+            ->where('status', 'VERIFIED')
+            ->sum('price');
+
             // cash revenue this month
-            $cashRevenueThisMonth = Transaction::whereYear('created_at', date('Y'))->where('status', 'VERIFIED')->whereMonth('created_at', date('m'))->where('payment_type', 'CASH')->sum('price');
+            $cashRevenueThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
+            ->whereMonth('updated_at', Carbon::now()->month)
+            ->where('status', 'SUCCEEDED')
+            ->where('payment_type', 'CASH')
+            ->sum('price');
+
             // e-payment revenue this month
-            $ePaymentRevenueThisMonth = Transaction::whereYear('created_at', date('Y'))->where('status', 'VERIFIED')->whereMonth('created_at', date('m'))->where('payment_type', 'XENDIT')->sum('price');
+            $ePaymentRevenueThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
+            ->whereMonth('updated_at', Carbon::now()->month)
+            ->where('status', 'SUCCEEDED')
+            ->where('payment_type', 'XENDIT')
+            ->sum('price');
+
             // success booking this month
-            $successBookingThisMonth = Transaction::whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->where('status', 'VERIFIED')->count();
+            $successBookingThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
+            ->whereMonth('updated_at', Carbon::now()->month)
+            ->where('status', 'SUCCEEDED')
+            ->count();
+
             // cancelled booking this month
-            $cancelledBookingThisMonth = Transaction::whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->whereIn('status', ['CANCELLED', 'VOIDED', 'REFUNDED'])->count();
+            $cancelledBookingThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
+            ->whereMonth('updated_at', Carbon::now()->month)
+            ->whereIn('status', ['CANCELLED', 'VOIDED', 'REFUNDED', 'FAILED'])
+            ->count();
     
             return response()->json([
                 'totalYearEarnings' => $totalYearEarnings,
@@ -42,6 +68,56 @@ class BookingController extends Controller
                 'successBookingThisMonth' => $successBookingThisMonth,
                 'cancelledBookingThisMonth' => $cancelledBookingThisMonth
             ]);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Something went wrong', 'error' => $th], 500);
+        }
+    }
+
+    public function fetchScannedBooking(Request $request){
+        // Return unathorize if user is not a manager
+        if (!$request->user()->manager()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+        try {
+            //code...
+            // sort by check in date
+            $perPage = $request->query('per_page', 10);
+            $scannedBooking = Booking::where('status', 'SCANNED')->paginate($perPage);
+            return response()->json($scannedBooking);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Something went wrong', 'error' => $th], 500);
+        }
+    }
+
+    public function bookingAction(Request $request, Booking $booking){
+        // Return unathorize if user is not a manager
+        if (!$request->user()->manager()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+        try {
+            //code...
+            if (!$booking) {
+                return response()->json(['message' => 'Booking not found'], 404);
+            }
+            switch ($request->action) {
+                case 'confirm':
+                    # code...
+                    $booking->status = 'VERIFIED';
+                    $booking->transaction->status = 'SUCCEEDED';
+                    break;
+
+                case 'cancel':
+                    # code...
+                    $booking->status = 'FAILED';
+                    $booking->transaction->status = 'FAILED';
+                    break;
+                default:
+                    return response()->json(['message' => 'Something went wrong', 'error', 'Action not acceptable'], 500);
+                    break;
+                }
+            $booking->transaction->save();
+            $booking->save();
+            return response()->json(['message' => 'Booking status updated']);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Something went wrong', 'error' => $th], 500);
         }
