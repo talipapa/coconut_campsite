@@ -18,18 +18,18 @@ class BookingController extends Controller
             //code...
             // data that i need [dashboard]
             // total earnings of current year
-            $totalYearEarnings = Transaction::whereYear('created_at', date('Y'))->sum('price');
+            $totalYearEarnings = Transaction::whereYear('created_at', date('Y'))->where('status', 'VERIFIED')->sum('price');
             // total earnings this month
-            $totalMonthEarnings = Transaction::whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->sum('price');
+            $totalMonthEarnings = Transaction::whereYear('created_at', date('Y'))->where('status', 'VERIFIED')->whereMonth('created_at', date('m'))->sum('price');
             // total earnings from previous month
-            $totalPreviousMonthEarnings = Transaction::whereYear('created_at', date('Y'))->whereMonth('created_at', date('m', strtotime('-1 month')))->sum('price');
+            $totalPreviousMonthEarnings = Transaction::whereYear('created_at', date('Y'))->where('status', 'VERIFIED')->whereMonth('created_at', date('m', strtotime('-1 month')))->sum('price');
     
             // cash revenue this month
-            $cashRevenueThisMonth = Transaction::whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->where('payment_type', 'CASH')->sum('price');
+            $cashRevenueThisMonth = Transaction::whereYear('created_at', date('Y'))->where('status', 'VERIFIED')->whereMonth('created_at', date('m'))->where('payment_type', 'CASH')->sum('price');
             // e-payment revenue this month
-            $ePaymentRevenueThisMonth = Transaction::whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->where('payment_type', 'XENDIT')->sum('price');
+            $ePaymentRevenueThisMonth = Transaction::whereYear('created_at', date('Y'))->where('status', 'VERIFIED')->whereMonth('created_at', date('m'))->where('payment_type', 'XENDIT')->sum('price');
             // success booking this month
-            $successBookingThisMonth = Booking::whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->where('status', 'VERIFIED')->count();
+            $successBookingThisMonth = Transaction::whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->where('status', 'VERIFIED')->count();
             // cancelled booking this month
             $cancelledBookingThisMonth = Transaction::whereYear('created_at', date('Y'))->whereMonth('created_at', date('m'))->whereIn('status', ['CANCELLED', 'VOIDED', 'REFUNDED'])->count();
     
