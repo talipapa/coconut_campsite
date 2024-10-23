@@ -15,4 +15,4 @@ Route::prefix('v1')->group(base_path('routes/v1/api_v1.php'));
 Route::prefix('v1/mobile')->group(base_path('routes/v1/Mobile/mobile_api_v1.php'));
 
 // For manager essentials
-// Route::prefix('v1/manager')->group(base_path('routes/v1/manager/manager_api_v1.php'));
+Route::prefix('v1/manager')->group(base_path('routes/v1/Desktop/desktop_api_v1.php'));

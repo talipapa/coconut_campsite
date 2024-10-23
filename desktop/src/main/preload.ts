@@ -9,6 +9,7 @@ const electronHandler = {
     sendMessage(channel: Channels, ...args: unknown[]) {
       ipcRenderer.send(channel, ...args);
     },
+
     on(channel: Channels, func: (...args: unknown[]) => void) {
       const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>
         func(...args);
@@ -21,7 +22,17 @@ const electronHandler = {
     once(channel: Channels, func: (...args: unknown[]) => void) {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
     },
+
+    setWindowSize(width: number, height: number) {
+      ipcRenderer.send('set-window-size', width, height);
+    },
+
+    setWindowFullScreen(shouldFullScreen: boolean) {
+      ipcRenderer.send('set-window-full-screen', shouldFullScreen);
+    }
   },
+
+  
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);

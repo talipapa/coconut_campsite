@@ -9,13 +9,13 @@ interface credentialsIE {
 }
 
 export async function login(credentials: credentialsIE) {
-    const { data } = await axios.post('/mobile/login', credentials)
+    const { data } = await axios.post('/manager/login', credentials)
     await setToken(data.token)
 }
 
 export async function loadUser() {
     const token = await getToken();
-    const { data: user} = await axios.get('/mobile/user', {
+    const { data: user} = await axios.get('/manager/user', {
         headers: {
             Authorization: `Bearer ${token}`
     }})
@@ -25,13 +25,12 @@ export async function loadUser() {
 
 export async function logout() {
     const token = await getToken();
-    const {data: data} = await axios.post('/mobile/logout', null, {
+    const {data: data} = await axios.post('/manager/logout', null, {
         headers: {
             Authorization: `Bearer ${token}`
         }
     })
+    window.electron.ipcRenderer.setWindowFullScreen(false)
     await setToken(null);
-
-
     return data;
 }
