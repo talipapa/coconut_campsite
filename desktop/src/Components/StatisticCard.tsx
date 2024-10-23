@@ -4,7 +4,7 @@ import { IconType } from 'react-icons'
 
 const StatisticCard = (
     // Parameters
-    {title, data = undefined, IconComponent, iconColor = "#000000", rootStyle = '', titleStyle = 'text-slate-700', dataStyle = ''}: 
+    {title, data = undefined, IconComponent, iconColor = "#000000", isLoading, rootStyle = '', titleStyle = 'text-slate-700', dataStyle = ''}: 
     // Parameter types
     {
         title: string, 
@@ -13,14 +13,14 @@ const StatisticCard = (
         iconColor?: string,
         rootStyle?: string,
         titleStyle?: string,
-        dataStyle?: string
+        dataStyle?: string,
+        isLoading: boolean
     }) => {
-    console.log(data)
   return (
     <div className='flex w-full flex-row justify-between items-center bg-slate-100 rounded-xl shadow-xl p-5'>
         <div>
             <div className={`font-semibold text-xl ${titleStyle}`}>{title}</div>
-            {true ? <div className={`font-semibold text-3xl ${dataStyle}`}>{data?.toString()}</div> :
+            {!isLoading ? <div className={`font-semibold text-3xl ${dataStyle}`}>{data?.toString()}</div> :
                     <Skeleton.Input active={true} size='large' />
             }
         </div>
