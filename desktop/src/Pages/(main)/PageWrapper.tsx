@@ -36,7 +36,7 @@ function getItem(
 const items: MenuItem[] = [
   getItem('Dashboard', '/dashboard', <PieChartOutlined />),
   getItem('Reservations', 'sub1', <UserOutlined />, [
-    getItem('Confirmation', '/confirmation'),
+    getItem('Pending', '/pending'),
     getItem('Successful', '/successful'),
     getItem('All reservations', '/all-reservation'),
   ]),
@@ -54,7 +54,7 @@ const PageWrapper = ({children} : {children: React.ReactElement}) => {
     } = theme.useToken();
     const path = pathname.pathname; // Make sure this is correctly set up
     const [selectedKey, setSelectedKey] = useState(path);
-    const [openKeys, setOpenKeys] = useState<string[]>(selectedKey === '/confirmation' || selectedKey === '/successful' || selectedKey === '/all-reservation' ? ['sub1'] : []);
+    const [openKeys, setOpenKeys] = useState<string[]>(selectedKey === '/pending' || selectedKey === '/successful' || selectedKey === '/all-reservation' ? ['sub1'] : []);
 
     const handleClick = (e: any) => {
         navigate(e.key);

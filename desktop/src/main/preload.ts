@@ -1,5 +1,6 @@
 // Disable no-unused-vars, broken for spread args
 /* eslint no-unused-vars: off */
+import { IBookingData } from '@/Pages/(main)/Pending';
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
 export type Channels = 'ipc-example';
@@ -29,6 +30,10 @@ const electronHandler = {
 
     setWindowFullScreen(shouldFullScreen: boolean) {
       ipcRenderer.send('set-window-full-screen', shouldFullScreen);
+    },
+
+    generateDataPDF(data: IBookingData[]){
+      return ipcRenderer.invoke('generate-pdf', data);
     }
   },
 

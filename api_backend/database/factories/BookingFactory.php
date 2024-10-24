@@ -27,7 +27,7 @@ class BookingFactory extends Factory
             "tel_number" => "9925606298",
             "adultCount" => rand(1, 10),
             "childCount" => rand(0, 10),
-            "check_in" => Carbon::now()->subDays(rand(1, 30)),
+            "check_in" => Carbon::now()->addDays(rand(1, 30)),
             "check_out" => Carbon::now()->subDays((rand(1, 30)))->addDays(rand(1, 100)),
             "booking_type" => $this->faker->randomElement(["overnight", "daytour"]),
             "tent_pitching_count" => rand(1, 10),

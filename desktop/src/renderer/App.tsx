@@ -9,7 +9,7 @@ import { ConfigProvider } from 'antd';
 import Successful from '@/Pages/(main)/Successful';
 import AllReservation from '@/Pages/(main)/AllReservation';
 import Settings from '@/Pages/(main)/Settings';
-import Confirmation from '@/Pages/(main)/Confirmation';
+import Confirmation from '@/Pages/(main)/Pending';
 
 export default function App() {
   return (
@@ -33,7 +33,7 @@ export default function App() {
           <Routes>
             <Route element={<ProtectedRoutes/>}>
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/confirmation" element={<Confirmation />} />
+              <Route path="/pending" element={<Confirmation />} />
               <Route path="/successful" element={<Successful />} />
               <Route path="/all-reservation" element={<AllReservation />} />
               <Route path="/settings" element={<Settings />} />

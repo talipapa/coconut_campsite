@@ -28,10 +28,12 @@ class BookingController extends Controller
             ->sum('price');
 
             // total earnings from previous month
-            $totalPreviousMonthEarnings = Transaction::whereYear('updated_at', Carbon::now()->subMonth()->year)
-            ->whereMonth('updated_at', Carbon::now()->subMonth(1)->month)
-            ->where('status', 'VERIFIED')
-            ->sum('price');
+            $startOfPreviousMonth = Carbon::now()->startOfMonth()->subMonth();
+            $endOfPreviousMonth = Carbon::now()->subMonth()->endOfMonth();
+
+            $totalPreviousMonthEarnings = Transaction::whereBetween('updated_at', [$startOfPreviousMonth, $endOfPreviousMonth])->where('status', 'SUCCEEDED')->sum('price');
+
+            
 
             // cash revenue this month
             $cashRevenueThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
@@ -118,6 +120,38 @@ class BookingController extends Controller
             $booking->transaction->save();
             $booking->save();
             return response()->json(['message' => 'Booking status updated']);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Something went wrong', 'error' => $th], 500);
+        }
+    }
+
+    public function fetchSuccessfulBooking(Request $request){
+        // Return unathorize if user is not a manager
+        if (!$request->user()->manager()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+        try {
+            //code...
+            // sort by check in date
+            $perPage = $request->query('per_page', 10);
+            $scannedBooking = Booking::where('status', 'VERIFIED')->paginate($perPage);
+            return response()->json($scannedBooking);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Something went wrong', 'error' => $th], 500);
+        }
+    }
+
+    public function fetchAllBooking(Request $request){
+        // Return unathorize if user is not a manager
+        if (!$request->user()->manager()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+        try {
+            //code...
+            // sort by check in date
+            $perPage = $request->query('per_page', 10);
+            $scannedBooking = Booking::paginate($perPage);
+            return response()->json($scannedBooking);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Something went wrong', 'error' => $th], 500);
         }
