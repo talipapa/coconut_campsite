@@ -70,6 +70,8 @@ The booking is verified by the manager/campsite_owner/caretaker
 
 This lets the ngrok host application that listen to port 8000 which is the "Api server" of this project
 
+## Desktop API change
+To switch api server host, just go to desktop/src/utils/auth.ts
 
 ## BUGS & ISSUE JOURNAL
 
@@ -82,3 +84,4 @@ This lets the ngrok host application that listen to port 8000 which is the "Api 
 
 ## Building react native
 https://docs.expo.dev/develop/development-builds/create-a-build/
+

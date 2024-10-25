@@ -1,6 +1,5 @@
 import { MemoryRouter as Router, Routes, Route, useNavigate, HashRouter } from 'react-router-dom';
-import './App.css';
-
+import "tailwindcss/tailwind.css";
 import ProtectedRoutes from './ProtectedRoutes';
 import Dashboard from '../Pages/(main)/Dashboard';
 import GlobalProvider from '../Context/GlobalProvider';
