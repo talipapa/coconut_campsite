@@ -3,13 +3,14 @@ import { logout } from '../../utils/AuthService'
 import { ipcRenderer } from 'electron'
 import PageWrapper from './PageWrapper'
 import { Breadcrumb, notification } from 'antd'
-import { FaPiggyBank } from "react-icons/fa6";
+import { FaCoins, FaPiggyBank } from "react-icons/fa6";
 import { HiOutlineCash } from "react-icons/hi";
 import { HiCash } from "react-icons/hi";
 
 import StatisticCard from '@/Components/StatisticCard'
 import axios from '@/utils/auth'
 import { useGlobalContext } from '@/Context/GlobalProvider'
+import { BsFillCreditCard2FrontFill } from "react-icons/bs";
 
 interface DashboardProps {
   cancelledBookingThisMonth: number,
@@ -74,8 +75,8 @@ const Dashboard = () => {
           <div className='space-y-1'>
             <span className='text-slate-500 text-lg tracking-wider'>Current month statistics</span>
             <div className='space-y-4'>
-              <StatisticCard isLoading={loading} title='Cash revenue' data={formatCurrency(data?.cashRevenueThisMonth)} IconComponent={FaPiggyBank}/>
-              <StatisticCard isLoading={loading} title='E-payment revenue' data={formatCurrency(data?.ePaymentRevenueThisMonth)} IconComponent={FaPiggyBank}/>
+              <StatisticCard isLoading={loading} title='Cash revenue' data={formatCurrency(data?.cashRevenueThisMonth)} IconComponent={FaCoins}/>
+              <StatisticCard isLoading={loading} title='E-payment revenue' data={formatCurrency(data?.ePaymentRevenueThisMonth)} IconComponent={BsFillCreditCard2FrontFill}/>
               <div className='flex flex-row justify-between gap-5'>
                 <StatisticCard isLoading={loading} title='Success' data={`${data?.successBookingThisMonth} bookings`} titleStyle='text-sm' dataStyle='text-[1.6em] text-green-600'/>
                 <StatisticCard isLoading={loading} title='Cancelled' data={`${data?.cancelledBookingThisMonth} bookings`} titleStyle='text-sm' dataStyle='text-[1.6em] text-red-600'/>
