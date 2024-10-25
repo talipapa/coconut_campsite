@@ -2,7 +2,7 @@ import axiosLab from 'axios';
 import { safeStorage } from 'electron';
 
 const axios = axiosLab.create({
-    baseURL: `http://192.168.2.106:8000/api/v1`,
+    baseURL: `https://server.coconutcampsite.com/api/v1`,
     headers: {
         'Accept': 'application/json',
     }
@@ -17,5 +17,7 @@ axios.interceptors.request.use(
         return config;
     },
 )
+
+
 
 export default axios;

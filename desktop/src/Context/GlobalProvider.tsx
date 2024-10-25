@@ -47,6 +47,14 @@ const GlobalProvider = ({children}: {children: ReactNode}) => {
 
     useEffect(() => {
         setIsLoading(true)
+        const token = localStorage.getItem('token');
+        if (token == null) {
+            setIsLoggedIn(false)
+            setUser(null)
+            setIsLoading(false)
+            return;
+        }
+
         loadUser()
             .then((data) => {
                 setUser(data)
@@ -59,12 +67,7 @@ const GlobalProvider = ({children}: {children: ReactNode}) => {
                 setIsLoading(false)
             })
 
-        if (!isLoading && !isLoggedIn) {
-            console.log('User is not logged in')
-            window.electron.ipcRenderer.setWindowFullScreen(false)
-        }
-
-    }, [])
+    }, [isLoggedIn])
 
     return (
         <GlobalContext.Provider value={{

@@ -37,6 +37,11 @@ ipcMain.on('set-window-full-screen', (event, shouldFullscreen) => {
 });
 
 
+ipcMain.on('reload', () => {
+  mainWindow?.close();
+
+})
+
 
 ipcMain.handle('generate-pdf', async (event, reservationData) => {
   const now = new Date();
@@ -150,7 +155,7 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    minWidth: 500,
+    minWidth: 900,
     minHeight: 650,
     autoHideMenuBar: true,
     icon: getAssetPath('logo.jpg'),
@@ -166,6 +171,8 @@ const createWindow = async () => {
   });
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
+
+  
 
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {
@@ -192,6 +199,7 @@ const createWindow = async () => {
 
   new AppUpdater();
 };
+
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

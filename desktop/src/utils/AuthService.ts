@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useGlobalContext } from "../Context/GlobalProvider";
 import axios from "./auth";
 import { getToken, setToken } from "./TokenService";
@@ -30,7 +31,6 @@ export async function logout() {
             Authorization: `Bearer ${token}`
         }
     })
-    window.electron.ipcRenderer.setWindowFullScreen(false)
     await setToken(null);
     return data;
 }

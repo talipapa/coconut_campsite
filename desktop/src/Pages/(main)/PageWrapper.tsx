@@ -63,6 +63,7 @@ const PageWrapper = ({children} : {children: React.ReactElement}) => {
     const logoutFunc = () => {
       logout()
         .then(() => {
+          window.electron.ipcRenderer.reloadWindow()
           window.location.href = '/'
         })
     }

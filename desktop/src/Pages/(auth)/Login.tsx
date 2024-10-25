@@ -55,15 +55,6 @@ const Login = () => {
       }
     }
   
-    const Logout = async () => {
-      logout()
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
   
   
     return (
@@ -73,7 +64,11 @@ const Login = () => {
             <h1 className='text-4xl text-white font-bold uppercase'>COCONUT CAMPSITE</h1>            
         </div>
         <div className='flex flex-col space-y-9 w-full'>
-            {serverAccountError && <div className='text-red-600'>{serverAccountError}</div>}
+            {serverAccountError && (
+              <div className='text-black w-full bg-red-300 py-3 flex items-center justify-center'>
+                <span className='text-xl font-semibold'>{serverAccountError}</span>
+              </div>
+            )}
             <div className='flex flex-col w-full'>
             <TextField title='Email' placeholder='Enter your email' value={formData['email']} handleChangeText={(e) => setFormData((prev) => ({ ...prev, email: e }))} errors={[errors.email]} />
             </div>

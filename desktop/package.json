@@ -186,8 +186,8 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "CoconutCampsite",
+    "appId": "org.erb.CoconutCampsite",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
@@ -226,6 +226,7 @@
       ]
     },
     "win": {
+      "icon": "resources/assets/logo.jpg",
       "target": [
         "nsis"
       ]

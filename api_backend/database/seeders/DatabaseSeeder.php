@@ -16,33 +16,33 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Price::factory()->create([
-        //     'name' => 'adult',
-        //     'price' => 100.00,
-        // ]);
-        // Price::factory()->create([
-        //     'name' => 'child',
-        //     'price' => 50.00,
-        // ]);
-        // Price::factory()->create([
-        //     'name' => 'tent_pitch',
-        //     'price' => 70.00,
-        // ]);
-        // Price::factory()->create([
-        //     'name' => 'bonfire',
-        //     'price' => 150.00,
-        // ]);
-        // Price::factory()->create([
-        //     'name' => 'cabin',
-        //     'price' => 650.00,
-        // ]);
+        Price::factory()->create([
+            'name' => 'adult',
+            'price' => 100.00,
+        ]);
+        Price::factory()->create([
+            'name' => 'child',
+            'price' => 50.00,
+        ]);
+        Price::factory()->create([
+            'name' => 'tent_pitch',
+            'price' => 70.00,
+        ]);
+        Price::factory()->create([
+            'name' => 'bonfire',
+            'price' => 150.00,
+        ]);
+        Price::factory()->create([
+            'name' => 'cabin',
+            'price' => 650.00,
+        ]);
         
-        // User::factory(10)->create();
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-        Transaction::factory(100)->create();
+        User::factory(10)->create();
+        User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+        ]);
+        // Transaction::factory(100)->create();
 
     }
 }

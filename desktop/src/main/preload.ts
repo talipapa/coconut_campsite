@@ -34,6 +34,10 @@ const electronHandler = {
 
     generateDataPDF(data: IBookingData[]){
       return ipcRenderer.invoke('generate-pdf', data);
+    },
+
+    reloadWindow(){
+      ipcRenderer.send('reload');
     }
   },
 
