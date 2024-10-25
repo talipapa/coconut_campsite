@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1\Desktop;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\v1\SuccessfulBookingResource;
 use App\Models\Booking;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
@@ -152,6 +153,25 @@ class BookingController extends Controller
             $perPage = $request->query('per_page', 10);
             $scannedBooking = Booking::paginate($perPage);
             return response()->json($scannedBooking);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Something went wrong', 'error' => $th], 500);
+        }
+    }
+
+    public function fetchSingleBooking(Request $request, Booking $booking){
+        // Return unathorize if user is not a manager
+        if (!$request->user()->manager()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+        try {
+            //code...
+            if (!$booking) {
+                return response()->json(['message' => 'Booking not found'], 404);
+            }
+            return response()->json([
+                'booking' => $booking,
+                'transaction' => $booking->transaction
+            ]);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Something went wrong', 'error' => $th], 500);
         }

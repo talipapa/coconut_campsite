@@ -10,6 +10,7 @@ import Successful from '@/Pages/(main)/Successful';
 import AllReservation from '@/Pages/(main)/AllReservation';
 import Settings from '@/Pages/(main)/Settings';
 import Confirmation from '@/Pages/(main)/Pending';
+import BookingDetails from '@/Pages/(main)/BookingDetails';
 
 export default function App() {
   return (
@@ -36,6 +37,7 @@ export default function App() {
               <Route path="/pending" element={<Confirmation />} />
               <Route path="/successful" element={<Successful />} />
               <Route path="/all-reservation" element={<AllReservation />} />
+              <Route path="/booking/:id" element={<BookingDetails />} />
               <Route path="/settings" element={<Settings />} />
             </Route>
 

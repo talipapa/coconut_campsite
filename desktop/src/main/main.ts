@@ -155,10 +155,13 @@ const createWindow = async () => {
     autoHideMenuBar: true,
     icon: getAssetPath('logo.jpg'),
     webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: true,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
       webSecurity: false,
+      
     },
   });
 

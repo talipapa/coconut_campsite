@@ -4,6 +4,7 @@ import { Breadcrumb, Button, Input, Table } from 'antd'
 import { format } from 'date-fns'
 import { IBookingData } from './Pending'
 import axios from '@/utils/auth'
+import { useNavigate } from 'react-router'
 
 const Successful = () => {
   const [bookingData, setBookingData] = useState<any | undefined>(undefined)
@@ -11,7 +12,9 @@ const Successful = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [filteredData, setFilteredData] = useState<any | undefined>(undefined)
-  
+  const navigate = useNavigate()
+
+
   const generatePDF = async () => {
     window.electron.ipcRenderer.generateDataPDF(filteredData.data)
       .then((result) => {
@@ -86,6 +89,15 @@ const Successful = () => {
               onChange: (page, pageSize) => tableFetchOptions(page, pageSize)
           }}>
             <Table.Column
+              title="Actions"
+              key="actions"
+              render={(_, record: IBookingData) => (
+                <div className='flex flex-rowselect-none'>
+                  <Button onClick={() => navigate(`/booking/${record.id}`)} className='px-2 text-xs py-1 w-full text-white bg-blue-400 rounded-lg transition ease-in-out hover:scale-105'>Info</Button>
+                </div>
+              )}
+            />
+            <Table.Column
               title="Name"
               key="name"
               render={(_, record: IBookingData) => <span className='text-xs'>{`${record.first_name} ${record.last_name}`}</span>}
@@ -102,7 +114,7 @@ const Successful = () => {
             )} />
             <Table.Column title='Booking Type' dataIndex='booking_type' key='booking_type' render={(value:string) => (
               value === 'daytour' ? (
-                <span className='bg-yellow-600 px-4 py-1 rounded-lg text-white'>Day Tour</span>
+                <span className='bg-yellow-600 px-4 w-full py-1 rounded-lg text-white'>Day Tour</span>
               ) : (
                 <span className='bg-slate-800 px-4 py-1 rounded-lg text-white'>Overnight</span>
               ) 

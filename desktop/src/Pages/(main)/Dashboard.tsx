@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { logout } from '../../utils/AuthService'
 import { ipcRenderer } from 'electron'
 import PageWrapper from './PageWrapper'
-import { Breadcrumb } from 'antd'
+import { Breadcrumb, notification } from 'antd'
 import { FaPiggyBank } from "react-icons/fa6";
 import { HiOutlineCash } from "react-icons/hi";
 import { HiCash } from "react-icons/hi";
@@ -26,6 +26,8 @@ const Dashboard = () => {
   const { user } = useGlobalContext()
   const [data, setData] = React.useState<DashboardProps | undefined>(undefined)
   const [loading, setLoading] = React.useState(true)
+
+
   const getDashboardData = () => {
     setLoading(true)
     axios.get('/manager/summary')
@@ -42,6 +44,8 @@ const Dashboard = () => {
       }
     )
   }
+
+
 
   const formatCurrency = (value: number|undefined) => {
     if (value === undefined) return '₱ 0'

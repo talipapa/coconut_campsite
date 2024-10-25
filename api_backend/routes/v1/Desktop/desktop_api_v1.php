@@ -13,6 +13,8 @@ Route::middleware(['auth:sanctum'])->group(function (){
     Route::get('/confirmation/bookings', [BookingController::class, 'fetchScannedBooking']);
     Route::get('/bookings', [BookingController::class, 'fetchAllBooking']);
     Route::get('/bookings/verified', [BookingController::class, 'fetchSuccessfulBooking']);
+    Route::get('/booking/{booking}', [BookingController::class, 'fetchSingleBooking']);
+    
 
     Route::patch('/booking/action/{booking}', [BookingController::class, 'bookingAction']);
 

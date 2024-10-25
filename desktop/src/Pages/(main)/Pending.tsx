@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PageWrapper from './PageWrapper'
-import { Breadcrumb, Button, Input, Modal, Table } from 'antd'
+import { Breadcrumb, Button, Input, Modal, notification, Table } from 'antd'
 import axios from '@/utils/auth'
 import { format } from 'date-fns'
 
@@ -25,7 +25,17 @@ const Pending = () => {
   const [currentPage, setCurrentPage] = React.useState(1)
   const [currentBookingId, setCurrentBookingId] = React.useState('')
   const [searchQuery, setSearchQuery] = useState<string>('')
-
+  const [api, contextHolder] = notification.useNotification();
+  const openNotification = (notifType: 'success'|'error'|'warning'|'info', title: string, body: string) => {
+    api.open({
+      type: notifType,
+      message: title,
+      description: body,
+      showProgress: true,
+      pauseOnHover: false,
+    });
+  };
+  
   const generatePDF = async () => {
     window.electron.ipcRenderer.generateDataPDF(filteredData.data)
       .then((result) => {
@@ -55,12 +65,23 @@ const Pending = () => {
         .then((res) => {
           setCurrentPage(1)
           fetchData()
+          openNotification('success', 'Booking confirmed', 'Booking has been confirmed successfuly');
         })
-    } else {
-      axios.patch(`manager/booking/action/${id}`, { action: 'cancel' })
+        .catch((err) => {
+          openNotification('error', 'System failure', `Something went wrong, ${JSON.stringify(err)}`);
+          console.log(err)
+        })
+        
+      } else {
+        axios.patch(`manager/booking/action/${id}`, { action: 'cancel' })
         .then((res) => {
           setCurrentPage(1)
           fetchData()
+          openNotification('info', 'No show', 'Booking has been tagged as no show');
+        })
+        .catch((err) => {
+          openNotification('error', 'System failure', `Something went wrong, ${JSON.stringify(err)}`);
+          console.log(err)
         })
     }
   }
@@ -99,9 +120,12 @@ const Pending = () => {
     setFilteredData({ ...bookingData, data: filtered });
   }
 
+
+
   return (
     <PageWrapper>
       <>
+        {contextHolder}
         <div className='flex flex-row justify-between bg-slate-200 shadow-lg py-5 px-6 select-none'>
           <Breadcrumb>
             <Breadcrumb.Item><span className='font-semibold'>Reservations</span></Breadcrumb.Item>
