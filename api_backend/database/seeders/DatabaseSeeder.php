@@ -37,11 +37,11 @@ class DatabaseSeeder extends Seeder
             'price' => 650.00,
         ]);
         
-        User::factory(10)->create();
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // User::factory(10)->create();
+        // User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
         // Transaction::factory(100)->create();
 
     }
