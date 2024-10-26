@@ -81,8 +81,8 @@ const index = () => {
         <Text className='mt-7 mb-4 text-lg text-slate-400 font-semibold'>This month statistics</Text>
         <StatisticCard title='Cash Revenue' data={FormatCurrency(dashboardData?.cashRevenueThisMonth)} isLoading={isLoading}/>
         <StatisticCard title='ePayment Revenue' data={FormatCurrency(dashboardData?.ePaymentRevenueThisMonth)} isLoading={isLoading} />
-        <StatisticCard title='Total Bookings' data={FormatCurrency(dashboardData?.successBookingThisMonth)} isLoading={isLoading} dataStyle='text-green-500'/>
-        <StatisticCard title='Cancelled Bookings' data={FormatCurrency(dashboardData?.cancelledBookingThisMonth)} isLoading={isLoading} dataStyle='text-red-500'/>
+        <StatisticCard title='Total Bookings' data={dashboardData?.successBookingThisMonth} isLoading={isLoading} dataStyle='text-green-500'/>
+        <StatisticCard title='Cancelled Bookings' data={dashboardData?.cancelledBookingThisMonth} isLoading={isLoading} dataStyle='text-red-500'/>
       </ContentBody>
     </ScrollView>
   )
