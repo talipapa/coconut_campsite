@@ -8,6 +8,7 @@ import { RefreshControl, ScrollView } from 'react-native-gesture-handler';
 import FormField from '@/components/FormField';
 import NumberField from '@/components/NumberField';
 import CustomButton from '@/components/CustomButton';
+import FormatCurrency from '@/utils/FormatCurrency';
 
 interface IWalletData {
   'XENDIT' : number,
@@ -111,7 +112,7 @@ const index = () => {
       <View className='h-[15vh] bg-[#5CBCB6]'>
         <View className='flex flex-col items-center justify-center h-full'>
           <Text className='text-white'>Available for Cash-out</Text>
-          {walletData !== undefined ? <Text className='font-bold text-white text-lg'>₱ {(walletData.XENDIT).toFixed(2)}</Text> : <Text className='bg-black rounded-md px-3 mt-2'>pending request</Text>}
+          {walletData !== undefined ? <Text className='font-bold text-white text-lg'>{FormatCurrency(walletData.XENDIT)}</Text> : <Text className='bg-black rounded-md px-3 mt-2'>pending request</Text>}
         </View>
       </View>
       <ContentBody>

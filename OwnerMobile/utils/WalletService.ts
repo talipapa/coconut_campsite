@@ -2,18 +2,16 @@ import axios from "./axios";
 import { getToken } from "./TokenService";
 
 export const getWalletData = async () => {
-    const token = await getToken()
-    const response = await axios.get(`/mobile/wallet/balance`, {
-        headers: {'Authorization': `Bearer ${token}`}})
+    const response = await axios.get(`/mobile/wallet/balance`)
+    return response.data;
+}
+
+export const getDashboardData = async () => {
+    const response = await axios.get(`/mobile/dashboard-summary`)
     return response.data;
 }
 
 export const sendPayoutRequest = async (data: any) => {
-    const token = await getToken()
-    const response = await axios.post('/mobile/payout', data, {
-        headers:{
-            'Authorization': `Bearer ${token}`
-        }
-    })
+    const response = await axios.post('/mobile/payout', data)
     return response.data;
 }

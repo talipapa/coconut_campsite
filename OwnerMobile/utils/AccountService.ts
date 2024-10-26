@@ -14,21 +14,11 @@ export interface IPassword {
 
 
 export const changeAccountDetail = async (id: number|undefined, data: IUser) => {
-    const token = await getToken()
-    const response = await axios.patch(`/mobile/owner-account/${id}`, data, {
-        headers:{
-            'Authorization': `Bearer ${token}`
-        }
-    })
+    const response = await axios.patch(`/mobile/owner-account/${id}`, data)
     return response.data;
 }
 
 export const changeAccountPassword = async (id: number|undefined, data: IPassword) => {
-    const token = await getToken()
-    const response = await axios.patch(`/mobile/owner-account/change-password/${id}`, data, {
-        headers:{
-            'Authorization': `Bearer ${token}`
-        }
-    })
+    const response = await axios.patch(`/mobile/owner-account/change-password/${id}`, data)
     return response.data;
 }

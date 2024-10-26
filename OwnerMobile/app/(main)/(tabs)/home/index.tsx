@@ -10,6 +10,7 @@ import { Href, Link, router } from 'expo-router';
 import { BookingType } from '@/types/BookingType'
 import BookingList from '@/components/home/BookingList'
 import { fetchWalletDetails } from '@/utils/BookingService'
+import FormatCurrency from '@/utils/FormatCurrency'
 
 interface walletSummaryType {
   wallet: number,
@@ -48,20 +49,18 @@ const index = () => {
     refreshWalletSummary()
   }, [])
 
-
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshWalletSummary} progressViewOffset={50}/>}>
       <MainHeader fullName={`${user?.first_name} ${user?.last_name}`} />
       <View className='bg-[#5CBCB6] h-[10vh] px-5 py-3 flex flex-col relative'>
         <View className='absolute bottom-[-40px]  w-[100vw] h-24 px-3'>
-          <View className='w-full h-full bg-[#256560] rounded-xl p-3 flex flex-row items-end justify-around'>
-            <View className='space-y-1'>
-              <View>
-                <Text className='text-slate-100 text-xs'>₱ {Number(walletSummary?.pendingCash).toFixed(2)} (Pending) | {walletSummary?.pendingTotalBookingCount} bookings </Text>
-              </View> 
+          <View className='w-full h-full bg-[#256560] rounded-xl p-3 flex flex-row items-center justify-around'>
+            <View>
               <View>  
                 <Text className='text-slate-100 text-md'>Xendit Wallet</Text>
-                <Text className='text-[#e5ffb1] text-xl font-bold'>₱ {(walletSummary?.wallet)?.toFixed(2)}</Text>
+                {/* Convert to php cash */}
+
+                <Text className='text-[#e5ffb1] text-xl font-bold'>{FormatCurrency(walletSummary?.wallet)}</Text>
               </View>
             </View>
             <View>

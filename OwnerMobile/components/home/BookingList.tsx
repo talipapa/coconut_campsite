@@ -1,4 +1,4 @@
-import { View, Text, Button, ActivityIndicator } from 'react-native'
+import { View, Text, Button, ActivityIndicator, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
 import BookingCard from '@/components/BookingCard'
@@ -41,6 +41,17 @@ const BookingList = () => {
             <>
                 <CustomButton title='Refresh' containerStyles='bg-[#BC7B5C] mt-5 rounded-none' textStyles='text-white text-xs' handlePress={() => refreshPageBooking()}/>
                 <ActivityIndicator size="large" className='mt-10'/>
+            </>
+        )
+    }
+
+    if (!isLoading && bookings.length === 0) {
+        return (
+            <>
+                <CustomButton title='Refresh' containerStyles='bg-[#BC7B5C] mt-5 rounded-none' textStyles='text-white text-xs' handlePress={() => refreshPageBooking()}/>
+                <View className='items-center mt-5'>
+                    <Text className='text-xl font-bold'>No bookings found</Text>
+                </View>
             </>
         )
     }

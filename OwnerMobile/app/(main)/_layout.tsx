@@ -73,6 +73,59 @@ const _layout = () => {
                 },
             }}
         />
+        <Stack.Screen
+            name="caretaker/index"
+            options={{
+                presentation: 'modal',
+                headerTitle: "Caretakers",
+                headerTitleStyle:{
+                    color: 'white'
+                },
+                headerStyle: {
+                    backgroundColor: "#5CBCB6"
+                },
+            }}
+        />
+        <Stack.Screen
+            name="caretaker/[id]"
+            options={{
+                presentation: 'modal',
+                headerTitle: "Account details",
+                headerTitleStyle:{
+                    color: 'white'
+                },
+                headerStyle: {
+                    backgroundColor: "#5CBCB6"
+                },
+            }}
+        />
+        <Stack.Screen
+            name="caretaker/add"
+            options={{
+                presentation: 'modal',
+                headerTitle: "Add caretaker",
+                headerTitleStyle:{
+                    color: 'white'
+                },
+                headerStyle: {
+                    backgroundColor: "#5CBCB6"
+                },
+            }}
+        />
+        <Stack.Screen
+            name="caretaker/change-password/index"
+            options={{
+                presentation: 'modal',
+                headerTitle: "Change caretaker password",
+                headerTitleStyle:{
+                    color: 'white'
+                },
+                headerStyle: {
+                    backgroundColor: "#9e2a2b"
+                },
+                headerTintColor: 'white'
+            }}
+        />
     </Stack>
   )
 }

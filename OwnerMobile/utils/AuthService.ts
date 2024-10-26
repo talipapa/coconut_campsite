@@ -14,23 +14,13 @@ export async function login(credentials: credentialsIE) {
 }
 
 export async function loadUser() {
-    const token = await getToken();
-    const { data: user} = await axios.get('/mobile/user', {
-        headers: {
-            Authorization: `Bearer ${token}`
-    }})
+    const { data: user} = await axios.get('/mobile/user')
 
     return user;
 }
 
 export async function logout() {
-    const token = await getToken();
-    const {data: data} = await axios.post('/mobile/logout', null, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
-    
+    const {data: data} = await axios.post('/mobile/logout', null)
     await setToken(null);
     return data;
 }

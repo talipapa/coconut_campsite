@@ -1,6 +1,6 @@
 import Toast from 'react-native-toast-message';
 
-export const ToastMessage = (type: "success" | "error" | "info", title:string, body:string|undefined) => {
+export const ToastMessage = (type: "success" | "error" | "info", title:string, body:string|undefined, time?: 5000) => {
     Toast.show({
       type: type,
       text1: title,
@@ -12,7 +12,7 @@ export const ToastMessage = (type: "success" | "error" | "info", title:string, b
       swipeable: true,
       position: 'top',
       topOffset: 70,
-      visibilityTime: 5000,
+      visibilityTime: time,
     });
 }
 

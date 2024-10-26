@@ -15,6 +15,9 @@ class ManagerMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (!$request->user()->has('owner') || !$request->user()->has('manager')) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
         return $next($request);
     }
 }

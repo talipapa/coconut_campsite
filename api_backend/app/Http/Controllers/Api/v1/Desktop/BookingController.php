@@ -12,10 +12,6 @@ use Carbon\Carbon;
 class BookingController extends Controller
 {
     public function dashboardSummary(Request $request){
-        // Return unathorize if user is not a manager
-        if (!$request->user()->manager()) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
         try {
             // total earnings of current year
             $totalYearEarnings = Transaction::whereYear('updated_at', Carbon::now()->year)
@@ -77,10 +73,6 @@ class BookingController extends Controller
     }
 
     public function fetchScannedBooking(Request $request){
-        // Return unathorize if user is not a manager
-        if (!$request->user()->manager()) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
         try {
             //code...
             // sort by check in date
@@ -93,10 +85,6 @@ class BookingController extends Controller
     }
 
     public function bookingAction(Request $request, Booking $booking){
-        // Return unathorize if user is not a manager
-        if (!$request->user()->manager()) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
         try {
             //code...
             if (!$booking) {
@@ -127,10 +115,6 @@ class BookingController extends Controller
     }
 
     public function fetchSuccessfulBooking(Request $request){
-        // Return unathorize if user is not a manager
-        if (!$request->user()->manager()) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
         try {
             //code...
             // sort by check in date
@@ -143,10 +127,6 @@ class BookingController extends Controller
     }
 
     public function fetchAllBooking(Request $request){
-        // Return unathorize if user is not a manager
-        if (!$request->user()->manager()) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
         try {
             //code...
             // sort by check in date
@@ -159,10 +139,6 @@ class BookingController extends Controller
     }
 
     public function fetchSingleBooking(Request $request, Booking $booking){
-        // Return unathorize if user is not a manager
-        if (!$request->user()->manager()) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
         try {
             //code...
             if (!$booking) {

@@ -73,7 +73,6 @@ const GlobalProvider = ({children}: {children: ReactNode}) => {
                 ToastMessage("error", "Error", JSON.stringify(err))
             })
     }, [])
-
     return (
         <GlobalContext.Provider value={{
             isLoggedIn, 

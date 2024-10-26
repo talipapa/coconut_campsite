@@ -1,17 +1,18 @@
 import { View, Text } from 'react-native'
-import React, { useState } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import ContentBody from '@/components/ContentBody'
 import { useGlobalContext } from '@/Context/GlobalProvider';
 import FormField from '@/components/FormField';
 import CustomButton from '@/components/CustomButton';
 import { changeAccountDetail, IUser } from '@/utils/AccountService';
 import ToastMessage from '@/components/ToastMessage';
-import { router } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 import { loadUser } from '@/utils/AuthService';
 
 
 
 const index = () => {
+  const navigation = useNavigation()
   const { isLoggedIn, setIsLoggedIn, user, setUser, isLoading, setIsLoading } = useGlobalContext();
 
   const [ errors, setErrors ] = useState<{ first_name?: string; last_name?: string, email?: string }>({})
@@ -21,6 +22,8 @@ const index = () => {
     'last_name' : user?.last_name || '',
     'email' : user?.email || '',
   })
+
+
 
   const changeDetailFunc = () => {
     setIsLoading(true)
@@ -48,9 +51,17 @@ const index = () => {
       })
   }
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <CustomButton title='Save' handlePress={changeDetailFunc} isLoading={isLoading} containerStyles='bg-[#BC7B5C] px-4' textStyles='text-white'/>
+      ),
+    })
+  }, [navigation, changeDetailFunc])
+
   return (
     <ContentBody>
-      <CustomButton title="Change password" handlePress={() => router.push('/profile/change-password')} containerStyles='bg-blue-400 mb-7 w-full' textStyles='text-xs text-white'/>
+
       <View>
           <FormField errors={errors.first_name} title='First name' placeholder={`${user?.first_name}`} value={formData['first_name'] || ''} handleChangeText={(e) => setFormData((prev) => ({ ...prev, first_name: e }))} />
       </View>
@@ -61,7 +72,8 @@ const index = () => {
           <FormField errors={errors.email} title='Email' placeholder={`${user?.email}`} value={formData['email'] || ''} handleChangeText={(e) => setFormData((prev) => ({ ...prev, email: e }))} />
       </View>
 
-      <CustomButton title='Update Profile' handlePress={changeDetailFunc} isLoading={isLoading} containerStyles='bg-[#BC7B5C] mt-10 py-3' textStyles='text-white'/>
+      <CustomButton title="Change password" handlePress={() => router.push('/profile/change-password')} containerStyles='bg-blue-400 py-4 mt-7 w-full' textStyles='text-xs text-white'/>
+
     </ContentBody>
   )
 }

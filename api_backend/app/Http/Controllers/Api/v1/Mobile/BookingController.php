@@ -18,13 +18,6 @@ class BookingController extends Controller
 {
     //
     function showList(Request $request, $page){
-        // Identify if account is owner
-        if (!$request->user()->owner){
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 401);
-        }
-
         // Get all bookings
         $bookings = [];
         
@@ -47,6 +40,71 @@ class BookingController extends Controller
         ], 200);
     }
 
+    public function dashboardSummary(Request $request){
+        try {
+            // total earnings of current year
+            $totalYearEarnings = Transaction::whereYear('updated_at', Carbon::now()->year)
+            ->where('status', 'SUCCEEDED')
+            ->sum('price');
+
+            // total earnings this month
+            $totalMonthEarnings = Transaction::whereYear('updated_at', Carbon::now()->year)
+            ->whereMonth('updated_at', Carbon::now()->month)
+            ->where('status', 'SUCCEEDED')
+            ->sum('price');
+
+            // total earnings from previous month
+            $startOfPreviousMonth = Carbon::now()->startOfMonth()->subMonth();
+            $endOfPreviousMonth = Carbon::now()->subMonth()->endOfMonth();
+
+            $totalPreviousMonthEarnings = Transaction::whereBetween('updated_at', [$startOfPreviousMonth, $endOfPreviousMonth])->where('status', 'SUCCEEDED')->sum('price');
+
+            // cash revenue this month
+            $cashRevenueThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
+            ->whereMonth('updated_at', Carbon::now()->month)
+            ->where('status', 'SUCCEEDED')
+            ->where('payment_type', 'CASH')
+            ->sum('price');
+
+            // e-payment revenue this month
+            $ePaymentRevenueThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
+            ->whereMonth('updated_at', Carbon::now()->month)
+            ->where('status', 'SUCCEEDED')
+            ->where('payment_type', 'XENDIT')
+            ->sum('price');
+
+            // success booking this month
+            $successBookingThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
+            ->whereMonth('updated_at', Carbon::now()->month)
+            ->where('status', 'SUCCEEDED')
+            ->count();
+
+            // cancelled booking this month
+            $cancelledBookingThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
+            ->whereMonth('updated_at', Carbon::now()->month)
+            ->whereIn('status', ['CANCELLED', 'VOIDED', 'REFUNDED', 'FAILED'])
+            ->count();
+    
+
+            // Wallet in XENDIT
+            $response = CustomVendorsXendivel::getBalance()->getResponse();
+            $xenditWallet = json_decode(json_encode($response), true)['balance'];
+
+            return response()->json([
+                'totalYearEarnings' => $totalYearEarnings,
+                'totalMonthEarnings' => $totalMonthEarnings,
+                'totalPreviousMonthEarnings' => $totalPreviousMonthEarnings,
+                'cashRevenueThisMonth' => $cashRevenueThisMonth,
+                'ePaymentRevenueThisMonth' => $ePaymentRevenueThisMonth,
+                'successBookingThisMonth' => $successBookingThisMonth,
+                'cancelledBookingThisMonth' => $cancelledBookingThisMonth,
+                'xenditWallet' => $xenditWallet,
+            ]);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Something went wrong', 'error' => $th], 500);
+        }
+    }
+
     function getSummaryWallet(Request $request){
         $summaryData = [
             'wallet' => 0,
@@ -54,33 +112,27 @@ class BookingController extends Controller
             'pendingCash' => 0,
             'pendingTotalBookingCount' => 0,
         ];
-        
-        // Identify if account is owner
-        if (!$request->user()->owner){
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 401);
-        }
+    
 
         // Sum all price of transaction with 'VERIFIED' status
         $response = CustomVendorsXendivel::getBalance()->getResponse();
         $summaryData['wallet'] = json_decode(json_encode($response), true)['balance'];
 
         
-        // Sum all count of transaction with 'SUCCEEDED' status
-        $summaryData['successfullTotalBookingCount'] = Booking::where('status', 'PAID')->get()->count();
+        // // Sum all count of transaction with 'SUCCEEDED' status
+        // $summaryData['successfullTotalBookingCount'] = Booking::where('status', 'PAID')->get()->count();
         
-        // Sum all price of transaction with 'CASH_PENDING & PENDING' status using where
-        $summaryData['pendingCash'] = Booking::whereIn('status', ['CASH_PENDING', 'PENDING'])->get()->sum(function($booking) {
-            if ($booking->transaction === null){
-                return 0;
-            }
-            return $booking->transaction->price;
-        });
+        // // Sum all price of transaction with 'CASH_PENDING & PENDING' status using where
+        // $summaryData['pendingCash'] = Booking::whereIn('status', ['CASH_PENDING', 'PENDING'])->get()->sum(function($booking) {
+        //     if ($booking->transaction === null){
+        //         return 0;
+        //     }
+        //     return $booking->transaction->price;
+        // });
         
 
-        // Sum all count of transaction with 'CASH_PENDING & PENDING' status
-        $summaryData['pendingTotalBookingCount'] = Booking::whereIn('status', ['CASH_PENDING', 'PENDING'])->whereHas('transaction')->count();
+        // // Sum all count of transaction with 'CASH_PENDING & PENDING' status
+        // $summaryData['pendingTotalBookingCount'] = Booking::whereIn('status', ['CASH_PENDING', 'PENDING'])->whereHas('transaction')->count();
 
         return response()->json([
             'summary' => $summaryData

@@ -14,12 +14,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->api(prepend: [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            'owner' => \App\Http\Middleware\OwnerMiddleware::class,
-            'manager' => \App\Http\Middleware\ManagerMiddleware::class,
         ]);
-
+        
         $middleware->alias([
             'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
+            'owner' => \App\Http\Middleware\OwnerMiddleware::class,
+            'manager' => \App\Http\Middleware\ManagerMiddleware::class,
         ]);
 
         //
