@@ -2,7 +2,6 @@ import { View, Text, Image, Platform } from 'react-native'
 import { useContext, useState } from 'react'
 import FormField from '@/components/FormField'
 import CustomButton from '@/components/CustomButton'
-import axios from '@/utils/axios'
 import { login, loadUser } from '@/utils/AuthService'
 import { useGlobalContext } from '@/Context/GlobalProvider'
 import { router } from 'expo-router'
@@ -67,6 +66,7 @@ const index = () => {
                         title='Password'
                         placeholder='Enter your password'
                         value={form.password}
+                        isPassword={true}
                         handleChangeText={(e) => setForm({...form, password: e})} 
                         otherStyles='mt-3'
                         errors={errors.password}

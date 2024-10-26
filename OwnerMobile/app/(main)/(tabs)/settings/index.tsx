@@ -38,12 +38,19 @@ const index = () => {
           <Text className='text-center text-black text-lg font-semibold'>Settings</Text>
       </View>
       <ContentBody>
-        <View className='min-h-[70vh] flex flex-col justify-between'>
+        <View className='min-h-[70vh] flex flex-col space-y-4'>
             <TouchableOpacity onPress={() => router.push("/profile")} className='flex flex-row bg-[#114844] rounded-xl items-center space-x-5 p-5 bg-slate-20'>
               <Image source={require('@/assets/logo.jpg')} className='w-12 h-12 rounded-full'/>
               <View>
                 <Text className='text-slate-200'>{fullName.length > 20 ? fullName.substring(0, 20) + '...' : fullName}</Text>
                 <Text className='font-bold text-white'>View Personal Info</Text>
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => router.push("/profile")} className='flex flex-row bg-[#114844] rounded-xl items-center space-x-5 p-5 bg-slate-20'>
+              <View>
+                <Text className='text-slate-200'>5 caretakers</Text>
+                <Text className='font-bold text-white'>Handle caretaker</Text>
               </View>
             </TouchableOpacity>
 

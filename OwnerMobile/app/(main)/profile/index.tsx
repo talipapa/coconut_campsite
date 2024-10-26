@@ -7,6 +7,7 @@ import CustomButton from '@/components/CustomButton';
 import { changeAccountDetail, IUser } from '@/utils/AccountService';
 import ToastMessage from '@/components/ToastMessage';
 import { router } from 'expo-router';
+import { loadUser } from '@/utils/AuthService';
 
 
 
@@ -26,6 +27,17 @@ const index = () => {
     changeAccountDetail(user?.id, formData)
       .then((res) => {
         ToastMessage('success', 'Updated successfully', 'Account details updated successfully')
+        loadUser()
+        .then((data) => {
+            setUser(data)
+            setIsLoggedIn(true)
+        }).catch((error) => {
+            console.log("Failed to load user", error);
+            setUser(null)
+            setIsLoggedIn(false)
+        }).finally(() => {
+            setIsLoading(false)
+        })
       })
       .catch((err) => {
         setErrors(err.response.data.errors)
