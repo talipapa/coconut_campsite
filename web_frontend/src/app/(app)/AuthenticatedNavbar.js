@@ -18,7 +18,7 @@ const AuthenticatedNavbar = ({user}) => {
   if (!booking && !error) {
     return (
         <nav className='bg-[#283618] p-[30px] text-white flex flex-row justify-between space-x-10 '>
-            <div className='w-full flex flex-row items-end space-x-5'>
+            <div className='w-full flex flex-row items-end justify-between md:justify-start space-x-5 '>
                     <a href='/' className='text-2xl font-semibold'>Coconut Campsite</a>
                     <div className='flex flex-row space-x-3'>
                         <FaFacebookSquare onClick={() => window.open("https://www.facebook.com/profile.php?id=61558384738390", "_blank")}  size={30} color='#0866FF' className='hover:scale-125 transition-all '/>
@@ -37,7 +37,7 @@ const AuthenticatedNavbar = ({user}) => {
 
   return (
     <nav className='bg-[#283618] p-[30px] text-white flex flex-row justify-between space-x-10 '>
-        <div className='w-full flex flex-row items-end space-x-5'>
+        <div className='w-full flex flex-row items-end justify-between md:justify-start space-x-5'>
                 <a href='/' className='text-2xl font-semibold'>Coconut Campsite</a>
                 <div className='flex flex-row space-x-3'>
                     <FaFacebookSquare onClick={() => window.open("https://www.facebook.com/profile.php?id=61558384738390", "_blank")}  size={30} color='#0866FF' className='hover:scale-125 transition-all '/>

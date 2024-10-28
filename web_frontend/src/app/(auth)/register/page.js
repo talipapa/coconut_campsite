@@ -1,12 +1,12 @@
 'use client'
 
-import Button from '@/components/Button'
 import Input from '@/components/Input'
 import InputError from '@/components/InputError'
 import Label from '@/components/Label'
 import Link from 'next/link'
 import { useAuth } from '@/hooks/auth'
 import { useState } from 'react'
+import { Button } from 'antd'
 
 const Page = () => {
     const { register } = useAuth({
@@ -139,7 +139,7 @@ const Page = () => {
                         Already registered?
                     </Link>
 
-                    <Button className="ml-4" disabled={buttonLoading}>Register</Button>
+                    <Button type='primary' htmlType='submit' className="px-10 ml-3" disabled={buttonLoading}>Register</Button>
                 </div>
             </form>
         </div>

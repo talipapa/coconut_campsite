@@ -12,19 +12,19 @@ const Footer = () => {
                 <h3 className='text-[#3085f5]'>Follow us on Facebook</h3>
             </a>
             <div className='space-x-2'>
-                <span className='text-[#6e6e6e]'>Address</span>
+                <span className='text-slate-300'>Address</span>
                 <span>Sitio. Kayrupa, Rodriguez, 1860 Rizal</span>
             </div>
             <div className='space-x-2'>
-                <span className='text-[#6e6e6e]'>TEL</span>
+                <span className='text-slate-300'>TEL</span>
                 <span>0992-5606-298</span>
             </div>
             <div className='space-x-2'>
-                <span className='text-[#6e6e6e]'>Email</span>
+                <span className='text-slate-300'>Email</span>
                 <span>dandandevera42@gmail.com</span>
             </div>
         </div>
-        <p className='text-sm text-[#ffffff3b]'>Copyright© Coconut Campsite & CDM Lakbay Team 2024 All rights reserved</p>
+        <p className='text-sm text-slate-500'>Copyright© Coconut Campsite & CDM Lakbay Team 2024 All rights reserved</p>
 
     </div>
   )

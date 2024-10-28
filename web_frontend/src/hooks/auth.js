@@ -15,9 +15,11 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
             .then(res => res.data)
             .catch(error => {
                 if (error.response.status !== 409) throw error
-
                 router.push('/verify-email')
             }),
+        {
+            shouldRetryOnError: false,
+        }
     )
 
     const csrf = () => axios.get('/sanctum/csrf-cookie')
@@ -112,7 +114,8 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
     
 
     useEffect(() => {
-        
+        console.log(user)
+
         if (middleware === 'guest' && redirectIfAuthenticated && user)
             router.push(redirectIfAuthenticated)
         

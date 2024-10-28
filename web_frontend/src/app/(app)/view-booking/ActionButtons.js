@@ -72,7 +72,7 @@ const ActionButtons = ({checkIn, bookingType, bookingId, transactionStatus}) => 
     return (
         <>
             {contextHolder}
-            <div className="space-x-4">
+            <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:space-x-4">
                 <Button color="primary" variant="solid"><a href="https://www.facebook.com/profile.php?id=61558384738390" target="_blank" rel="noreferrer">Contact Campsite</a></Button>
                 <RescheduleButton checkIn={checkIn} bookingType={bookingType} bookingId={bookingId}/>
                 <Popconfirm

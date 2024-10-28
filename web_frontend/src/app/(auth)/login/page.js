@@ -1,6 +1,5 @@
 'use client'
 
-import Button from '@/components/Button'
 import Input from '@/components/Input'
 import InputError from '@/components/InputError'
 import Label from '@/components/Label'
@@ -9,6 +8,7 @@ import { useAuth } from '@/hooks/auth'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import AuthSessionStatus from '@/app/(auth)/AuthSessionStatus'
+import { Button } from 'antd'
 
 const Login = () => {
     const router = useRouter()
@@ -35,7 +35,6 @@ const Login = () => {
 
     const submitForm = async event => {
         event.preventDefault()
-        setButtonLoading(true)
         login({
             email,
             password,
@@ -44,6 +43,7 @@ const Login = () => {
             setErrors,
             setStatus,
         })
+        setButtonLoading(true)
 
     }
 
@@ -55,7 +55,7 @@ const Login = () => {
                     <h2 className="text-center text-2xl font-semibold tracking-widest">Login</h2>
                     <div className="flex flex-col space-y-1">
                         <span className="text-sm">Or sign up using</span>
-                        <a href="/register" onCLick className="text-sm font-semibold text-[#0000FF] cursor-pointer">SIGN UP</a>
+                        <a href="/register" className="text-sm font-semibold text-[#0000FF] cursor-pointer">SIGN UP</a>
                     </div>
                 </div>
             
@@ -125,7 +125,7 @@ const Login = () => {
                             Forgot your password?
                         </Link>
 
-                        <Button className="ml-3" disabled={buttonLoading}>Login</Button>
+                        <Button type='primary' htmlType='submit' className="px-10 ml-3" disabled={buttonLoading}>Login</Button>
                     </div>
                 </form>
             </div>

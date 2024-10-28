@@ -39,7 +39,7 @@ const Home = () => {
 
                 </div>
                 <div className='top-0 left-0 absolute w-full h-full text-center'>
-                    <div className='bg-[#00000075] bg-opacity-90 w-full flex flex-col justify-between h-full px-[30px] py-[40px]'>
+                    <div className='w-full flex flex-col justify-between h-full px-[30px] py-[40px]'>
                         <div className='flex flex-col items-center justify-center h-full space-y-5'>
                             <div className='flex flex-col items-center justify-center space-y-1'>
                                 <h1 className='text-4xl font-bold tracking-widest text-white'>Welcome to <span className='text-[#FFC39E]'>Coconut</span> Campsite</h1>

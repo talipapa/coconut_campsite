@@ -99,7 +99,7 @@ const RescheduleButton = ({checkIn, bookingType, bookingId}) => {
                     <label htmlFor="checkInDate">Check in</label>
                     <DatePicker className="w-full"
                         id="checkInDate"
-                        minDate={dayjs()}
+                        minDate={dayjs().add(2, 'day')}
                         value={checkInDate}
                         onChange={date => setCheckInDate(date)}
                         maxDate={dayjs().add(3, 'month')}
