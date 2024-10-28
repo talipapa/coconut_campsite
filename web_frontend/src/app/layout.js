@@ -46,7 +46,8 @@ const RootLayout = ({ children }) => {
 }
 
 export const metadata = {
-    title: 'Coconut Campsite',
+    title: 'Coconut Campsite | Wawa Dam Camping Site - Montalban (Rodriguez) Rizal',
+    description: 'Located in Sitio. Kayrupa, Rodriguez, 1860 Rizal! Coconut Campsite is a camping site which lets you experience the  camping adventure at Wawa Dam! Equipped with toilet, cooking area, vendo wifi and sari-sari store so you can enjoy your comfortable camping stay!',
 }
 
 export default RootLayout

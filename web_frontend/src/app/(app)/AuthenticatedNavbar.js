@@ -17,7 +17,7 @@ const AuthenticatedNavbar = ({user}) => {
 
   if (!booking && !error) {
     return (
-        <nav className='bg-[#855139] p-[30px] text-white flex flex-row justify-between space-x-10 '>
+        <nav className='bg-[#283618] p-[30px] text-white flex flex-row justify-between space-x-10 '>
             <div className='w-full flex flex-row items-end space-x-5'>
                     <a href='/' className='text-2xl font-semibold'>Coconut Campsite</a>
                     <div className='flex flex-row space-x-3'>
@@ -36,7 +36,7 @@ const AuthenticatedNavbar = ({user}) => {
   }
 
   return (
-    <nav className='bg-[#855139] p-[30px] text-white flex flex-row justify-between space-x-10 '>
+    <nav className='bg-[#283618] p-[30px] text-white flex flex-row justify-between space-x-10 '>
         <div className='w-full flex flex-row items-end space-x-5'>
                 <a href='/' className='text-2xl font-semibold'>Coconut Campsite</a>
                 <div className='flex flex-row space-x-3'>

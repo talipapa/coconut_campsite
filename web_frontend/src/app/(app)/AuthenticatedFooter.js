@@ -2,7 +2,7 @@ import { FaFacebookSquare } from "react-icons/fa"
 
 const AuthenticatedFooter = () => {
   return (
-    <div className='w-full flex flex-col justify-between h-full px-[30px] py-[40px] bg-[#855139] text-white items-center text-center space-y-6'>
+    <div className='w-full flex flex-col justify-between h-full px-[30px] py-[40px] bg-[#283618] text-white items-center text-center space-y-6'>
         <h2 className='font-bold text-2xl text-[#FFC39E]'>COCONUT CAMPSITE</h2>
         {/* Facebook page */}
         <div className='flex flex-col items-center space-y-1'>
@@ -11,15 +11,15 @@ const AuthenticatedFooter = () => {
                 <h3 className='text-[#3085f5]'>Follow us on Facebook</h3>
             </a>
             <div className='space-x-2'>
-                <span className='text-[#080808]'>Address</span>
+                <span className='text-[#6e6e6e]'>Address</span>
                 <span>Sitio. Kayrupa, Rodriguez, 1860 Rizal</span>
             </div>
             <div className='space-x-2'>
-                <span className='text-[#080808]'>TEL</span>
+                <span className='text-[#6e6e6e]'>TEL</span>
                 <span>0992-5606-298</span>
             </div>
             <div className='space-x-2'>
-                <span className='text-[#080808]'>Email</span>
+                <span className='text-[#6e6e6e]'>Email</span>
                 <span>dandandevera42@gmail.com</span>
             </div>
         </div>

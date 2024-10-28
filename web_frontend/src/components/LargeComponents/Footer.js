@@ -3,7 +3,7 @@ import { FaFacebookSquare } from "react-icons/fa"
 
 const Footer = () => {
   return (
-    <div className='w-full flex flex-col justify-between h-full px-[30px] py-[40px] bg-[#111111] text-white items-center text-center space-y-6'>
+    <div className='w-full flex flex-col justify-between h-full px-[30px] py-[40px] bg-[#283618] text-white items-center text-center space-y-6'>
         <h2 className='font-bold text-2xl text-[#FFC39E]'>COCONUT CAMPSITE</h2>
         {/* Facebook page */}
         <div className='flex flex-col items-center space-y-1'>

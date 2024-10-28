@@ -194,25 +194,6 @@ const Home = () => {
                     </div>
 
                     <div className=' min-h-[300px] w-full flex flex-col justify-between space-y-12 items-start'>
-                        <div className='w-full h-auto bg-[#1b1b1b75] px-2 md:px-10 md:rounded- xl'>
-                            <Carousel autoplay arrows adaptiveHeight>
-                                    <div className="relative w-full h-[400px]">
-                                        <Image className='object-contain object-center' fill={true}  sizes="100vw" src="/img/gallery/gallery1.jpg"/>
-                                    </div>
-                                    <div className="relative w-full h-[400px]">
-                                        <Image className='object-contain object-center' fill={true}  sizes="100vw" src="/img/gallery/gallery2.jpg"/>
-                                    </div>
-                                    <div className="relative w-full h-[400px]">
-                                        <Image className='object-contain object-center' fill={true}  sizes="100vw" src="/img/gallery/gallery3.jpg"/>
-                                    </div>
-                                    <div className="relative w-full h-[400px]">
-                                        <Image className='object-contain object-center' fill={true}  sizes="100vw" src="/img/gallery/gallery4.jpg"/>
-                                    </div>
-                                    <div className="relative w-full h-[400px]">
-                                        <Image className='object-contain object-center' fill={true}  sizes="100vw" src="/img/gallery/gallery5.jpg"/>
-                                    </div>
-                            </Carousel>
-                        </div>
                         <div className='hidden md:block columns-1 md:columns-3'>
                             <AntImage  src="/img/gallery/gallery1.jpg" />
                             <AntImage src="/img/gallery/gallery2.jpg" />
@@ -249,8 +230,6 @@ const Home = () => {
                         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13607.431373242382!2d121.18812472764765!3d14.72558446589735!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397bda85647cc8f%3A0xbd1a2f816c06b4c6!2sCoconut%20Campsite!5e0!3m2!1sen!2sph!4v1727672350142!5m2!1sen!2sph" width="100%" height="500px" allowfullscreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
                     </div>
                 </section>
-
-
             </main>
 
             <Footer/>

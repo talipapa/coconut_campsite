@@ -15,7 +15,7 @@ const Login = () => {
 
     const { login } = useAuth({
         middleware: 'guest',
-        redirectIfAuthenticated: '/',
+        redirectIfAuthenticated: '/booking',
     })
 
     const [email, setEmail] = useState('')
