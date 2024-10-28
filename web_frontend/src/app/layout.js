@@ -21,6 +21,7 @@ const RootLayout = ({ children }) => {
 
                     gtag('config', 'G-6TCW1QLWFS');`}
                 </Script>
+                <meta name="google-site-verification" content="ZecYuJerndzJMnbJkJhWNrFB6G4SE8zFpE3WfQ1EnvU" />
             </head>
             <ConfigProvider
             theme={{
