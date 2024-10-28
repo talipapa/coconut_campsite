@@ -2,6 +2,7 @@ import { Hahmlet } from 'next/font/google'
 import { ConfigProvider } from 'antd'
 
 import '@/app/global.css'
+import Script from 'next/script'
 
 const hahmlet = Hahmlet({
     subsets: ['latin'],
@@ -11,6 +12,16 @@ const hahmlet = Hahmlet({
 const RootLayout = ({ children }) => {
     return (
         <html lang="en" className={hahmlet.className}>
+            <head>
+                <Script async src="https://www.googletagmanager.com/gtag/js?id=G-6TCW1QLWFS"></Script>
+                <Script id="google-analytics">
+                    {`window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+
+                    gtag('config', 'G-6TCW1QLWFS');`}
+                </Script>
+            </head>
             <ConfigProvider
             theme={{
                 token:{
