@@ -321,7 +321,7 @@ export default function Page() {
                         <div className="1/4">
                             <span className="font-semibold">Reservation holder details</span>
                         </div>
-                        <div className="basis-1/2 grid grid-cols-2 gap-5">
+                        <div className="basis-1/2 grid md:grid-cols-2 gap-5 w-full">
                             {/* First name field */}
                             <div className="space-y-2">
                                 <label htmlFor="first_name">First name</label>
@@ -354,9 +354,9 @@ export default function Page() {
                         <div className="1/4">
                             <span className="font-semibold">When would you like to make the reservation?</span>
                         </div>
-                        <div className="basis-1/2 grid grid-cols-1 gap-5">
+                        <div className="basis-1/2 grid grid-cols-1 gap-5 w-full">
                             {/* Check in field */}
-                            <div className="space-y-2">
+                            <div className="space-y-2 w-full">
                                 <label htmlFor="checkInDate">Check in</label>
                                 <DatePicker className="w-full"
                                     id="checkInDate"
@@ -418,7 +418,7 @@ export default function Page() {
                         <div className="1/4">
                             <span className="font-semibold">Camping setup</span>
                         </div>
-                        <div className="basis-1/2 grid grid-cols-1 gap-5">
+                        <div className="basis-1/2 grid grid-cols-1 gap-5 w-full">
                             {/* Tent pitching count field */}
                             <div className="space-y-2">
                                 <label htmlFor="tentPitching">Tent pitching</label>
