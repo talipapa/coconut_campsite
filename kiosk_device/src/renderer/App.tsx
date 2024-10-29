@@ -5,11 +5,8 @@ import Dashboard from '../Pages/(main)/Dashboard';
 import GlobalProvider from '../Context/GlobalProvider';
 import Login from '../Pages/(auth)/Login';
 import { ConfigProvider } from 'antd';
-import Successful from '@/Pages/(main)/Successful';
-import AllReservation from '@/Pages/(main)/AllReservation';
-import Settings from '@/Pages/(main)/Settings';
-import Confirmation from '@/Pages/(main)/Pending';
-import BookingDetails from '@/Pages/(main)/BookingDetails';
+import SettingUp from '@/Pages/(main)/SettingUp';
+import Notfound from '@/Pages/Notfound';
 
 export default function App() {
   return (
@@ -31,9 +28,10 @@ export default function App() {
       }}>
         <HashRouter>
           <Routes>
-            <Route path='*' element={<div>Not Found</div>} />
+            <Route path='*' element={<Notfound/>} />
             <Route element={<ProtectedRoutes/>}>
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/setting-up/:id" element={<SettingUp />} />
             </Route>
             <Route path="/" element={<Login />} />
           </Routes>
