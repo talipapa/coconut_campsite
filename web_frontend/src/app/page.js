@@ -30,13 +30,12 @@ const Home = () => {
     const { adultPrice, childPrice, tentPitchPrice, bonfireKitPrice, cabinPrice } = usePrice()
 
     return (
-        <div className="bg-[#F2F2F2] min-h-[1600px]">
+        <div className="bg-[#F2F2F2] min-h-[1600px] overflow-hidden">
             {/* <LoginLinks /> */}
             {/* Hero */}
             <nav className='relative'>
                 <div className="w-full h-[500px]">
                     <Image src="/img/banner-dim.jpg" alt="hero" quality={100} fill={true} className="object-cover" />
-
                 </div>
                 <div className='top-0 left-0 absolute w-full h-full text-center'>
                     <div className='w-full flex flex-col justify-between h-full px-[30px] py-[40px]'>
@@ -46,15 +45,11 @@ const Home = () => {
                                 <p className='text-white text-lg'>"Be the most alive among the Trees"</p>
                             </div>
                             <Button type='primary' href='/booking' className='font-semibold py-4 px-6'>Make Reservation</Button>
-                    
                         </div>
-                    
                         {/* Nav bar */}
                         <NavbarLoginLinks/>
-
                     </div>
                 </div>
-
             </nav>
             
             {/* Main wrapper */}
@@ -71,7 +66,6 @@ const Home = () => {
                             <Image src="/img/image1.jpg" alt="campsite" fill={true} sizes="100vw" className="object-cover"/>
                         </div>
                     </div>
-
                 </section>
 
                 <section className='py-[60px] md:px-[30px] xl:px-[100px] flex flex-col justify-between w-full min-h-[450px] space-y-10 bg-[rgba(83,54,35,0.13)]'>
