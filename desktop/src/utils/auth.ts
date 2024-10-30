@@ -2,7 +2,7 @@ import axiosLab from 'axios';
 import { safeStorage } from 'electron';
 
 const axios = axiosLab.create({
-    baseURL: `https://server.coconutcampsite.com/api/v1`,
+    baseURL: `http://localhost:8000/api/v1`,
     headers: {
         'Accept': 'application/json',
     }

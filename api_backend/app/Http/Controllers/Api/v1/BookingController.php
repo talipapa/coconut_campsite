@@ -208,7 +208,7 @@ class BookingController extends Controller
     public function index(Request $request)
     {
         $booking = Booking::where('user_id', $request->user()->id)
-        ->whereNotIn('status', ['PENDING', 'CANCELLED'])
+        ->whereNotIn('status', ['PENDING', 'CANCELLED', 'VOIDED', 'REFUNDED', 'VERIFIED'])
         ->first();
 
         // Log::info($bookings);

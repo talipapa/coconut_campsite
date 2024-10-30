@@ -62,11 +62,9 @@ const getXenditData = async (xenditId) => {
 export default async function Page() {
     const {bookingData, pricesData} = await getData()
     
-    if (!bookingData){
+    if (bookingData.message === 'No bookings found'){
         redirect("/booking")
     }
-
-    
 
 
     var xenditData 
@@ -131,7 +129,7 @@ export default async function Page() {
                     </div>
                     <div className="bg-white shadow-lg p-7 rounded-2xl space-y-5">
                         <h1 className="uppercase font-bold">Transaction Details</h1>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
+                        <div className="grid grid-cols-1 gap-2 w-full">
                             <div>
                                 <div className="text-[#555555]">
                                     Transaction id
@@ -173,7 +171,7 @@ export default async function Page() {
                                 <div className="text-[#555555]">
                                     Booking type
                                 </div>
-                                <div className="capitalize text-end">
+                                <div className="capitalize">
                                     {bookingData.data.booking_type}
                                 </div>
                             </div>         
@@ -181,7 +179,7 @@ export default async function Page() {
                                 <div className="text-[#555555]">
                                     Booking status
                                 </div>
-                                <div className="capitalize text-end">
+                                <div className="capitalize">
                                     {bookingData.data.status}
                                 </div>
                             </div>         
