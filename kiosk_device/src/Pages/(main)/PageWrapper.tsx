@@ -79,7 +79,7 @@ const PageWrapper = ({children} : {children: React.ReactElement}) => {
                   </div>
                 </Header>
 
-                <Content className='bg-[#dfdede] overflow-hidden flex flex-col items-center justify-center'>
+                <Content className='bg-[#dfdede] overflow-hidden flex flex-col items-center justify-center relative'>
                     {children}
                 </Content>
             </Layout>
