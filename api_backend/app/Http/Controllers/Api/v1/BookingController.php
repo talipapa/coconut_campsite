@@ -37,7 +37,7 @@ class BookingController extends Controller
     public function showSelfBooking(Request $request){
         // Check if user has existing booking
         $booking = Booking::where('user_id', $request->user()->id)
-        ->whereNotIn('status', ['PENDING', 'CANCELLED'])
+        ->whereNotIn('status', ['PENDING', 'CANCELLED', 'VOIDED', 'REFUNDED', 'VERIFIED'])
         ->first();
     
 
