@@ -37,6 +37,8 @@ Payment transaction for specified charge_id has been voided
 REFUNDED
 Payment transaction for specified charge_id has been either partially or fully refunded
 
+VERIFIED
+The booking is verified by the manager/campsite_owner/caretaker
 
 ## BOOKING STATUS KEY
 PENDING

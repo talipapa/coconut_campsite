@@ -25,13 +25,16 @@ class BookingController extends Controller
         
 
         if (is_numeric($page) && $page > 0) {
-            $bookings = Booking::whereHas('transaction', function ($query) {
-                $query->whereIn('status', ['CASH_PENDING', 'SUCCEEDED']);
-            })->orderBy('check_in', 'asc')->paginate($page);
+            $bookings = Booking::whereIn('status', ['SCANNED', 'PAID', 'PENDING'])->orderBy('check_in', 'asc')->paginate($page);
+
+            // $bookings = Booking::whereHas('transaction', function ($query) {
+            //     $query->whereIn('status', ['CASH_PENDING', 'SUCCEEDED']);
+            // })->orderBy('check_in', 'asc')->paginate($page);
         } else {
-            $bookings = Booking::all()->filter(function ($booking) {
-                return $booking->transaction !== null && in_array($booking->transaction->status, ['CASH_PENDING', 'SUCCEEDED']);
-            })->sortByAsc('check_in');
+            $bookings = Booking::whereIn('status', ['SCANNED', 'PAID', 'PENDING'])->orderBy('check_in', 'asc');
+            // $bookings = Booking::all()->filter(function ($booking) {
+            //     return $booking->transaction !== null && in_array($booking->transaction->status, ['CASH_PENDING', 'SUCCEEDED']);
+            // })->sortByAsc('check_in');
         }
 
         // Return all bookings with successful bookingresource
