@@ -176,6 +176,14 @@ export default async function Page() {
                                     {bookingData.data.booking_type}
                                 </div>
                             </div>         
+                            <div>
+                                <div className="text-[#555555]">
+                                    Booking status
+                                </div>
+                                <div className="capitalize text-end">
+                                    {bookingData.data.status}
+                                </div>
+                            </div>         
                         </div>
                         <div className="grid grid-cols-1 pt-2">
                             <div className="flex flex-row justify-between ">
