@@ -161,7 +161,7 @@ export default async function Page() {
                     </div>
                     <div className="w-full flex flex-col space-y-5 bg-white shadow-lg p-7 rounded-2xl divide-y-2">
                         <h1 className="uppercase font-bold">Booking details</h1>
-                        <div className="flex md:flex-row md:justify-between pt-2">
+                        <div className="flex flex-col pt-2">
                             <div>
                                 <div className="text-[#555555]">
                                     Check in
