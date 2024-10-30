@@ -28,6 +28,12 @@ class KioskController extends Controller
             ], 400);
         }
 
+        if ($booking->status == 'VERIFIED') {
+            return response()->json([
+                'message' => 'QR code already scanned',
+            ], 400);
+        }
+
         $booking->status = 'SCANNED';
         $booking->save(); 
 
