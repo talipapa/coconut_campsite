@@ -61,8 +61,8 @@ const getXenditData = async (xenditId) => {
 
 export default async function Page() {
     const {bookingData, pricesData} = await getData()
-
-    if (bookingData.message === "No bookings found"){
+    
+    if (!bookingData){
         redirect("/booking")
     }
 
@@ -81,7 +81,6 @@ export default async function Page() {
         return (price * count).toFixed(2)
     }
 
-    console.log(bookingData)
 
     return (
         <div className="p-[30px] w-full space-y-5">

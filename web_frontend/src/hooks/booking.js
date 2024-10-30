@@ -19,7 +19,9 @@ export const useLaravelBooking = ({ routeLink } = {}) => {
     
     }
     
-    const { data: booking, error, mutate, } = useSWR(routeLink, fetcher)
+    const { data: booking, error, mutate, } = useSWR(routeLink, fetcher, {
+        shouldRetryOnError: false,
+    })
     // True = user has existing booking
 
     // Api version

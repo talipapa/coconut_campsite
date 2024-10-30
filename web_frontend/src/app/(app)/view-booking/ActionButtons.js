@@ -73,7 +73,7 @@ const ActionButtons = ({checkIn, bookingType, bookingId, transactionStatus}) => 
         <>
             {contextHolder}
             <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:space-x-4">
-                <Button color="primary" variant="solid" className='py-6' onClick={() => window.open('https://www.facebook.com/profile.php?id=61558384738390', '_blank')}>Contact Campsite</Button>
+                <Button color="primary" variant="solid" className='py-6 md:py-0' onClick={() => window.open('https://www.facebook.com/profile.php?id=61558384738390', '_blank')}>Contact Campsite</Button>
                 <RescheduleButton checkIn={checkIn} bookingType={bookingType} bookingId={bookingId}/>
                 <Popconfirm
                     open={open}
