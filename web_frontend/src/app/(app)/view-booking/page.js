@@ -95,7 +95,7 @@ export default async function Page() {
                 <div className="w-full flex flex-col space-y-5">
                     <div className="bg-white shadow-lg p-7 rounded-2xl space-y-5">
                         <h1 className="uppercase font-bold">Reservation Holder</h1>
-                        <div className="grid grid-cols-2 gap-2 w-full">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
                             <div>
                                 <div className="text-[#555555]">
                                     First Name
@@ -132,34 +132,36 @@ export default async function Page() {
                     </div>
                     <div className="bg-white shadow-lg p-7 rounded-2xl space-y-5">
                         <h1 className="uppercase font-bold">Transaction Details</h1>
-                        <div>
-                            <div className="text-[#555555]">
-                                Transaction id
-                            </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
                             <div>
-                                {bookingData.data.transaction_id}
-                            </div>
-                        </div>  
-                        <div>
-                            <div className="text-[#555555]">
-                                Payment gateway
-                            </div>
+                                <div className="text-[#555555]">
+                                    Transaction id
+                                </div>
+                                <div>
+                                    {bookingData.data.transaction_id}
+                                </div>
+                            </div>  
                             <div>
-                                {bookingData.data.transactionType}
-                            </div>
-                        </div>    
-                        <div>
-                            <div className="text-[#555555]">
-                                Status
-                            </div>
-                            <div className="capitalize">
-                                {bookingData.data.transactionStatus}
-                            </div>
-                        </div>   
+                                <div className="text-[#555555]">
+                                    Payment gateway
+                                </div>
+                                <div>
+                                    {bookingData.data.transactionType}
+                                </div>
+                            </div>    
+                            <div>
+                                <div className="text-[#555555]">
+                                    Status
+                                </div>
+                                <div className="capitalize">
+                                    {bookingData.data.transactionStatus}
+                                </div>
+                            </div>   
+                        </div>
                     </div>
                     <div className="w-full flex flex-col space-y-5 bg-white shadow-lg p-7 rounded-2xl divide-y-2">
                         <h1 className="uppercase font-bold">Booking details</h1>
-                        <div className="flex flex-row justify-between pt-2">
+                        <div className="flex md:flex-row md:justify-between pt-2">
                             <div>
                                 <div className="text-[#555555]">
                                     Check in
