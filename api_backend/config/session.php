@@ -156,7 +156,7 @@ return [
     |
     */
 
-    'domain' => env('SESSION_DOMAIN', 'localhost'),
+    'domain' => env('SESSION_DOMAIN', request()->getHost() === 'localhost' ? 'localhost' : '.coconutcampsite.com'),
 
     /*
     |--------------------------------------------------------------------------
