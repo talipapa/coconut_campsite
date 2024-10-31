@@ -22,8 +22,7 @@ const Dashboard = () => {
   const [api, contextHolder] = notification.useNotification();
 
   const openNotification = (messageType: 'success'|'warning'|'info'|'error', title: string, body: string) => {
-    api.info({
-      type: messageType,
+    api[messageType]({
       message: title,
       description: body,
       placement: 'top',
@@ -53,12 +52,12 @@ const Dashboard = () => {
         .then((res) => {
           openNotification('success', 'Success', res.data.message);
           setResponse(res.data);
-          setTimeout(() => {
-            navigate(`/setting-up/${inputValue}`);
-          }, 5000);
+          // setTimeout(() => {
+          //   navigate(`/setting-up/${inputValue}`);
+          // }, 5000);
         })
         .catch((err) => {
-          openNotification('warning', 'Unsuccessful', err.response.data.message);
+          openNotification('error', 'QR code has already been processed', err.response.data.message);
           setInputValue('');
         })
         .finally(() => {
