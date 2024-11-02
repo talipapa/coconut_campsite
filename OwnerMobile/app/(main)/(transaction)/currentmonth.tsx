@@ -40,7 +40,7 @@ const currentmonth = () => {
 
     const refreshPageBooking = () => {
         setIsLoading(true)
-        fetchCurrentMonthBookingHistory(50)
+        fetchCurrentMonthBookingHistory(100)
             .then((res: { data: VerifiedBookingType[] }) => {
                 if (Array.isArray(res.data)){
                     setBookings(res.data)

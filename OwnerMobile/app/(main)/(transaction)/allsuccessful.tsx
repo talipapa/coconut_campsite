@@ -40,7 +40,7 @@ const allsuccessful = () => {
 
     const refreshPageBooking = () => {
         setIsLoading(true)
-        fetchSuccessfulBookingHistory(50)
+        fetchSuccessfulBookingHistory(100)
             .then((res: { data: VerifiedBookingType[] }) => {
                 if (Array.isArray(res.data)){
                     setBookings(res.data)

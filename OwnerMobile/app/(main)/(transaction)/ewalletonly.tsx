@@ -40,7 +40,7 @@ const ewalletonly = () => {
 
     const refreshPageBooking = () => {
         setIsLoading(true)
-        fetchEwalletOnlyBookingHistory(50)
+        fetchEwalletOnlyBookingHistory(100)
             .then((res: { data: VerifiedBookingType[] }) => {
                 if (Array.isArray(res.data)){
                     setBookings(res.data)
