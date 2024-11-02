@@ -47,3 +47,33 @@ export const fetchSuccessfulBookingHistory = async (itemCount: number) => {
     const response = await axios.get(`/mobile/bookings/verified/${itemCount}`)
     return response.data;
 }
+
+export const fetchCurrentMonthBookingHistory = async (itemCount: number) => {
+    const response = await axios.get(`/mobile/bookings/current-month/${itemCount}`)
+    return response.data;
+}
+
+export const fetchPreviousMonthBookingHistory = async (itemCount: number) => {
+    const response = await axios.get(`/mobile/bookings/previous-month/${itemCount}`)
+    return response.data;
+}
+
+export const fetchCashOnlyBookingHistory = async (itemCount: number) => {
+    const response = await axios.get(`/mobile/bookings/cash-only/${itemCount}`)
+    return response.data;
+}
+
+export const fetchEwalletOnlyBookingHistory = async (itemCount: number) => {
+    const response = await axios.get(`/mobile/bookings/ewallet-only/${itemCount}`)
+    return response.data;
+}
+
+export const fetchVerifiedCurrentMonthBookingHistory = async (itemCount: number) => {
+    const response = await axios.get(`/mobile/bookings/verified-only/${itemCount}`)
+    return response.data;
+}
+
+export const fetchCancelledCurrentMonthBookingHistory = async (itemCount: number) => {
+    const response = await axios.get(`/mobile/bookings/cancelled-only/${itemCount}`)
+    return response.data;
+}

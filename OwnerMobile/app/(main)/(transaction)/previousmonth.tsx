@@ -1,13 +1,131 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import ContentBody from '@/components/ContentBody'
+import { View, Text, ScrollView, ActivityIndicator, RefreshControl } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { useGlobalContext } from '@/Context/GlobalProvider';
+import { router, useNavigation } from 'expo-router';
+import ContentBody from '@/components/ContentBody';
+import { fetchBookings, fetchCurrentMonthBookingHistory, fetchPreviousMonthBookingHistory, fetchSuccessfulBookingHistory } from '@/utils/BookingService';
+import Toast from 'react-native-toast-message';
+import CustomButton from '@/components/CustomButton';
+import BookingCard from '@/components/BookingCard';
+import TransactionCard from '@/components/TransactionCard';
 
-const previousmonth = () => {
-  return (
-    <ContentBody>
-      <Text>previousmonth</Text>
-    </ContentBody>
-  )
+
+
+interface VerifiedBookingType {
+  id: number,
+  full_name: string;
+  email: string,
+  tel_number: string
+  first_name: string,
+  last_name: string,
+  check_in: string,
+  check_out: string,
+  status: string,
 }
 
-export default previousmonth
+interface PaginatedBookingType {
+  data: VerifiedBookingType[],
+  total: number,
+  page: number
+}
+
+const previousmonth = () => {
+    const navigation = useNavigation();
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [bookings, setBookings] = useState<VerifiedBookingType[]>([]);
+    const [filteredBookings, setFilteredBookings] = useState<VerifiedBookingType[]>([]);
+
+
+
+
+    const refreshPageBooking = () => {
+        setIsLoading(true)
+        fetchPreviousMonthBookingHistory(50)
+            .then((res: { data: VerifiedBookingType[] }) => {
+                if (Array.isArray(res.data)){
+                    setBookings(res.data)
+                    setFilteredBookings(res.data)
+                    setIsLoading(false)
+                } else {
+                    setBookings([])
+                    setFilteredBookings([])
+                }
+            })
+            .catch((error) => {
+                Toast.show({
+                    type: 'error',
+                    text1: 'Error',
+                    text2: `Something went wrong: ${JSON.stringify(error)}`,
+                })
+                setIsLoading(false)
+            })
+    }
+
+    useEffect(() => {
+        refreshPageBooking()
+    }, [])
+
+    const handleFilter = (searchText: string | undefined) => {
+        setIsLoading(true)
+        if (searchText === undefined) {
+            return
+        }
+
+        if (searchText.length === 0) {
+            setFilteredBookings(bookings)
+        } else {
+            setFilteredBookings(
+                bookings.filter((booking: VerifiedBookingType) => {
+                    return booking.full_name.toUpperCase().includes(searchText.toUpperCase())
+                })
+            )
+        }
+        setIsLoading(false)
+    }
+
+    useEffect(() => {
+        // Ensure handleFilter is available when setting options
+        navigation.setOptions({
+            headerSearchBarOptions: {
+                placeholder: "Search via name",
+                onChangeText: (e: any) => {
+                    handleFilter(e.nativeEvent.text)
+                }
+            }
+        })
+    }, [navigation, bookings])
+
+
+    if (isLoading) {
+        return (
+            <ContentBody>
+                <ActivityIndicator size="large" className='mt-10' />
+            </ContentBody>
+        )
+    }
+    
+    if (!isLoading && filteredBookings.length === 0){
+        return (
+            <ContentBody>
+                <Text>Not found</Text>
+            </ContentBody>
+        )
+    }
+
+    return (
+        <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshPageBooking} progressViewOffset={50}/>}>
+            <ContentBody>
+                {filteredBookings.length <= 0 ? (
+                    <Text>Booking not found</Text>
+                )
+                    :
+                    filteredBookings.map((booking: VerifiedBookingType, index: number) => (
+                        <TransactionCard key={index} containerStyle="mb-4" booking={booking} />
+                    ))
+                }
+            </ContentBody>
+        </ScrollView>
+    )
+}
+
+export default previousmonth;

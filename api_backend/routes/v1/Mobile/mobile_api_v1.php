@@ -18,8 +18,15 @@ Route::middleware(['auth:sanctum', 'owner'])->group(function (){
     Route::get('booking/{booking}', [BookingController::class, 'getBookingSummary']);
     Route::patch('/reschedule/{booking}', [BookingController::class, 'rescheduleBooking']);
 
-    // Get booking with successful "VERIFIED" status 
+    // Get booking with successful "VERIFIED status 
     Route::get('/bookings/verified/{page}', [BookingController::class, 'showVerifiedBookings']);
+    Route::get('/bookings/current-month/{page}', [BookingController::class, 'showCurrentMonthBookings']);
+    Route::get('/bookings/previous-month/{page}', [BookingController::class, 'showPreviousMonthBookings']);
+    Route::get('/bookings/cash-only/{page}', [BookingController::class, 'showCashOnlyCurrentMonthBookings']);
+    Route::get('/bookings/ewallet-only/{page}', [BookingController::class, 'showEWalletOnlyCurrentMonthBookings']);
+    // Get booking with successful "VERIFIED" status
+    Route::get('/bookings/verified-only/{page}', [BookingController::class, 'showCurrentMonthVerifiedBookings']);
+    Route::get('/bookings/cancelled-only/{page}', [BookingController::class, 'showCurrentMonthCancelledBookings']);
 
     // If xendit
     Route::post('/refund/{booking}', [BookingController::class, 'refundBooking']);

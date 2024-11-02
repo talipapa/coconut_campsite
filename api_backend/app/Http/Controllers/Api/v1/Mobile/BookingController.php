@@ -45,13 +45,13 @@ class BookingController extends Controller
         try {
             // total earnings of current year
             $totalYearEarnings = Transaction::whereYear('updated_at', Carbon::now()->year)
-            ->whereIn('status', ['VERIFIED'])
+            ->whereIn('status', ['VERIFIED', 'SCANNED', 'SUCCEEDED'])
             ->sum('price');
 
             // total earnings this month
             $totalMonthEarnings = Transaction::whereYear('updated_at', Carbon::now()->year)
             ->whereMonth('updated_at', Carbon::now()->month)
-            ->where('status', 'VERIFIED')
+            ->where('status', ['VERIFIED', 'SCANNED', 'SUCCEEDED'])
             ->sum('price');
 
             // total earnings from previous month
@@ -70,7 +70,7 @@ class BookingController extends Controller
             // e-payment revenue this month
             $ePaymentRevenueThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
             ->whereMonth('updated_at', Carbon::now()->month)
-            ->whereIn('status', ['VERIFIED'])
+            ->whereIn('status', ['VERIFIED', 'SCANNED', 'SUCCEEDED'])
             ->where('payment_type', 'XENDIT')
             ->sum('price');
 
@@ -369,7 +369,62 @@ class BookingController extends Controller
         return response()->json($bookings, 200);
     }
 
-    
+    function showCurrentMonthBookings(Request $request, $page){
+        // Get all bookings
+        $bookings = [];
+        // Check if $page is number
+        $bookings = Booking::whereIn('status', ['VERIFIED'])->whereMonth('updated_at', Carbon::now()->month)->orderBy('check_in', 'asc')->paginate($page);
+        // Return all bookings with successful bookingresource
+        return response()->json($bookings, 200);
+    }
 
+    function showPreviousMonthBookings(Request $request, $page){
+        // Get all bookings
+        $bookings = [];
+        // Check if $page is number
+        $bookings = Booking::whereIn('status', ['VERIFIED'])->whereMonth('updated_at', Carbon::now()->subMonth()->month)->orderBy('check_in', 'asc')->paginate($page);
+        // Return all bookings with successful bookingresource
+        return response()->json($bookings, 200);
+    }
+
+    function showCashOnlyCurrentMonthBookings(Request $request, $page){
+        // Get all bookings
+        $bookings = [];
+        // Check if $page is number
+        $bookings = Booking::WhereHas('transaction', function ($query) {
+            $query->where('payment_type', 'CASH') && $query->where('status', 'VERIFIED');
+        })->whereMonth('updated_at', Carbon::now()->month)->orderBy('check_in', 'asc')->paginate($page);
+        // Return all bookings with successful bookingresource
+        return response()->json($bookings, 200);
+    }
+
+    function showEWalletOnlyCurrentMonthBookings(Request $request, $page){
+        // Get all bookings
+        $bookings = [];
+        // Check if $page is number
+        $bookings = Booking::WhereHas('transaction', function ($query) {
+            $query->where('payment_type', 'XENDIT') && $query->whereIn('status', ['VERIFIED', 'SCANNED', 'SUCCEEDED']);
+        })->whereMonth('updated_at', Carbon::now()->month)->orderBy('check_in', 'asc')->paginate($page);
+        // Return all bookings with successful bookingresource
+        return response()->json($bookings, 200);
+    }
+
+    function showCurrentMonthVerifiedBookings(Request $request, $page){
+        // Get all bookings
+        $bookings = [];
+        // Check if $page is number
+        $bookings = Booking::whereIn('status', ['VERIFIED'])->orderBy('check_in', 'asc')->paginate($page);
+        // Return all bookings with successful bookingresource
+        return response()->json($bookings, 200);
+    }
+
+    function showCurrentMonthCancelledBookings(Request $request, $page){
+        // Get all bookings
+        $bookings = [];
+        // Check if $page is number
+        $bookings = Booking::whereIn('status', ['CANCELLED'])->orderBy('check_in', 'asc')->paginate($page);
+        // Return all bookings with successful bookingresource
+        return response()->json($bookings, 200);
+    }
 
 }

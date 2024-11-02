@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useGlobalContext } from '@/Context/GlobalProvider';
 import { router, useNavigation } from 'expo-router';
 import ContentBody from '@/components/ContentBody';
-import { fetchBookings, fetchCurrentMonthBookingHistory, fetchSuccessfulBookingHistory } from '@/utils/BookingService';
+import { fetchBookings, fetchCashOnlyBookingHistory, fetchCurrentMonthBookingHistory, fetchEwalletOnlyBookingHistory, fetchPreviousMonthBookingHistory, fetchSuccessfulBookingHistory } from '@/utils/BookingService';
 import Toast from 'react-native-toast-message';
 import CustomButton from '@/components/CustomButton';
 import BookingCard from '@/components/BookingCard';
@@ -29,7 +29,7 @@ interface PaginatedBookingType {
   page: number
 }
 
-const currentmonth = () => {
+const ewalletonly = () => {
     const navigation = useNavigation();
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [bookings, setBookings] = useState<VerifiedBookingType[]>([]);
@@ -40,7 +40,7 @@ const currentmonth = () => {
 
     const refreshPageBooking = () => {
         setIsLoading(true)
-        fetchCurrentMonthBookingHistory(50)
+        fetchEwalletOnlyBookingHistory(50)
             .then((res: { data: VerifiedBookingType[] }) => {
                 if (Array.isArray(res.data)){
                     setBookings(res.data)
@@ -128,4 +128,4 @@ const currentmonth = () => {
     )
 }
 
-export default currentmonth;
+export default ewalletonly;

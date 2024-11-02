@@ -170,6 +170,62 @@ const _layout = () => {
                 headerTintColor: 'black'
             }}
         />
+        <Stack.Screen
+            name="(transaction)/cashonly"
+            options={{
+                presentation: 'modal',
+                headerTitle: "Cash only bookings",
+                headerTitleStyle:{
+                    color: 'white'
+                },
+                headerStyle: {
+                    backgroundColor: "#5CBCB6"
+                },
+                headerTintColor: 'black'
+            }}
+        />
+        <Stack.Screen
+            name="(transaction)/ewalletonly"
+            options={{
+                presentation: 'modal',
+                headerTitle: "E-wallet only bookings",
+                headerTitleStyle:{
+                    color: 'white'
+                },
+                headerStyle: {
+                    backgroundColor: "#5CBCB6"
+                },
+                headerTintColor: 'black'
+            }}
+        />
+        <Stack.Screen
+            name="(transaction)/successfulcurrentmonth"
+            options={{
+                presentation: 'modal',
+                headerTitle: "Successful bookings for the current month",
+                headerTitleStyle:{
+                    color: 'white'
+                },
+                headerStyle: {
+                    backgroundColor: "#5CBCB6"
+                },
+                headerTintColor: 'black'
+            }}
+        />
+        <Stack.Screen
+            name="(transaction)/cancelledcurrentmonth"
+            options={{
+                presentation: 'modal',
+                headerTitle: "Cancelled bookings for the current month",
+                headerTitleStyle:{
+                    color: 'white'
+                },
+                headerStyle: {
+                    backgroundColor: "#5CBCB6"
+                },
+                headerTintColor: 'black'
+            }}
+        />
     </Stack>
   )
 }

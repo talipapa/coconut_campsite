@@ -99,10 +99,18 @@ const index = () => {
 
         <ContentBody containerClass='items-center mt-12'>
           <Text className='mt-7 mb-4 text-lg text-slate-400 font-semibold'>This month statistics</Text>
-          <StatisticCard title='Cash Revenue' data={FormatCurrency(dashboardData?.cashRevenueThisMonth)} isLoading={isLoading}/>
-          <StatisticCard title='ePayment Revenue' data={FormatCurrency(dashboardData?.ePaymentRevenueThisMonth)} isLoading={isLoading} />
-          <StatisticCard title='Successful Bookings' data={dashboardData?.successBookingThisMonth} isLoading={isLoading} dataStyle='text-green-500'/>
-          <StatisticCard title='Cancelled Bookings' data={dashboardData?.cancelledBookingThisMonth} isLoading={isLoading} dataStyle='text-red-500'/>
+          <TouchableOpacity className='w-full' activeOpacity={1} onPress={() => router.push('/cashonly' as Href)}>
+            <StatisticCard title='Cash Revenue' data={FormatCurrency(dashboardData?.cashRevenueThisMonth)} isLoading={isLoading}/>
+          </TouchableOpacity>
+          <TouchableOpacity className='w-full' activeOpacity={1} onPress={() => router.push('/ewalletonly' as Href)}>
+            <StatisticCard title='ePayment Revenue' data={FormatCurrency(dashboardData?.ePaymentRevenueThisMonth)} isLoading={isLoading} />
+          </TouchableOpacity>
+          <TouchableOpacity className='w-full' activeOpacity={1} onPress={() => router.push('/successfulcurrentmonth' as Href)}>
+            <StatisticCard title='Successful Bookings' data={dashboardData?.successBookingThisMonth} isLoading={isLoading} dataStyle='text-green-500'/>
+          </TouchableOpacity>
+          <TouchableOpacity className='w-full' activeOpacity={1} onPress={() => router.push('/cancelledcurrentmonth' as Href)}>
+            <StatisticCard title='Cancelled Bookings' data={dashboardData?.cancelledBookingThisMonth} isLoading={isLoading} dataStyle='text-red-500'/>
+          </TouchableOpacity>
         </ContentBody>
       </View>
 
