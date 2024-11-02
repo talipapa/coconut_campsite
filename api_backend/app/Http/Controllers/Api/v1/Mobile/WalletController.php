@@ -80,7 +80,7 @@ class WalletController extends Controller
                     'message' => 'Payout request failed',
                     'email_to' => $request->user()->email
                 ]
-            ], 500);
+            ], 400);
         }
 
 
