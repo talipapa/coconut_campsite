@@ -82,9 +82,9 @@ class Xendivel extends XenditApi{
     }
 
     // Checkpoint
-    public static function sendPayout($payload): self{
+    public static function sendDisbursement($payload): self{
 
-        $response = self::baseApi(('post'), "/payouts", $payload);
+        $response = self::baseApi(('post'), "/batch_disbursements", $payload);
         
         if ($response->failed()){
             throw new Exception($response);

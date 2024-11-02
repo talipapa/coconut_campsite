@@ -118,8 +118,7 @@ return [
     'xendit_failure_url' => env("XENDIT_FAILURE_URL", "http://localhost:3000/booking"),
 
     'xendit_cancel_url' => env("XENDIT_CANCEL_URL", "http://localhost:3000/booking"),
-
-
+    
     'business_id' => env("XENDIT_BUSINESS_ID")
 
 ];

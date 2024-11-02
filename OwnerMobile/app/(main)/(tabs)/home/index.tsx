@@ -9,8 +9,9 @@ import CustomButton from '@/components/CustomButton'
 import { Href, Link, router } from 'expo-router';
 import { BookingType } from '@/types/BookingType'
 import BookingList from '@/components/home/BookingList'
-import { fetchWalletDetails } from '@/utils/BookingService'
+import { fetchBookings, fetchWalletDetails } from '@/utils/BookingService'
 import FormatCurrency from '@/utils/FormatCurrency'
+import Toast from 'react-native-toast-message'
 
 interface walletSummaryType {
   wallet: number,
@@ -21,11 +22,7 @@ interface walletSummaryType {
 
 const index = () => {
   const { user, isLoading, setIsLoading } = useGlobalContext();
-  const redirectCashout = () => {
-    router.navigate('/wallet')
-  }
-
-
+  const [bookings, setBookings] = useState<BookingType[]>([])
 
   const [walletSummary, setWalletSummary] = useState<walletSummaryType | undefined>()
 
@@ -38,16 +35,30 @@ const index = () => {
       .catch((error) => {
         console.log(error)
       })
-      .finally(() => {
-        setIsLoading(false)
-      })
 
+      fetchBookings(30)
+      .then((data) => {
+          setBookings(data)
+      })
+      .catch((error) => {
+          Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: `Something went wrong: ${JSON.stringify(error)}`,
+          })
+      })
+      .finally(() => {
+          setIsLoading(false)
+      }
+  )
   }
 
 
   useEffect(() => {
     refreshWalletSummary()
   }, [])
+  
+
 
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshWalletSummary} progressViewOffset={50}/>}>
@@ -83,7 +94,7 @@ const index = () => {
               </View>
             </View>
           </View>
-          <BookingList/>
+          <BookingList isLoading={isLoading} bookings={bookings}/>
         </View>
       </ContentBody>
     </ScrollView>

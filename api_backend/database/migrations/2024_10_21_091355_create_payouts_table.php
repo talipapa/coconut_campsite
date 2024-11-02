@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string("amount")->default(0);
             $table->string("account_type")->default("MOBILE_NO");
             $table->string("currency")->default("PHP");
-            $table->string("business_id")->default(config('xendivel.business_id'));
+            $table->string('status')->default('PENDING');
+            $table->string("business_id");
             $table->timestamps();
         });
     }

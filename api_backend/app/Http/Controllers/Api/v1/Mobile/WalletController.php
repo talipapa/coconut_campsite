@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 
 class WalletController extends Controller
 {
+
     public function displayWallet(Request $request) {
         $wallet = [
             'XENDIT' => '',
@@ -35,24 +36,54 @@ class WalletController extends Controller
     public function createPayout(Request $request){
         $validated = $request->validate([
             'account_holder_name' => 'required|max:20',
-            'account_number' => 'required|max:11',
-            'amount' => 'required',
+            // Character should be 11 exact
+            'account_number' => 'required|numeric|digits:11',
+            'amount' => 'required|numeric|min:10|max:20000',
         ]);
 
         $payout = Payout::create([
             "account_name" => $validated['account_holder_name'],
             "account_number" => $validated['account_number'],
             "amount" => $validated['amount'],
+            "business_id" => config('xendivel.business_id'),
         ]);
 
-        $payout->save();
+        try {
+            //code...
+            $response = Xendivel::sendDisbursement([
+                'reference' => $payout->id,
+                'disbursements' => [
+                    [
+                        'amount' => (int) $payout->amount,
+                        'bank_code' => 'PH_GCASH',
+                        'bank_account_name' => $payout->account_name,
+                        'bank_account_number' => $payout->account_number,
+                        'description' => 'Payout for '.$payout->account_name,
+                        'email_to' => [$request->user()->email]
+                    ]
+                ]
+            ])->getResponse();
+            $payout->save();
+            return response()->json([
+                'message' => [
+                    'status' => 'success',
+                    'message' => 'Payout request sent successfully',
+                    'email_to' => $request->user()->email
+                ]
+            ], 200);
 
-        
+        } catch (\Throwable $th) {
+            $payout->delete();
+            return response()->json([
+                'message' => [
+                    'status' => 'error',
+                    'message' => 'Payout request failed',
+                    'email_to' => $request->user()->email
+                ]
+            ], 500);
+        }
 
 
-        return response()->json([
-            'message' => "Success"
-        ], 200);
 
     }
 }

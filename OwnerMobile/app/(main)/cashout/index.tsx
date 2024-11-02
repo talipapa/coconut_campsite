@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import ContentBody from '@/components/ContentBody'
 import { getWalletData, sendPayoutRequest } from '@/utils/WalletService';
@@ -9,6 +9,7 @@ import FormField from '@/components/FormField';
 import NumberField from '@/components/NumberField';
 import CustomButton from '@/components/CustomButton';
 import FormatCurrency from '@/utils/FormatCurrency';
+import { router } from 'expo-router';
 
 interface IWalletData {
   'XENDIT' : number,
@@ -83,17 +84,25 @@ const index = () => {
   }
 
 
-
   const submitCashoutRequest = async () => {
     setErrors({})
+    
     setIsLoading(true)
     sendPayoutRequest(formData)
     .then(() => {
-      ToastMessage('success', 'Success', 'Cashout has been sent successfully')
+      alert(`Verify cashout request has been sent to ${user?.email}`)
+      router.replace('/home')
+
+
     }) 
     .catch((error) => {
-      ToastMessage('error', 'Something went wrong', error.response?.data.message)
-      setErrors(error.response.data.errors)
+      if (error.response?.status !== 500) {
+        setErrors(error.response.data.errors)
+      } else{
+        ToastMessage('error', 'Something went wrong', JSON.stringify(error.response?.data))
+      }
+      
+        
     })
     .finally(() => {
       setIsLoading(false)

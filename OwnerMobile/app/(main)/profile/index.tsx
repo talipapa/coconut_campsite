@@ -54,7 +54,8 @@ const index = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <CustomButton title='Save' handlePress={changeDetailFunc} isLoading={isLoading} containerStyles='bg-[#BC7B5C] px-4' textStyles='text-white'/>
+
+        <CustomButton title="Change password" handlePress={() => router.push('/profile/change-password')} containerStyles='bg-blue-400 py-3 px-2' textStyles='text-xs text-white'/>
       ),
     })
   }, [navigation, changeDetailFunc])
@@ -71,8 +72,8 @@ const index = () => {
       <View className='mt-4'>
           <FormField errors={errors.email} title='Email' placeholder={`${user?.email}`} value={formData['email'] || ''} handleChangeText={(e) => setFormData((prev) => ({ ...prev, email: e }))} />
       </View>
+      <CustomButton title='Save' handlePress={changeDetailFunc} isLoading={isLoading} containerStyles='bg-[#BC7B5C] px-4 mt-7' textStyles='text-white'/>
 
-      <CustomButton title="Change password" handlePress={() => router.push('/profile/change-password')} containerStyles='bg-blue-400 py-4 mt-7 w-full' textStyles='text-xs text-white'/>
 
     </ContentBody>
   )
