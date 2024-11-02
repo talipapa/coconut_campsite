@@ -121,7 +121,9 @@ const index = () => {
     .catch((error) => {
       if (error.response?.status !== 500) {
         setErrors(error.response.data.errors)
-      } else{
+      } else if (error.response?.status !== 400) {
+        setErrors(error.response.data.errors)
+      } else {
         ToastMessage('error', 'Something went wrong', JSON.stringify(error.response?.data))
       }
     })

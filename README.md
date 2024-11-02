@@ -87,3 +87,9 @@ To switch api server host, just go to desktop/src/utils/auth.ts
 ## Building react native
 https://docs.expo.dev/develop/development-builds/create-a-build/
 
+
+
+## POLICY NOTE
+1. Refund are 100% returned if the refund requests didn't reached the xendit cutoff (23:50) in the same day of making the transaction.
+2. If refund has reached the void cut-off, The campsite will deduct 10% off, which will be used to cover for xendit service fee`s.
+3. The campsite can refund transaction made with e-payment (xendit), but will require a valid and reasonable reason. 
