@@ -134,12 +134,17 @@ class BookingController extends Controller
             // Void the charge, Check if the created_at is currently in the same day and is before 23:50:00.
             if ($createdAt->isSameDay($now) && $createdAt->lte($cutOffTime)) {
                 $response = Xendivel::void($xenditId)->getResponse();
-                // Log::info('Void response:', [$response->]);
+                Log::info('Void response:', [$response]);
             } else{
-
-                // Temporary solution for refunding
-                return response()->json(['message' => 'Refund not possible'], 400);
+                $response = Xendivel::getPayment($xenditId, 'ewallet')
+                    ->refund((int) $transaction->price * 0.9)
+                    ->getResponse();
+                Log::info(`Refund response:` . $transaction->price, [$response]);
             }
+            $booking->status = "PENDING";
+            $transaction->status = "REFUND_PENDING";
+            $transaction->save();
+            $booking->save();
 
             return response()->json(['message' => 'Refund request sent'], 201);
         } catch (\Throwable $th) {
