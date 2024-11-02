@@ -125,7 +125,7 @@ class BookingController extends Controller
             $createdAt = Carbon::parse($response->created)->timezone('Asia/Manila');
             $now = Carbon::now()->timezone('Asia/Manila');
             // Xendit cutoff time for voiding charge
-            $cutOffTime = $createdAt->copy()->setTime(23, 50, 0); 
+            $cutOffTime = $createdAt->copy()->setTime(23, 40, 0); 
             
             // Log::info('Date info', ['Xendit created_at' => $createdAt, 'now' => $now]);
             // Log::info('Xendit response:', [$response]);

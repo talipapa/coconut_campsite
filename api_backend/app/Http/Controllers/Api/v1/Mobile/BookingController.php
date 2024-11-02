@@ -45,39 +45,39 @@ class BookingController extends Controller
         try {
             // total earnings of current year
             $totalYearEarnings = Transaction::whereYear('updated_at', Carbon::now()->year)
-            ->where('status', 'SUCCEEDED')
+            ->whereIn('status', ['VERIFIED'])
             ->sum('price');
 
             // total earnings this month
             $totalMonthEarnings = Transaction::whereYear('updated_at', Carbon::now()->year)
             ->whereMonth('updated_at', Carbon::now()->month)
-            ->where('status', 'SUCCEEDED')
+            ->where('status', 'VERIFIED')
             ->sum('price');
 
             // total earnings from previous month
             $startOfPreviousMonth = Carbon::now()->startOfMonth()->subMonth();
             $endOfPreviousMonth = Carbon::now()->subMonth()->endOfMonth();
 
-            $totalPreviousMonthEarnings = Transaction::whereBetween('updated_at', [$startOfPreviousMonth, $endOfPreviousMonth])->where('status', 'SUCCEEDED')->sum('price');
+            $totalPreviousMonthEarnings = Transaction::whereBetween('updated_at', [$startOfPreviousMonth, $endOfPreviousMonth])->whereIn('status', ['VERIFIED'])->sum('price');
 
             // cash revenue this month
             $cashRevenueThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
             ->whereMonth('updated_at', Carbon::now()->month)
-            ->where('status', 'SUCCEEDED')
+            ->whereIn('status', ['VERIFIED'])
             ->where('payment_type', 'CASH')
             ->sum('price');
 
             // e-payment revenue this month
             $ePaymentRevenueThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
             ->whereMonth('updated_at', Carbon::now()->month)
-            ->where('status', 'SUCCEEDED')
+            ->whereIn('status', ['VERIFIED'])
             ->where('payment_type', 'XENDIT')
             ->sum('price');
 
             // success booking this month
             $successBookingThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
             ->whereMonth('updated_at', Carbon::now()->month)
-            ->where('status', 'SUCCEEDED')
+            ->whereIn('status', ['VERIFIED'])
             ->count();
 
             // cancelled booking this month
@@ -152,7 +152,7 @@ class BookingController extends Controller
 
                 $createdAt = Carbon::parse($booking->updated_at)->timezone('Asia/Manila');
                 $now = Carbon::now()->timezone('Asia/Manila');
-                $cutOffTime = $createdAt->copy()->setTime(23, 50, 0);
+                $cutOffTime = $createdAt->copy()->setTime(23, 40, 0);
                 
                 if ($createdAt->isSameDay($now) && $createdAt->lte($cutOffTime)) {
                     $details['isVoidEligible'] = true;
@@ -179,7 +179,7 @@ class BookingController extends Controller
 
                     $createdAt = Carbon::parse($response->created)->timezone('Asia/Manila');
                     $now = Carbon::now()->timezone('Asia/Manila');
-                    $cutOffTime = $createdAt->copy()->setTime(23, 50, 0);
+                    $cutOffTime = $createdAt->copy()->setTime(23, 40, 0);
                     
                     if ($createdAt->isSameDay($now) && $createdAt->lte($cutOffTime)) {
                         $details['isVoidEligible'] = true;
@@ -226,8 +226,8 @@ class BookingController extends Controller
         $transaction = $booking->transaction;
         // Check if the status of the transaction is SUCCEEDED
         try {
-            if ($transaction->status !== 'SUCCEEDED') {
-                return response()->json(['message' => 'Transaction is not successful'], 400);
+            if (!in_array($transaction->status, ['SUCCEEDED', 'VERIFIED', 'SCANNED'])) {
+                return response()->json(['message' => 'Transaction is not permitted to refund'], 400);
             }
     
             // Fetch the xendit id and append "ewc_" to it
@@ -240,7 +240,7 @@ class BookingController extends Controller
             $createdAt = Carbon::parse($response->created)->timezone('Asia/Manila');
             $now = Carbon::now()->timezone('Asia/Manila');
             // Xendit cutoff time for voiding charge
-            $cutOffTime = $createdAt->copy()->setTime(23, 50, 0); 
+            $cutOffTime = $createdAt->copy()->setTime(23, 40, 0); 
             
             // Log::info('Date info', ['Xendit created_at' => $createdAt, 'now' => $now]);
             // Log::info('Xendit response:', [$response]);
@@ -251,14 +251,15 @@ class BookingController extends Controller
                 $response = Xendivel::void($xenditId)->getResponse();
                 Log::info('Void response:', [$response]);
             } else{
-                $response = Xendivel::getPayment($request->charge_id, 'ewallet')
-                    ->refund($transaction->price)
+                $response = Xendivel::getPayment($xenditId, 'ewallet')
+                    ->refund((int) $transaction->price)
                     ->getResponse();
-                Log::info('Refund response:', [$response]);
+                Log::info(`Refund response:` . $transaction->price, [$response]);
             }
-
+            $booking->status = "PENDING";
             $transaction->status = "REFUND_PENDING";
             $transaction->save();
+            $booking->save();
 
             return response()->json($booking, 201);
         } catch (\Throwable $th) {
@@ -355,7 +356,7 @@ class BookingController extends Controller
         $bookings = [];
         // Check if $page is number
         if (is_numeric($page) && $page > 0) {
-            $bookings = Booking::where('status', 'VERIFIED')->orderBy('check_in', 'asc')->paginate($page);
+            $bookings = Booking::whereIn('status', ['VERIFIED'] )->orderBy('check_in', 'asc')->paginate($page);
 
             // $bookings = Booking::whereHas('transaction', function ($query) {
             //     $query->where('status', 'VERIFIED');

@@ -76,7 +76,7 @@ const allsuccessful = () => {
         } else {
             setFilteredBookings(
                 bookings.filter((booking: VerifiedBookingType) => {
-                    return booking.email.toUpperCase().includes(searchText.toUpperCase())
+                    return booking.full_name.toUpperCase().includes(searchText.toUpperCase())
                 })
             )
         }
@@ -87,7 +87,7 @@ const allsuccessful = () => {
         // Ensure handleFilter is available when setting options
         navigation.setOptions({
             headerSearchBarOptions: {
-                placeholder: "Search via email",
+                placeholder: "Search via name",
                 onChangeText: (e: any) => {
                     handleFilter(e.nativeEvent.text)
                 }

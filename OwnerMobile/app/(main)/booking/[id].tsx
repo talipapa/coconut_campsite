@@ -244,6 +244,7 @@ const index = () => {
   }
 
   const exclutedStatus = ["CANCELLED", "VOIDED", "REFUNDED", "VERIFIED", "CASH_CANCELLED"]
+  const refundedStatus = ["REFUNDED", "VOIDED", "REFUND_PENDING"]
 
   return (
     <>
@@ -257,7 +258,7 @@ const index = () => {
                 containerStyles='bg-[#BC7B5C] mr-3 px-3' 
                 handlePress={showBottomSheetModal}/>
             )}
-            {booking.transaction.payment_type === "XENDIT" ? (
+            {booking.transaction.payment_type === "XENDIT" && !refundedStatus.includes(booking.transaction.status) ? (
               <XenditBookingButtons 
                 id={booking.id} 
                 refresh={() => refreshData()} 
