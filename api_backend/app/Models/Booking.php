@@ -16,6 +16,7 @@ class Booking extends Model
     
     protected $fillable = [
         'user_id',
+        'full_name',
         'first_name',
         'last_name',
         'email',
@@ -30,7 +31,21 @@ class Booking extends Model
         'is_cabin',
         'note',
         'status',
+        'payment_type'
     ];
+
+    protected $appends = ['full_name', 'payment_type'];
+
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function getPaymentTypeAttribute()
+    {
+        return $this->transaction ? $this->transaction->payment_type : null;
+    }
+
 
     public function user()
     {

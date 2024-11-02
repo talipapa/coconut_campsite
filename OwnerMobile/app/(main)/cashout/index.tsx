@@ -84,16 +84,39 @@ const index = () => {
   }
 
 
+
+
   const submitCashoutRequest = async () => {
     setErrors({})
-    
+    if (!formData.account_holder_name || !formData.account_number || !formData.amount) {
+      ToastMessage('error', 'Validation error', 'Please fill up all fields')
+      return
+    }
     setIsLoading(true)
+    Alert.alert(
+      "Confirm Cashout", (
+        `Please confirm the details \n\nAccount Name: ${formData.account_holder_name} \nAccount Number: ${formData.account_number} \nAmount: ${formData.amount}`
+      ),
+      [
+        {
+          text: "Cancel",
+          onPress: () => setIsLoading(false),
+          style: "cancel"
+        },
+        { 
+          text: "OK", 
+          onPress: () => sendPayoutRequestForm()
+
+        }
+      ]
+    )
+  }
+
+  const sendPayoutRequestForm = () => {
     sendPayoutRequest(formData)
     .then(() => {
       alert(`Verify cashout request has been sent to ${user?.email}`)
       router.replace('/home')
-
-
     }) 
     .catch((error) => {
       if (error.response?.status !== 500) {
@@ -101,8 +124,6 @@ const index = () => {
       } else{
         ToastMessage('error', 'Something went wrong', JSON.stringify(error.response?.data))
       }
-      
-        
     })
     .finally(() => {
       setIsLoading(false)

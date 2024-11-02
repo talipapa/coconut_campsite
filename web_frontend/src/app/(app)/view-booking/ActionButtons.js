@@ -40,9 +40,11 @@ const ActionButtons = ({checkIn, bookingType, bookingId, transactionStatus}) => 
             case 'CASH_PENDING':
                 axios.post('/api/v1/booking/cancel/' + bookingId, bookingId)
                 .then(() => {
+                    openSuccessNotification()
                     window.location.reload()
                 })
                 .catch(() => {
+                    openErrorNotification()
                     window.location.reload()
                 })
                 break
@@ -93,7 +95,6 @@ const ActionButtons = ({checkIn, bookingType, bookingId, transactionStatus}) => 
                     }
                 >
                     {transactionStatus != 'CASH_PENDING' ? <Button color="danger" variant="outlined" onClick={showPopconfirm}>Refund</Button> : <Button color="danger" variant="outlined" onClick={showPopconfirm}>Cancel booking</Button>}
-                    
                 </Popconfirm>
             </div>
         </>

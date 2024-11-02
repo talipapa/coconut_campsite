@@ -36,3 +36,14 @@ export const refundBooking = async (id: string) => {
     const response = await axios.post(`/mobile/refund/${id}`, undefined)
     return response.data;
 }
+
+export const bookingActionConfirmation = async (id: string, action: string) => {
+    const response = await axios.patch(`/mobile/booking/action/${id}`, {'action': action})
+    return response.data;
+}
+
+
+export const fetchSuccessfulBookingHistory = async (itemCount: number) => {
+    const response = await axios.get(`/mobile/bookings/verified/${itemCount}`)
+    return response.data;
+}

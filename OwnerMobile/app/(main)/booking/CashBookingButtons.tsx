@@ -30,7 +30,7 @@ const CashBookingButtons = ({refresh, id, type, check_in} : {refresh: () => void
         <CustomButton 
             title='Cancel booking' 
             textStyles="text-xs text-white" 
-            containerStyles='ml-3 bg-red-400 px-3' 
+            containerStyles='bg-red-400 px-3' 
             handlePress={cancelBooking_localFunc}/>
     )
 }

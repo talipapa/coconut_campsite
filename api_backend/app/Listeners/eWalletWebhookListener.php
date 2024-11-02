@@ -48,6 +48,10 @@ class eWalletWebhookListener
         // Check if webhook_data array contains the 'event' key
         // If webhook_data array does not contain the 'event' key, the transaction is probably a disbursements or a payout
         if (!array_key_exists('event', $event->webhook_data)){
+            Log::alert('Webhook debug', [
+                'webhook_data' => json_encode($event->webhook_data[])
+            ]);
+            
             $payout = Payout::find($event->webhook_data['reference']);
             $payout->status = $event->webhook_data['status'];
             $payout->save();   
@@ -56,7 +60,7 @@ class eWalletWebhookListener
                 'status' => $payout->status
             ]);
 
-            return response('Webhook received', 200);
+            return response()->json('Webhook event not found', 200);
         } 
 
         // Handle the event based on the event type (most likely a void, refund, or transaction event)
@@ -79,6 +83,7 @@ class eWalletWebhookListener
                     
                     // Set the booking status to PAID
                     $booking->status = 'PAID';
+                    $transaction->price = $data['charge_amount'];
                     
                     $booking->save();
                     $transaction->save();
@@ -182,6 +187,10 @@ class eWalletWebhookListener
                 break;
         }
 
-        return response('Webhook received', 200);
+
+
+        
+
+        return response()->json('Webhook received', 200);
     }
 }

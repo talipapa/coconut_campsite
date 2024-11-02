@@ -79,17 +79,26 @@ export default async function Page() {
         return (price * count).toFixed(2)
     }
 
+    const exclutedStatus = ["CANCELLED", "VOIDED", "REFUNDED", "VERIFIED", "CASH_CANCELLED", "REFUND_PENDING"]
+
 
     return (
         <div className="p-[30px] w-full space-y-5">
             {/* CTA Buttons */}
-            <ActionButtons checkIn={bookingData.data.check_in} bookingType={bookingData.data.booking_type} bookingId={bookingData.data.id} transactionStatus={bookingData.data.status}/>
+            {!exclutedStatus.includes(bookingData.data.transactionStatus) && (
+                <ActionButtons checkIn={bookingData.data.check_in} bookingType={bookingData.data.booking_type} bookingId={bookingData.data.id} transactionStatus={bookingData.data.status}/>
+            )}
+                
 
             <div className="flex flex-col md:flex-row space-y-10 md:space-y-0 md:space-x-10">
                 <div className="flex-auto md:w-[70vw] xl:w-[50vw] space-y-5">
                     <QrCard id={bookingData.data.id}/>
+
                 </div>
                 <div className="w-full flex flex-col space-y-5">
+                    <div className='w-full h-full shadow-xl rounded-xl'>
+                        <iframe className="rounded-xl border-2 border-green-700" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13607.431373242382!2d121.18812472764765!3d14.72558446589735!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397bda85647cc8f%3A0xbd1a2f816c06b4c6!2sCoconut%20Campsite!5e0!3m2!1sen!2sph!4v1727672350142!5m2!1sen!2sph" width="100%" height="400px" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
+                    </div>
                     <div className="bg-white shadow-lg p-7 rounded-2xl space-y-5">
                         <h1 className="uppercase font-bold">Reservation Holder</h1>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">

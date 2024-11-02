@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, ActivityIndicator } from 'react-native'
+import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import MainHeader from '@/components/MainHeader'
 import ContentBody from '@/components/ContentBody'
@@ -7,7 +7,7 @@ import { getDashboardData, getWalletData } from '@/utils/WalletService'
 import ToastMessage from '@/components/ToastMessage'
 import { RefreshControl } from 'react-native-gesture-handler'
 import CustomButton from '@/components/CustomButton'
-import { router, useFocusEffect } from 'expo-router'
+import { Href, router, useFocusEffect } from 'expo-router'
 import FormatCurrency from '@/utils/FormatCurrency'
 import StatisticCard from '@/components/StatisticCard'
 
@@ -42,27 +42,35 @@ const index = () => {
       .finally(() => {
         setIsLoading(false)
       })
-
-    console.log(dashboardData)
   }
 
-  useFocusEffect(
-    React.useCallback(() => {
-      refreshPageBooking()
-    }, [])
-  )
-  
+  const getCurrentMonthName = () => {
+    const date = new Date();
+    return date.toLocaleString('default', { month: 'long' });
+  };
+
+  const getPreviousMonthName = () => {
+    const date = new Date();
+    date.setMonth(date.getMonth() - 1); // Set to the previous month
+    return date.toLocaleString('default', { month: 'long' });
+  };
+
+  useEffect(() => {
+    refreshPageBooking()
+
+  }, [])
+
 
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshPageBooking} progressViewOffset={50}/>}>
       <MainHeader fullName={`${user?.first_name} ${user?.last_name}`} />
-      <View className='bg-[#5CBCB6] min-h-[15vh] px-5 py-3 flex flex-col relative mb-4'>
+      <View className='bg-[#58afa9] min-h-[26vh] px-5 py-8 flex flex-col relative mb-4'>
       {dashboardData ? (
         <View className='flex flex-row items-end justify-between'>
           <View className='space-y-1'>
             <View>  
               <Text className='text-slate-100 text-md'>Xendit Wallet</Text>
-              <Text className='text-[#434343] text-2xl font-bold'>{FormatCurrency(dashboardData?.xenditWallet)}</Text>
+              <Text className='text-black text-3xl font-bold'>{FormatCurrency(dashboardData?.xenditWallet)}</Text>
             </View>
           </View>
           <View>
@@ -74,16 +82,30 @@ const index = () => {
       )}
       </View>
 
-      <ContentBody containerClass='items-center'>
-        <StatisticCard title='Total Earnings' data={FormatCurrency(dashboardData?.totalMonthEarnings)} isLoading={isLoading} dataStyle='text-green-500'/>
-        <StatisticCard title='Total Previous Earnings' data={FormatCurrency(dashboardData?.totalPreviousMonthEarnings)} dataStyle='text-slate-500' isLoading={isLoading}/>
+      <View className='relative'>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='absolute top-[-70px]'>
+            <View className='flex flex-row items-center justify-center'>
+              <TouchableOpacity activeOpacity={1} onPress={() => router.push('/allsuccessful' as Href)}>
+                <StatisticCard title={`Total Revenue`} data={FormatCurrency(dashboardData?.totalYearEarnings)} isLoading={isLoading} dataStyle='text-green-500' titleStyle='text-slate-200' rootStyle='bg-slate-900 h-[100px] w-[220px] ml-5'/>
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={1} onPress={() => router.push('/currentmonth' as Href)}>
+                <StatisticCard title={`${getCurrentMonthName()} revenue`} data={FormatCurrency(dashboardData?.totalMonthEarnings)} isLoading={isLoading} dataStyle='text-green-500' titleStyle='text-slate-300' rootStyle='h-[100px] w-[250px] ml-5 bg-slate-700'/>
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={1} onPress={() => router.push('/previousmonth' as Href)}>
+                <StatisticCard title={`${getPreviousMonthName()} revenue`} data={FormatCurrency(dashboardData?.totalPreviousMonthEarnings)} isLoading={isLoading} rootStyle='h-[100px] w-[250px] mx-5 bg-slate-200'/>
+              </TouchableOpacity>
+            </View>
+        </ScrollView>
 
-        <Text className='mt-7 mb-4 text-lg text-slate-400 font-semibold'>This month statistics</Text>
-        <StatisticCard title='Cash Revenue' data={FormatCurrency(dashboardData?.cashRevenueThisMonth)} isLoading={isLoading}/>
-        <StatisticCard title='ePayment Revenue' data={FormatCurrency(dashboardData?.ePaymentRevenueThisMonth)} isLoading={isLoading} />
-        <StatisticCard title='Successful Bookings' data={dashboardData?.successBookingThisMonth} isLoading={isLoading} dataStyle='text-green-500'/>
-        <StatisticCard title='Cancelled Bookings' data={dashboardData?.cancelledBookingThisMonth} isLoading={isLoading} dataStyle='text-red-500'/>
-      </ContentBody>
+        <ContentBody containerClass='items-center mt-12'>
+          <Text className='mt-7 mb-4 text-lg text-slate-400 font-semibold'>This month statistics</Text>
+          <StatisticCard title='Cash Revenue' data={FormatCurrency(dashboardData?.cashRevenueThisMonth)} isLoading={isLoading}/>
+          <StatisticCard title='ePayment Revenue' data={FormatCurrency(dashboardData?.ePaymentRevenueThisMonth)} isLoading={isLoading} />
+          <StatisticCard title='Successful Bookings' data={dashboardData?.successBookingThisMonth} isLoading={isLoading} dataStyle='text-green-500'/>
+          <StatisticCard title='Cancelled Bookings' data={dashboardData?.cancelledBookingThisMonth} isLoading={isLoading} dataStyle='text-red-500'/>
+        </ContentBody>
+      </View>
+
     </ScrollView>
   )
 }

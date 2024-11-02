@@ -13,17 +13,23 @@ Route::middleware(['auth:sanctum', 'owner'])->group(function (){
     Route::post('logout', [TokenBasedAuthController::class, 'logout']);  
     // Booking controller for mobile
     Route::get('bookings/{page}', [BookingController::class, 'showList']);
-    
     Route::get('wallet-summary', [BookingController::class, 'getSummaryWallet']);
     Route::get('dashboard-summary', [BookingController::class, 'dashboardSummary']);
-    
     Route::get('booking/{booking}', [BookingController::class, 'getBookingSummary']);
+    Route::patch('/reschedule/{booking}', [BookingController::class, 'rescheduleBooking']);
+
+    // Get booking with successful "VERIFIED" status 
+    Route::get('/bookings/verified/{page}', [BookingController::class, 'showVerifiedBookings']);
+
     // If xendit
     Route::post('/refund/{booking}', [BookingController::class, 'refundBooking']);
+
     // If cash
     Route::post('/cancel/{booking}', [BookingController::class, 'cancelBooking']);
 
-    Route::patch('/reschedule/{booking}', [BookingController::class, 'rescheduleBooking']);
+    // Confirmation or no show
+    Route::patch('/booking/action/{booking}', [BookingController::class, 'bookingAction']);
+
 
     // Show balance
     Route::get('/wallet/balance', [WalletController::class, 'displayWallet']);
@@ -31,10 +37,7 @@ Route::middleware(['auth:sanctum', 'owner'])->group(function (){
 
     // Owner account routes
     Route::patch('/owner-account/{user}', [OwnerAccountController::class, 'update']);
-
     Route::patch('/owner-account/change-password/{user}', [OwnerAccountController::class, 'changePassword']);
-
-
 
     // Owner handling manager routes
     Route::get('/managers', [OwnerAccountController::class, 'getManagers']);

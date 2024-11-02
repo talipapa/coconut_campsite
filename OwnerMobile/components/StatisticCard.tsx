@@ -32,11 +32,13 @@ const StatisticCard = (
 
 
     return (
-      <View style={customStyles.shadow} className='flex w-full flex-row justify-between items-center bg-slate-100 rounded-xl shadow-xl p-5 mb-5'>
+      <View style={customStyles.shadow} className={`flex w-full flex-row justify-between items-center bg-slate-100 rounded-xl shadow-xl p-5 mb-5 ${rootStyle}`}>
           <View>
               <Text className={`font-semibold text-xl ${titleStyle}`}>{title}</Text>
-              {!isLoading ? <Text className={`font-semibold text-3xl ${dataStyle}`}>{data?.toString()}</Text> :
-                      <ActivityIndicator size="large" className='mt-10'/>
+              {!isLoading ? 
+                  <Text className={`font-semibold text-3xl ${dataStyle}`}>{data?.toString()}</Text> 
+                :
+                  <View className={`font-semibold bg-slate-800 text-3xl rounded-lg w-[80%] h-8 ${dataStyle}`}/>
               }
           </View>
       </View>

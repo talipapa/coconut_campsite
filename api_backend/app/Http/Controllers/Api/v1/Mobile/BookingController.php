@@ -22,16 +22,14 @@ class BookingController extends Controller
         $bookings = [];
         
         // Check if $page is number
-        
-
         if (is_numeric($page) && $page > 0) {
-            $bookings = Booking::whereIn('status', ['SCANNED', 'PAID', 'PENDING'])->orderBy('check_in', 'asc')->paginate($page);
+            $bookings = Booking::whereIn('status', ['SCANNED', 'PAID', 'PENDING', 'CASH_PENDING'])->orderBy('check_in', 'asc')->paginate($page);
 
             // $bookings = Booking::whereHas('transaction', function ($query) {
             //     $query->whereIn('status', ['CASH_PENDING', 'SUCCEEDED']);
             // })->orderBy('check_in', 'asc')->paginate($page);
         } else {
-            $bookings = Booking::whereIn('status', ['SCANNED', 'PAID', 'PENDING'])->orderBy('check_in', 'asc');
+            $bookings = Booking::whereIn('status', ['SCANNED', 'PAID', 'PENDING', 'CASH_PENDING'])->orderBy('check_in', 'asc');
             // $bookings = Booking::all()->filter(function ($booking) {
             //     return $booking->transaction !== null && in_array($booking->transaction->status, ['CASH_PENDING', 'SUCCEEDED']);
             // })->sortByAsc('check_in');
@@ -320,6 +318,57 @@ class BookingController extends Controller
 
         return response()->json($booking, 200);
     }
+
+    public function bookingAction(Request $request, Booking $booking){
+        try {
+            //code...
+            if (!$booking) {
+                return response()->json(['message' => 'Booking not found'], 404);
+            }
+            switch ($request->action) {
+                case 'confirm':
+                    # code...
+                    $booking->status = 'VERIFIED';
+                    $booking->transaction->status = 'VERIFIED';
+                    break;
+
+                case 'cancel':
+                    # code...
+                    $booking->status = 'CANCELLED';
+                    $booking->transaction->status = 'CANCELLED';
+                    break;
+                default:
+                    return response()->json(['message' => 'Something went wrong', 'error', 'Action not acceptable'], 500);
+                    break;
+                }
+            $booking->transaction->save();
+            $booking->save();
+            return response()->json(['message' => 'Booking status updated']);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Something went wrong', 'error' => $th], 500);
+        }
+    }
+
+
+    function showVerifiedBookings(Request $request, $page){
+        // Get all bookings
+        $bookings = [];
+        // Check if $page is number
+        if (is_numeric($page) && $page > 0) {
+            $bookings = Booking::where('status', 'VERIFIED')->orderBy('check_in', 'asc')->paginate($page);
+
+            // $bookings = Booking::whereHas('transaction', function ($query) {
+            //     $query->where('status', 'VERIFIED');
+            // })->orderBy('check_in', 'asc')->paginate($page);
+        } else {
+            $bookings = Booking::all();
+        }
+
+        // Return all bookings with successful bookingresource
+        return response()->json($bookings, 200);
+    }
+
+    
 
 
 }

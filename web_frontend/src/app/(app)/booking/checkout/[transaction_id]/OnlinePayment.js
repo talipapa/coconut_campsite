@@ -49,7 +49,7 @@ const OnlinePayment = ({paymentType, totalPrice, bookId}) => {
     setButtonLoading(true)
     axios.post('api/v1/transaction', {
       "email": invoiceEmail,
-      "price": calculateTotalPrice(subTotal, calculateFee(subTotal, paymentMethodVal)),
+      "price": subTotal,
       "payment_type": paymentType,
       "booking_id": bookId,
       "paymentMethod": paymentMethodVal

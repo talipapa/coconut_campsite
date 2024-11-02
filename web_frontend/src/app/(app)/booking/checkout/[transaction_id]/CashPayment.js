@@ -20,7 +20,8 @@ const CashPayment = ({paymentType, totalPrice, bookId}) => {
     axios.post('api/v1/transaction', {
       "email": invoiceEmail,
       "booking_id": bookId,
-      "price": calculateTotalPrice(subTotal, calculateFee(subTotal, paymentMethodVal)),
+      "price": subTotal,
+      // "price": calculateTotalPrice(subTotal, calculateFee(subTotal, paymentMethodVal)),
       "payment_type": paymentType,
       "paymentMethod": "CASH_ARRIVAL"
 
@@ -44,19 +45,10 @@ const CashPayment = ({paymentType, totalPrice, bookId}) => {
         />
 
         <div className='flex flex-col space-y-4'>
-          <div>
-            <div className='w-full flex flex-row justify-between'>
-              <span>Subtotal</span>
-              <span>P {totalPrice}</span>
-            </div>
-            <div className='w-full flex flex-row justify-between text-slate-600'>
-              <span>Xendit Fee</span>
-              <span>P 0.00</span>
-            </div>
-          </div>
+
           <div className='w-full flex flex-row justify-between font-bold'>
             <span>Total Price</span>
-            <span>P {calculateTotalPrice(subTotal, calculateFee(subTotal, paymentMethodVal))}</span>
+            <span>P {subTotal}</span>
           </div>
         </div>
         
