@@ -5,8 +5,8 @@ import GlobalProvider from './Context/GlobalProvider';
 import { ConfigProvider } from 'antd';
 import NotFound from './Pages/NotFound';
 import Dashboard from './Pages/(protected)/Dashboard';
-import SettingUp from './Pages/(protected)/SettingUp';
 import Login from './Pages/(public)/Login';
+import LogBook from './Pages/(protected)/LogBook';
 
 function App() {
   return (
@@ -29,7 +29,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/setting-up/:id" element={<SettingUp />} />
+            <Route path="/logbook/:id" element={<LogBook />} />
             <Route path="/" element={<Login />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
