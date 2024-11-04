@@ -256,7 +256,7 @@ class BookingController extends Controller
                     ->getResponse();
                 Log::info(`Refund response:` . $transaction->price, [$response]);
             }
-            $booking->status = "PENDING";
+            $booking->status = "CANCELLED";
             $transaction->status = "REFUND_PENDING";
             $transaction->save();
             $booking->save();

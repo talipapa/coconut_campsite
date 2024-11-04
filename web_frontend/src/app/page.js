@@ -8,6 +8,7 @@ import Footer from '@/components/LargeComponents/Footer'
 import NavbarLoginLinks from './NavbarLoginLinks'
 import { usePrice } from '@/hooks/prices'
 import Image from 'next/image'
+import { PiCookingPotFill } from "react-icons/pi";
 
 
 
@@ -95,8 +96,8 @@ const Home = () => {
                         </div>
                         <div className='bg-[#F2F2F2] w-full md:min-h-[300px] px-[30px] py-[20px] flex flex-col items-center space-y-4 text-center shadow-md'>
                             <div className='flex flex-col items-center space-y-2'>
-                                <IoPricetags fontSize={40}/>
-                                <h2 className='text-md font-bold text-[#555555]'>Amenities</h2>
+                                <PiCookingPotFill fontSize={40}/>
+                                <h2 className='text-md font-bold text-[#555555]'>Kitchen</h2>
                             </div>
 
                             <p>The campsite are equipped with tables, chairs, kitchen area and night lamps. Cooking equipment and utensils are free to use in case you forgot yours.</p>

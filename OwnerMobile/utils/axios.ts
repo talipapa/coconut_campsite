@@ -26,12 +26,6 @@ axios.interceptors.response.use(
     error => {
         if (error.response?.status === 401) {
             setToken(null)
-                .then(() => {
-                    window.location.href = '/';
-                })
-                .catch(() => {
-                    window.location.href = '/';
-                })
         }
         return Promise.reject(error);
     }

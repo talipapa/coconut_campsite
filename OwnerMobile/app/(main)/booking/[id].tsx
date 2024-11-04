@@ -7,7 +7,6 @@ import ContentBody from '@/components/ContentBody'
 import { useGlobalContext } from '@/Context/GlobalProvider'
 import CashBookingButtons from './CashBookingButtons'
 import XenditBookingButtons from './XenditBookingButtons'
-
 import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps, BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import CustomButton from '@/components/CustomButton'
 import RescheduleComponent from './RescheduleComponent'

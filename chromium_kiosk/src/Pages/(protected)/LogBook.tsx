@@ -1,5 +1,5 @@
 import { Button } from 'antd';
-import React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AnimatePresence, motion, Variants } from 'framer-motion';
 import PageWrapper from '../PageWrapper';
@@ -16,11 +16,11 @@ const LogBook = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const [campersName, setCampersName] = React.useState<ICamper[]>([]);
-    const [newCamper, setNewCamper] = React.useState('');
-    const [nextId, setNextId] = React.useState(4);
-    const listRef = React.useRef<HTMLDivElement | null>(null);
-    const [isNewCamperAdded, setIsNewCamperAdded] = React.useState(false);
+    const [campersName, setCampersName] = useState<ICamper[]>([]);
+    const [newCamper, setNewCamper] = useState('');
+    const [nextId, setNextId] = useState(4);
+    const listRef = useRef<HTMLDivElement | null>(null);
+    const [isNewCamperAdded, setIsNewCamperAdded] = useState(false);
 
     const handleNameChange = (id: number, newName: string) => {
         setCampersName(campersName.map(camper =>
@@ -51,7 +51,7 @@ const LogBook = () => {
         exit: { x: 100, opacity: 0 }
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         // Scroll to the top of the list whenever a new camper is added
         if (isNewCamperAdded && listRef.current) {
             listRef.current.scrollTop = 0; // Set scroll position to the top
@@ -64,7 +64,7 @@ const LogBook = () => {
             <div className='w-full h-full flex flex-col'>
                 <div className='flex flex-col mx-10 h-full space-y-6 items-start'>
                     <Button type='primary' onClick={() => navigate(-1)}>
-                        <FaArrowLeft className='text-2xl' /> Back
+                        <FaArrowLeft className='text-xl' /> Back
                     </Button>
                     <div className='w-full h-full flex flex-col items-start justify-start text-3xl font-bold'>
                         <div className='w-full h-full flex flex-row gap-10 items-start'>
