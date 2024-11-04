@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native'
 import React, { useEffect } from 'react'
 import MainHeader from '@/components/MainHeader'
 import ContentBody from '@/components/ContentBody'
@@ -20,12 +20,15 @@ const index = () => {
         setIsLoggedIn(false)
         setUser(null)
         router.replace('/login');
-      }, 3000)
+      }, 1000)
     } catch (error) {
       console.log("Error logging out", error)
       ToastMessage('error', 'Error logging out', (error as Error).toString())
     } finally {
-      setIsLoading(false)
+      setTimeout(() => {
+        setIsLoading(false)
+        
+      }, 10000);
     }
   }
 
@@ -47,33 +50,31 @@ const index = () => {
 
 
   return (
-    <ScrollView className='bg-slate-100'>
-      <View className=' min-h-[15vh] bg-[#64bdb7] rounded-3xl flex flex-row items-end justify-center px-5 pb-3'>
+    <View className='space-y-10 grow'>
+      <View className='h-[100px] bg-[#64bdb7] rounded-3xl flex flex-row items-end justify-center px-5 pb-3'>
           <Text className='text-center text-black text-lg font-semibold'>Settings</Text>
       </View>
-      <ContentBody>
-        <View className='min-h-[70vh] flex flex-col space-y-4'>
-            <TouchableOpacity style={customStyle.shadow} onPress={() => router.push("/profile")} className='flex flex-row rounded-xl bg-white items-center space-x-5 p-5 '>
+      <View className='m-5 grow justify-between'>
+        <View className='flex flex-col space-y-4'>
+            <TouchableOpacity style={customStyle.shadow} onPress={() => router.push("/profile")} className='flex flex-row rounded-xl bg-white items-center space-x-5 p-5'>
               <Image source={require('@/assets/logo.jpg')} className='w-12 h-12 rounded-full'/>
               <View>
                 <Text className='text-slate-700'>{fullName.length > 20 ? fullName.substring(0, 20) + '...' : fullName}</Text>
                 <Text className='font-bold text-black'>View Personal Info</Text>
               </View>
             </TouchableOpacity>
-
             <TouchableOpacity style={customStyle.shadow} onPress={() => router.push("/caretaker")} className='flex flex-row bg-white rounded-xl items-center space-x-5 p-5 bg-slate-20'>
               <View className='justify-center items-center w-full'>
                 <Image source={require('@/assets/icons/admin-panel.png')} className='w-12 h-12 rounded-full'/>
                 <Text className='text-slate-800 text-lg font-bold'>Caretaker manager</Text>
               </View>
             </TouchableOpacity>
-
-          
-            <CustomButton title="Logout" handlePress={() => handleLogout()} containerStyles='bg-red-500 mt-10 w-full' textStyles='text-xs text-white' isLoading={isLoading}/>
-
         </View>
-      </ContentBody>
-    </ScrollView>
+        <View className='items-end'>
+          <CustomButton title="Logout" handlePress={() => handleLogout()} containerStyles='bg-red-500 h-[50px] w-full' textStyles='text-xs text-white' isLoading={isLoading}/>
+        </View>
+      </View>
+    </View>
   )
 }
 

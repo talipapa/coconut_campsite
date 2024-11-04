@@ -5,7 +5,7 @@ import { Slot } from 'expo-router'
 
 const _layout = () => {
   return (
-    <SafeAreaView className='h-full p-7'>
+    <SafeAreaView className='h-full grow items-center justify-end'>
         <Slot/>
     </SafeAreaView>
   )

@@ -1,5 +1,5 @@
 import axiosLab from 'axios';
-import { getToken } from './TokenService';
+import { getToken, setToken } from './TokenService';
 
 const axios = axiosLab.create({
     baseURL: `${process.env.EXPO_PUBLIC_BACKEND_API_URL}/api/${process.env.EXPO_PUBLIC_BACKEND_API_VERSION}`,
@@ -18,6 +18,22 @@ axios.interceptors.request.use(
     },
     (error) => {
         return Promise.reject(error)
+    }
+)
+
+axios.interceptors.response.use(
+    response => response,
+    error => {
+        if (error.response?.status === 401) {
+            setToken(null)
+                .then(() => {
+                    window.location.href = '/';
+                })
+                .catch(() => {
+                    window.location.href = '/';
+                })
+        }
+        return Promise.reject(error);
     }
 )
 

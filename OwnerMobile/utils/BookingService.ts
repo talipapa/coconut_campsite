@@ -77,3 +77,8 @@ export const fetchCancelledCurrentMonthBookingHistory = async (itemCount: number
     const response = await axios.get(`/mobile/bookings/cancelled-only/${itemCount}`)
     return response.data;
 }
+
+export const fetchScannedBookingHistory = async (itemCount: number) => {
+    const response = await axios.get(`/mobile/bookings/scanned/${itemCount}`)
+    return response.data;
+}

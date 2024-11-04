@@ -1,4 +1,4 @@
-import { View, Text, Image, Platform } from 'react-native'
+import { View, Text, Image, Platform, ScrollView, SafeAreaView } from 'react-native'
 import { useContext, useState } from 'react'
 import FormField from '@/components/FormField'
 import CustomButton from '@/components/CustomButton'
@@ -42,39 +42,43 @@ const index = () => {
                 ToastMessage('error', 'Something went wrong', error.response?.data.message)
             }
         } finally{
-            setIsLoading(false)
+            setTimeout(() => {
+                setIsLoading(false) 
+            }, 5000);
         }
     }
 
     return (
-        <View className='space-y-8'>
-            <View className='flex flex-row space-x-2 items-center'>
-                <Image source={require('@/assets/logo.jpg')} className='w-12 h-12 rounded-full' />
-                <Text className='text-2xl font-bold'>Coconut Campsite</Text>
-            </View>
-            <View className='space-y-3'>
-                <Text className='text-2xl font-semibold'>Login</Text>
-                <View>
-                    <FormField
-                        title='Email'
-                        placeholder='Enter your email'
-                        value={form.email}
-                        handleChangeText={(e) => setForm({...form, email: e})}
-                        errors={errors.email} 
-                    />
-                    <FormField
-                        title='Password'
-                        placeholder='Enter your password'
-                        value={form.password}
-                        isPassword={true}
-                        handleChangeText={(e) => setForm({...form, password: e})} 
-                        otherStyles='mt-3'
-                        errors={errors.password}
-                    />
+        <SafeAreaView className='relative w-full h-full'>
+            {/* <Image source={require('@/assets/logo.jpg')} className='w-full h-full top-0 absolute'/> */}
+            <View className='p-8 justify-evenly grow'>
+                <View className='flex flex-col items-center grow'>
+                    <Image source={require('@/assets/logo.jpg')} className='w-12 h-12 rounded-full'/>
+                    <Text className='text-2xl font-bold'>Coconut Campsite</Text>
+                    <View className='mt-12 grow w-full'>
+                        <View>
+                            <FormField
+                                title='Email'
+                                placeholder='Enter your email'
+                                value={form.email}
+                                handleChangeText={(e) => setForm({...form, email: e})}
+                                errors={errors.email} 
+                            />
+                            <FormField
+                                title='Password'
+                                placeholder='Enter your password'
+                                value={form.password}
+                                isPassword={true}
+                                handleChangeText={(e) => setForm({...form, password: e})} 
+                                otherStyles='mt-7'
+                                errors={errors.password}
+                            />
+                        </View>
+                    </View>
                 </View>
-                <CustomButton title="Submit" handlePress={handleLogin} containerStyles='bg-[#5CBCB6] mt-12' isLoading={isLoading}/>
+                <CustomButton title="Submit" handlePress={handleLogin} containerStyles='bg-[#5CBCB6] mt-12 mb-6 py-3' isLoading={isLoading} textStyles='text-white font-semibold'/>
             </View>
-        </View>
+        </SafeAreaView>
     )
 }
 

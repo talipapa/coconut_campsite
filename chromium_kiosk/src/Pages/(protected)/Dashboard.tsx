@@ -5,13 +5,14 @@ import { useNavigate } from 'react-router-dom'
 import { useGlobalContext } from '../../Context/GlobalProvider';
 import PageWrapper from '../PageWrapper';
 import axios from '../../Utils/auth';
+import ProtectedMiddleware from './ProtectedMiddleware';
 
 interface Iresponse {
   message: string
 }
 
 const Dashboard = () => {
-  const { user } = useGlobalContext()
+  const { user, isLoggedIn } = useGlobalContext()
   const [inputValue, setInputValue] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [response, setResponse] = useState<Iresponse>();
@@ -26,6 +27,7 @@ const Dashboard = () => {
     });
   };
 
+  
   useEffect(() => {
     const handleKeyPress = (event: any) => {
       if (event.key !== 'Enter') {
@@ -38,6 +40,8 @@ const Dashboard = () => {
       window.removeEventListener('keypress', handleKeyPress);
     };
   }, []);
+
+  
 
   useEffect(() => {
     if (!inputValue) return; // Don't send request if input is empty
@@ -54,9 +58,11 @@ const Dashboard = () => {
           // }, 5000);
         })
         .catch((err) => {
-          if (err.response.status === 404) openNotification('error', 'QR code not found', err.response.data.message);
-        
-          openNotification('error', 'Please try another QR code', "QR code has already been processed");
+          if (err.response.status === 404){
+            openNotification('error', 'QR code not found', err.response.data.message);
+          } else{
+            openNotification('error', 'Please try another QR code', "QR code has already been processed");
+          }         
           setInputValue('');
         })
         .finally(() => {
@@ -71,17 +77,31 @@ const Dashboard = () => {
   }, [inputValue, navigate]);
 
   return (
-    <PageWrapper>
-      <>
-        {contextHolder}
-        <motion.div
-          initial={{ opacity: 0, y: -200 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 200 }}
-          
-        >
-          {isLoading ? (
-            <div className='flex flex-col items-center'>
+    <ProtectedMiddleware>
+      <PageWrapper>
+        <>
+          {contextHolder}
+          <motion.div
+            initial={{ opacity: 0, y: -200 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 200 }}
+            
+          >
+            {isLoading ? (
+              <div className='flex flex-col items-center'>
+                <motion.span
+                  animate={{ opacity: [0.3, 1, 0.3] }}
+                  transition={{
+                    duration: 1.2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className='text-2xl font-semibold'
+                >
+                  Processing
+                </motion.span>
+              </div>
+            ) : (
               <motion.span
                 animate={{ opacity: [0.3, 1, 0.3] }}
                 transition={{
@@ -89,35 +109,23 @@ const Dashboard = () => {
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
-                className='text-2xl font-semibold'
+                className='text-2xl font-bold'
               >
-                Processing
+                Scanning for input...
               </motion.span>
-            </div>
-          ) : (
-            <motion.span
-              animate={{ opacity: [0.3, 1, 0.3] }}
-              transition={{
-                duration: 1.2,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              className='text-2xl font-bold'
-            >
-              Scanning for input...
-            </motion.span>
-          )}
-        </motion.div>
+            )}
+          </motion.div>
 
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Type anything..."
-          className='w-[60%] hidden'
-        />
-      </>
-    </PageWrapper>
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Type anything..."
+            className='w-[60%] hidden'
+          />
+        </>
+      </PageWrapper>
+    </ProtectedMiddleware>
   );
 };
 

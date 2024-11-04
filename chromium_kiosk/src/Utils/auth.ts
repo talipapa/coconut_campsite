@@ -1,7 +1,7 @@
 import axiosLab from 'axios';
 
 const axios = axiosLab.create({
-    baseURL: `https://server.coconutcampsite.com/api/v1`,
+    baseURL: `https://glorious-live-marten.ngrok-free.app/api/v1`,
     headers: {
         'Accept': 'application/json',
     }
@@ -17,6 +17,17 @@ axios.interceptors.request.use(
     },
 )
 
+
+axios.interceptors.response.use(
+    response => response,
+    error => {
+        if (error.response?.status === 401) {
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        }
+        return Promise.reject(error);
+    }
+)
 
 
 export default axios;

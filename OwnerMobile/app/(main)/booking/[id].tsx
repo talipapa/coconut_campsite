@@ -321,21 +321,28 @@ const index = () => {
               <DetailField title="Email" body={booking.email}/>
               <DetailField title="Phone number" body={`0${booking.tel_number}`}/>
             </View>
-            {booking.transaction.payment_type === "XENDIT" && (
-              <View className='w-full border-green-300 border-t-2 pt-4 flex items-center'>
-                {isVoidEligible === true ? (
-                  <View className='bg-green-200 px-4 py-2 rounded-lg'>
-                    <Text>Booking is eligible for void refund 
-                    (100% return)</Text>
-                  </View>
-                ) : (
-                  <View className='bg-red-200 px-4 py-2 rounded-lg'>
-                    <Text>Booking is not eligible for void refund, 
-                    VAT & fee will reducts total cash return of the guest</Text>
-                  </View>
-                )}
+
+            <View className='w-full border-green-300 border-t-2 pt-4 flex items-center'>
+              <View className='mb-4 items-center justify-center space-y-1'>
+                <Text className='text-slate-400'>Transaction status</Text>
+                <Text className='bg-blue-200 font-bold px-6 py-2 rounded-lg'>{booking.transaction.status}</Text>
               </View>
-            )}
+              {booking.transaction.payment_type === "XENDIT" && (
+                <>
+                  {isVoidEligible === true ? (
+                    <View className='bg-green-200 px-4 py-2 rounded-lg'>
+                      <Text>Booking is eligible for void refund 
+                      (100% return)</Text>
+                    </View>
+                  ) : (
+                    <View className='bg-red-200 px-4 py-2 rounded-lg'>
+                      <Text>Booking is not eligible for void refund, 
+                      VAT & fee will reducts total cash return of the guest</Text>
+                    </View>
+                  )}
+                </>
+              )}
+            </View>
             <View className='w-full border-green-300 border-t-2 pt-4 flex items-start'>
               <View className={`px-4 rounded-lg flex-row items-center
                     ${booking.booking_type === "overnight" ? 'bg-[#434343] text-white' : 'bg-yellow-200'}`}>

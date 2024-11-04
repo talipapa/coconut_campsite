@@ -58,6 +58,7 @@ const Home = () => {
                 <section className='py-[60px] px-[30px] flex flex-col md:flex-row justify-between items-center w-full h-full space-x-12'>
                     <div className='w-full h-full flex flex-col text-center md:text-left md:items-left md:space-y-3'>
                         <h2 className='text-2xl font-extrabold text-[#BC7B5C]'>Welcome to Coconut Campsite</h2>
+        
                         <p className='w-[90%] text-xl tracking-wide'>Experience the ultimate camping adventure at Wawa Dam! Just steps away from the stunning Karugo Falls and the hidden Secret River, your perfect nature escape awaits!. The campsite is equipped with toilet, cooking area, vendo wifi and sari-sari store.</p>
                     </div>
 

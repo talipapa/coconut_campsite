@@ -68,6 +68,9 @@ class TransactionController extends Controller
             'paymentMethod' => 'required',
             'payment_type' => 'required',
         ]);
+        
+
+
 
         $transaction = Transaction::where('booking_id', $validated['booking_id'])->first();
         $transaction->payment_type = $validated['payment_type'];
@@ -91,7 +94,6 @@ class TransactionController extends Controller
         //     // $response = OrigXendivel::getPayment('ewc_'.$transaction->xendit_product_id, 'ewallet')->getResponse();
         //     // Log::info("Xendit response", [$response]);
         //     $transaction->delete();
-	    
         // }
         
         switch ($validated['payment_type']) {
@@ -219,6 +221,8 @@ class TransactionController extends Controller
             'payment_type' => 'required',
             'xendit_transaction_id' => 'required',
         ]);
+
+        
 
     
         // Find data

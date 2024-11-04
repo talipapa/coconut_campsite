@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import React, { useLayoutEffect, useState } from 'react'
 import ContentBody from '@/components/ContentBody'
 import { useGlobalContext } from '@/Context/GlobalProvider';
@@ -61,20 +61,21 @@ const index = () => {
   }, [navigation, changeDetailFunc])
 
   return (
-    <ContentBody>
-
+    <ContentBody containerClass='grow justify-between my-7'>
+      <ScrollView className='grow space-y-6 my-4' showsVerticalScrollIndicator={false}>
+        <View>
+            <FormField errors={errors.first_name} title='First name' placeholder={`${user?.first_name}`} value={formData['first_name'] || ''} handleChangeText={(e) => setFormData((prev) => ({ ...prev, first_name: e }))} />
+        </View>
+        <View>
+            <FormField errors={errors.last_name} title='Last name' placeholder={`${user?.last_name}`} value={formData['last_name'] || ''} handleChangeText={(e) => setFormData((prev) => ({ ...prev, last_name: e }))} />
+        </View>
+        <View>
+            <FormField errors={errors.email} title='Email' placeholder={`${user?.email}`} value={formData['email'] || ''} handleChangeText={(e) => setFormData((prev) => ({ ...prev, email: e }))} />
+        </View>
+      </ScrollView>
       <View>
-          <FormField errors={errors.first_name} title='First name' placeholder={`${user?.first_name}`} value={formData['first_name'] || ''} handleChangeText={(e) => setFormData((prev) => ({ ...prev, first_name: e }))} />
+        <CustomButton title='Save' handlePress={changeDetailFunc} isLoading={isLoading} containerStyles='bg-[#BC7B5C] px-4 py-3' textStyles='text-white'/>
       </View>
-      <View className='mt-4'>
-          <FormField errors={errors.last_name} title='Last name' placeholder={`${user?.last_name}`} value={formData['last_name'] || ''} handleChangeText={(e) => setFormData((prev) => ({ ...prev, last_name: e }))} />
-      </View>
-      <View className='mt-4'>
-          <FormField errors={errors.email} title='Email' placeholder={`${user?.email}`} value={formData['email'] || ''} handleChangeText={(e) => setFormData((prev) => ({ ...prev, email: e }))} />
-      </View>
-      <CustomButton title='Save' handlePress={changeDetailFunc} isLoading={isLoading} containerStyles='bg-[#BC7B5C] px-4 mt-7' textStyles='text-white'/>
-
-
     </ContentBody>
   )
 }

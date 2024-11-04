@@ -57,36 +57,22 @@ const index = () => {
 
   useEffect(() => {
     refreshPageBooking()
-
   }, [])
 
 
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshPageBooking} progressViewOffset={50}/>}>
       <MainHeader fullName={`${user?.first_name} ${user?.last_name}`} />
-      <View className='bg-[#58afa9] min-h-[26vh] px-5 py-8 flex flex-col relative mb-4'>
-      {dashboardData ? (
-        <View className='flex flex-row items-end justify-between'>
-          <View className='space-y-1'>
-            <View>  
-              <Text className='text-slate-100 text-md'>Xendit Wallet</Text>
-              <Text className='text-black text-3xl font-bold'>{FormatCurrency(dashboardData?.xenditWallet)}</Text>
-            </View>
-          </View>
-          <View>
-            <CustomButton handlePress={() => router.push('/cashout')} title='Cash out' containerStyles='bg-[#BC7B5C] px-6' textStyles='text-white text-sm' />
-          </View>
-        </View>
-      ) : (
-          <ActivityIndicator size="large" />
-      )}
-      </View>
+      <View className='bg-[#58afa9] min-h-[12vh] px-5 py-8 flex flex-col relative mb-4'/>
 
       <View className='relative'>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='absolute top-[-70px]'>
             <View className='flex flex-row items-center justify-center'>
+              <TouchableOpacity activeOpacity={1} onPress={() => router.push('/scanned' as Href)}>
+                <StatisticCard title={`Scanned bookings`} data="Confirm campers that visited your campsite" isLoading={isLoading} dataStyle='text-green-500 text-xs mt-1' titleStyle='text-slate-200' rootStyle='bg-slate-900 h-[100px] w-[220px] ml-5'/>
+              </TouchableOpacity>
               <TouchableOpacity activeOpacity={1} onPress={() => router.push('/allsuccessful' as Href)}>
-                <StatisticCard title={`Total Revenue`} data={FormatCurrency(dashboardData?.totalYearEarnings)} isLoading={isLoading} dataStyle='text-green-500' titleStyle='text-slate-200' rootStyle='bg-slate-900 h-[100px] w-[220px] ml-5'/>
+                <StatisticCard title={`Total Revenue`} data={FormatCurrency(dashboardData?.totalYearEarnings)} isLoading={isLoading} dataStyle='text-green-500' titleStyle='text-slate-200' rootStyle='bg-[#256560] h-[100px] w-[220px] ml-5'/>
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={1} onPress={() => router.push('/currentmonth' as Href)}>
                 <StatisticCard title={`${getCurrentMonthName()} revenue`} data={FormatCurrency(dashboardData?.totalMonthEarnings)} isLoading={isLoading} dataStyle='text-green-500' titleStyle='text-slate-300' rootStyle='h-[100px] w-[250px] ml-5 bg-slate-700'/>
@@ -97,7 +83,27 @@ const index = () => {
             </View>
         </ScrollView>
 
-        <ContentBody containerClass='items-center mt-12'>
+        
+
+
+        <ContentBody containerClass='items-center mt-[70px]'>
+          {dashboardData ? (
+            <View className='w-full h-[12vh] bg-[#256560] rounded-xl p-3 flex flex-row items-center justify-around'>
+              <View>
+                <View>  
+                  <Text className='text-slate-100 text-md'>Xendit Wallet</Text>
+                  {/* Convert to php cash */}
+
+                  <Text className='text-[#e5ffb1] text-xl font-bold'>{FormatCurrency(dashboardData?.xenditWallet)}</Text>
+                </View>
+              </View>
+              <View>
+                <CustomButton handlePress={() => router.push('/cashout')} title='Cash out' containerStyles='bg-[#BC7B5C] px-6' textStyles='text-white text-sm' />
+              </View>
+            </View>
+          ) : (
+              <ActivityIndicator size="large" />
+          )}
           <Text className='mt-7 mb-4 text-lg text-slate-400 font-semibold'>This month statistics</Text>
           <TouchableOpacity className='w-full' activeOpacity={1} onPress={() => router.push('/cashonly' as Href)}>
             <StatisticCard title='Cash Revenue' data={FormatCurrency(dashboardData?.cashRevenueThisMonth)} isLoading={isLoading}/>

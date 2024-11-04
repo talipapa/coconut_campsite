@@ -226,6 +226,20 @@ const _layout = () => {
                 headerTintColor: 'black'
             }}
         />
+        <Stack.Screen
+            name="(transaction)/scanned"
+            options={{
+                presentation: 'modal',
+                headerTitle: "Campers scanned in",
+                headerTitleStyle:{
+                    color: 'white'
+                },
+                headerStyle: {
+                    backgroundColor: "#38b000"
+                },
+                headerTintColor: 'white'
+            }}
+        />
     </Stack>
   )
 }

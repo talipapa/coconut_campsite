@@ -27,7 +27,18 @@ type AuthContextType = {
 
 
 
-const GlobalContext = createContext<AuthContextType | undefined>(undefined);
+const GlobalContext = createContext<AuthContextType | undefined>({
+    isLoggedIn: true,
+    user: null,
+    setUser: () => {},
+    isLoading: true,
+    setIsLoggedIn: () => {},
+    setIsLoading: () => {},
+    test: 'unflag',
+    setTest: () => {},
+    prices: [],
+    setPrices: () => {},
+});
 
 export const useGlobalContext = () => {
     const context = useContext(GlobalContext);
@@ -45,28 +56,30 @@ const GlobalProvider = ({children}: {children: ReactNode}) => {
     const [prices, setPrices] = useState<PriceType[]>([])
 
     useEffect(() => {
-        setIsLoading(true)
-        const token = localStorage.getItem('token');
-        if (token == null) {
-            setIsLoggedIn(false)
-            setUser(null)
-            setIsLoading(false)
-            return;
-        }
-
-        loadUser()
-            .then((data) => {
-                setUser(data)
+        const initialize = async (): Promise<void> => {
+          try {
+            const accessToken = window.localStorage.getItem('token');
+            if (accessToken) {
+                const user = await loadUser()
+                setUser(user)
                 setIsLoggedIn(true)
-            }).catch((error) => {
-                console.log("Failed to load user", error);
+                setIsLoading(false)
+            } else {
                 setUser(null)
                 setIsLoggedIn(false)
-            }).finally(() => {
-                setIsLoading(false)
-            })
+            }
+          } catch (err) {
+            console.error(err);
+            // Dispatch INITIALIZE action with default data in case of any error
+            setUser(null)
+            setIsLoggedIn(false)
+          } 
+        };
+    
+        // Call the initialize function on component mount
+        initialize();
+      }, [setUser, setIsLoggedIn, setIsLoading]);
 
-    }, [isLoggedIn])
 
     return (
         <GlobalContext.Provider value={{

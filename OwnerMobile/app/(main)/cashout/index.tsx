@@ -115,7 +115,7 @@ const index = () => {
   const sendPayoutRequestForm = () => {
     sendPayoutRequest(formData)
     .then(() => {
-      alert(`Verify cashout request has been sent to ${user?.email}`)
+      alert(`Verify cashout request has been sent to the email address associated with xendit business account. Please confirm the cashout request in Xendit dashboard`)
       router.replace('/home')
     }) 
     .catch((error) => {
@@ -140,36 +140,39 @@ const index = () => {
 
 
   return (
-    <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshPageBooking}/>}>
+    <>
+    
       <View className='h-[15vh] bg-[#5CBCB6]'>
         <View className='flex flex-col items-center justify-center h-full'>
           <Text className='text-white'>Available for Cash-out</Text>
           {walletData !== undefined ? <Text className='font-bold text-white text-lg'>{FormatCurrency(walletData.XENDIT)}</Text> : <Text className='bg-black rounded-md px-3 mt-2'>pending request</Text>}
         </View>
       </View>
-      <ContentBody>
-        <Text className='text-center font-black text-xl mb-5'>GCASH</Text>
+      <ScrollView className='grow relative' refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshPageBooking}/>}>
+        <ContentBody>
+          <Text className='text-center font-black text-xl mb-5'>GCASH</Text>
 
-        <View className='space-y-4'>
+          <View className='space-y-4'>
 
-          <FormField errors={errors.account_holder_name} title='Account name' placeholder={`${user?.first_name} ${user?.last_name}`} value={formData['account_holder_name']} handleChangeText={(e) => setFormData((prev) => ({ ...prev, account_holder_name: e }))} />
+            <FormField errors={errors.account_holder_name} title='Account name' placeholder={`${user?.first_name} ${user?.last_name}`} value={formData['account_holder_name']} handleChangeText={(e) => setFormData((prev) => ({ ...prev, account_holder_name: e }))} />
 
-        </View>
-        <View className='space-y-4 mt-5'>
-          <NumberField errors={errors.account_number} title='Account Number' placeholder='09xxxxxxxxx' value={formData['account_number']} handleChangeText={(e) => setFormData((prev) => ({ ...prev, account_number: e }))} />
-        </View>
+          </View>
+          <View className='space-y-4 mt-5'>
+            <NumberField errors={errors.account_number} title='Account Number' placeholder='09xxxxxxxxx' value={formData['account_number']} handleChangeText={(e) => setFormData((prev) => ({ ...prev, account_number: e }))} />
+          </View>
 
-        <View className='space-y-4 mt-5'>
-          <NumberField errors={errors.amount} title='Ilagay ang amount na gusto mo' placeholder='0.00' value={formData['amount']} handleChangeText={(e) => setFormData((prev) => ({ ...prev, amount: e }))} />
-            <View className='mt-3'>
-              {walletData && <CashOutValidation minValue={5} maxValue={200000}/>}
-            </View>
-        </View>
+          <View className='space-y-4 mt-5'>
+            <NumberField errors={errors.amount} title='Ilagay ang amount na gusto mo' placeholder='0.00' value={formData['amount']} handleChangeText={(e) => setFormData((prev) => ({ ...prev, amount: e }))} />
+              <View className='mt-3'>
+                {walletData && <CashOutValidation minValue={5} maxValue={200000}/>}
+              </View>
+          </View>
 
 
-        <CustomButton title='Confirm' containerStyles='bg-[#BC7B5C] mt-10' textStyles='text-white' handlePress={submitCashoutRequest} isLoading={isLoading}/>
-      </ContentBody>
-    </ScrollView>
+          <CustomButton title='Confirm' containerStyles='bg-[#BC7B5C] mt-10 py-3' textStyles='text-white' handlePress={submitCashoutRequest} isLoading={isLoading}/>
+        </ContentBody>
+      </ScrollView>
+    </>
   )
 }
 

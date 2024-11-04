@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import GlobalProvider from './Context/GlobalProvider';
 import { ConfigProvider } from 'antd';
 import NotFound from './Pages/NotFound';
-import ProtectedRoutes from './ProtectedRoutes';
 import Dashboard from './Pages/(protected)/Dashboard';
 import SettingUp from './Pages/(protected)/SettingUp';
 import Login from './Pages/(public)/Login';
@@ -29,10 +28,8 @@ function App() {
         }}>
         <BrowserRouter>
           <Routes>
-            <Route element={<ProtectedRoutes />}>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/setting-up/:id" element={<SettingUp />} />
-            </Route>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/setting-up/:id" element={<SettingUp />} />
             <Route path="/" element={<Login />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

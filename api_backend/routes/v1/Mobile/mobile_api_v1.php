@@ -27,6 +27,7 @@ Route::middleware(['auth:sanctum', 'owner'])->group(function (){
     // Get booking with successful "VERIFIED" status
     Route::get('/bookings/verified-only/{page}', [BookingController::class, 'showCurrentMonthVerifiedBookings']);
     Route::get('/bookings/cancelled-only/{page}', [BookingController::class, 'showCurrentMonthCancelledBookings']);
+    Route::get('/bookings/scanned/{page}', [BookingController::class, 'showScannedBookings']);
 
     // If xendit
     Route::post('/refund/{booking}', [BookingController::class, 'refundBooking']);

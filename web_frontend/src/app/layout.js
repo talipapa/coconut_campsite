@@ -9,6 +9,8 @@ const hahmlet = Hahmlet({
     display: 'swap',
 })
 
+
+
 const RootLayout = ({ children }) => {
     return (
         <html lang="en" className={hahmlet.className}>

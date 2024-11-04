@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from 'antd';
 import { useGlobalContext } from '../../Context/GlobalProvider';
-import { replace, useNavigate } from 'react-router-dom';
+import { Form, replace, useNavigate } from 'react-router-dom';
 import { loadUser, login } from '../../Utils/AuthService';
 import TextField from '../../Components/TextField';
 
@@ -12,7 +12,8 @@ interface IFormData {
 }
 
 const Login = () => {
-    const { user, setUser, isLoading, setIsLoading, setIsLoggedIn } = useGlobalContext();
+    const { user, setUser, setIsLoggedIn, isLoggedIn } = useGlobalContext();
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const [formData, setFormData] = useState<IFormData>({
         email: '',
@@ -23,13 +24,16 @@ const Login = () => {
     const [serverAccountError, setServerAccountError] = useState<string | null>(null);
 
     useEffect(() => {
-        if (user) {
+        const accessToken = window.localStorage.getItem('token');
+        if (accessToken) {
             navigate('/dashboard');
         }
-    }, [user, navigate]);
+    }, []);
 
-    const handleLogin = async () => {
+    const handleLogin = async (e: any) => {
+        e.preventDefault()
         setErrors({});
+        setServerAccountError(null);
         setIsLoading(true);
         try {
             await login(formData);
@@ -50,7 +54,7 @@ const Login = () => {
     };
 
     return (
-        <div className='h-[100vh] w-[100vw] bg-[#5CBCB6] flex flex-col items-center justify-center pt-12 space-y-10 p-10'>
+        <form onSubmit={handleLogin} className='h-[100vh] w-[100vw] bg-[#5CBCB6] flex flex-col items-center justify-center pt-12 space-y-10 p-10'>
             <div className='flex flex-col items-center w-full'>
                 <h1 className='text-4xl text-[#0000009d] font-bold'>Welcome to</h1>            
                 <h1 className='text-4xl text-white font-bold uppercase'>COCONUT CAMPSITE</h1>            
@@ -68,8 +72,8 @@ const Login = () => {
                     <TextField otherStyles='items-center w-[60%] flex flex-col' title='Password' isPassword={true} placeholder='Enter your password' value={formData.password} handleChangeText={(e) => setFormData(prev => ({ ...prev, password: e }))} errors={[errors.password]} />
                 </div>
             </div>
-            <Button type='primary' loading={isLoading} onClick={handleLogin} className='bg-[#BC7B5C] w-[60%] rounded-md py-7 text-white'>Login</Button>
-        </div>
+            <Button type='primary' htmlType='submit' loading={isLoading} className='bg-[#BC7B5C] w-[60%] rounded-md py-7 text-white'>Login</Button>
+        </form>
     );
 };
 

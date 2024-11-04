@@ -45,7 +45,7 @@ class BookingController extends Controller
         try {
             // total earnings of current year
             $totalYearEarnings = Transaction::whereYear('updated_at', Carbon::now()->year)
-            ->whereIn('status', ['VERIFIED', 'SCANNED', 'SUCCEEDED'])
+            ->whereIn('status', ['VERIFIED'])
             ->sum('price');
 
             // total earnings this month
@@ -70,7 +70,7 @@ class BookingController extends Controller
             // e-payment revenue this month
             $ePaymentRevenueThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
             ->whereMonth('updated_at', Carbon::now()->month)
-            ->whereIn('status', ['VERIFIED', 'SCANNED', 'SUCCEEDED'])
+            ->whereIn('status', ['VERIFIED'])
             ->where('payment_type', 'XENDIT')
             ->sum('price');
 
@@ -403,7 +403,7 @@ class BookingController extends Controller
         $bookings = [];
         // Check if $page is number
         $bookings = Booking::WhereHas('transaction', function ($query) {
-            $query->where('payment_type', 'XENDIT') && $query->whereIn('status', ['VERIFIED', 'SCANNED', 'SUCCEEDED']);
+            $query->where('payment_type', 'XENDIT') && $query->whereIn('status', ['VERIFIED']);
         })->whereMonth('updated_at', Carbon::now()->month)->orderBy('check_in', 'asc')->paginate($page);
         // Return all bookings with successful bookingresource
         return response()->json($bookings, 200);
@@ -423,6 +423,15 @@ class BookingController extends Controller
         $bookings = [];
         // Check if $page is number
         $bookings = Booking::whereIn('status', ['CANCELLED'])->orderBy('check_in', 'asc')->paginate($page);
+        // Return all bookings with successful bookingresource
+        return response()->json($bookings, 200);
+    }
+
+    function showScannedBookings(Request $request, $page){
+        // Get all bookings
+        $bookings = [];
+        // Check if $page is number
+        $bookings = Booking::whereIn('status', ['SCANNED'])->orderBy('check_in', 'asc')->paginate($page);
         // Return all bookings with successful bookingresource
         return response()->json($bookings, 200);
     }
