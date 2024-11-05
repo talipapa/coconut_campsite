@@ -24,14 +24,14 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/",
-            "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/"
+            "App\\": "api_backend/app/",
+            "Database\\Factories\\": "api_backend/database/factories/",
+            "Database\\Seeders\\": "api_backend/database/seeders/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Tests\\": "api_backend/tests/"
         }
     },
     "scripts": {
