@@ -59,13 +59,14 @@ const getXenditData = async (xenditId) => {
 }
 
 
+
 export default async function Page() {
     const {bookingData, pricesData} = await getData()
     
     if (bookingData.message === 'No bookings found'){
         redirect("/booking")
     }
-
+    console.log(bookingData)
 
     var xenditData 
     
@@ -244,6 +245,33 @@ export default async function Page() {
                             ) }
 
         
+                        </div>
+                        <div className="grid grid-cols-1 pt-2">
+                            <div className="flex flex-row justify-between text-slate-500 text-md font-semibold">
+                                <div>
+                                    Fee
+                                </div>
+                                <div>
+                                     P {parseInt(bookingData.data.fee).toFixed(2)}
+                                </div>
+                            </div>
+                            <div className="flex flex-row justify-between text-slate-500 text-md font-semibold">
+                                <div>
+                                    Subtotal
+                                </div>
+                                <div>
+                                     
+                                     P {parseInt(bookingData.data.price).toFixed(2)}
+                                </div>
+                            </div>
+                            <div className="flex flex-row justify-between text-lg font-bold">
+                                <div>
+                                    Booking Total
+                                </div>
+                                <div>
+                                    P {(parseInt(Number(bookingData.data.price) + Number(bookingData.data.fee)).toFixed(2))}
+                                </div>
+                            </div>
                         </div>
                     </div>
 

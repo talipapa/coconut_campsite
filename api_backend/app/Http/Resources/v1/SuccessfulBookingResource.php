@@ -34,6 +34,7 @@ class SuccessfulBookingResource extends JsonResource
             'transaction_id' => $this->transaction ?  $this->transaction->id : null,
             'transactionType' => $this->transaction ?  $this->transaction->payment_type : null,
             'price' => $this->transaction ? $this->transaction->price : null,
+            'fee' => $this->transaction ? $this->transaction->fee : 0,
             'transactionStatus' => $this->transaction ? $this->transaction->status : null,
             'xendit_id' => $this->transaction ? $this->transaction->xendit_id : null,
             'created_at' => $this->created_at,
