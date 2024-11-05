@@ -11,6 +11,7 @@ import BottomSheet, { BottomSheetBackdrop, BottomSheetBackdropProps, BottomSheet
 import CustomButton from '@/components/CustomButton'
 import RescheduleComponent from './RescheduleComponent'
 import PressButton from '@/components/PressButton'
+import FormatCurrency from '@/utils/FormatCurrency'
 
 export interface transactionDetailType {
   booking_id: string,
@@ -19,6 +20,7 @@ export interface transactionDetailType {
   id: string,
   payment_type: "XENDIT" | "CASH",
   price: number,
+  fee: number;
   status: "CASH_PENDING" | "PENDING" | "SUCCEEDED" | "FAILED" | "CANCELLED" | "VOIDED" | "REFUNDED",
   updated_at: Date,
   user_id: string,
@@ -394,9 +396,13 @@ const index = () => {
               <Text>Payment method</Text>
               <Text>{booking.transaction.payment_type === "XENDIT" ? "E-WALLET" : "CASH"}</Text>
             </View>
+            <View className='flex-row justify-between mt-2'>
+              <Text className='text-md text-slate-500'>Fee</Text>
+              <Text className='text-md text-slate-500'>{FormatCurrency(booking.transaction.fee)}</Text>
+            </View>
             <View className='flex-row justify-between'>
               <Text className='font-black text-xl'>Net earnings</Text>
-              <Text className='font-black text-xl'>₱ {booking.transaction.price}</Text>
+              <Text className='font-black text-xl'>{FormatCurrency(booking.transaction.price - booking.transaction.fee)}</Text>
             </View>
           </View>
 
@@ -423,7 +429,7 @@ const index = () => {
             <View className='mx-5 my-6'>
               <View className='flex flex-row justify-between items-center'>
               <Text className='text-green-200 text-xl'>Net earnings</Text>
-              <Text className='text-white font-bold text-xl'>₱ {booking.transaction.price}</Text>         
+              <Text className='text-white font-bold text-xl'>{FormatCurrency(booking.transaction.price - booking.transaction.fee)}</Text>         
               </View>
               <View className='flex flex-row justify-between w-full mt-4'>
                 <PressButton 

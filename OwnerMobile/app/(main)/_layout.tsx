@@ -81,8 +81,9 @@ const _layout = () => {
                 headerTitleStyle:{
                     color: 'white'
                 },
+                headerTintColor: 'white',
                 headerStyle: {
-                    backgroundColor: "#5CBCB6"
+                    backgroundColor: "#1e3a8a"
                 },
             }}
         />

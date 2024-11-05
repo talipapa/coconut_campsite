@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, ActivityIndicator, RefreshControl } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useGlobalContext } from '@/Context/GlobalProvider';
-import { router, useNavigation } from 'expo-router';
+import { router, useFocusEffect, useNavigation } from 'expo-router';
 import ContentBody from '@/components/ContentBody';
 import { BookingType } from '@/types/BookingType';
 import { fetchBookings } from '@/utils/BookingService';
@@ -38,9 +38,13 @@ const bookings = () => {
             })
     }
 
-    useEffect(() => {
-        refreshPageBooking()
-    }, [])
+
+    
+    useFocusEffect(
+        useCallback(() => {
+            refreshPageBooking()
+        }, [])
+      );
 
     const handleFilter = (searchText: string | undefined) => {
         setIsLoading(true)
@@ -72,6 +76,9 @@ const bookings = () => {
             }
         })
     }, [navigation, bookings])
+
+
+    
 
 
     if (isLoading) {

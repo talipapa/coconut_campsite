@@ -1,12 +1,12 @@
 import { View, Text, StyleSheet, Button, RefreshControl } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MainHeader from '@/components/MainHeader'
 import { ScrollView } from 'react-native'
 import AuthContext, { useGlobalContext } from '@/Context/GlobalProvider'
 import ContentBody from '@/components/ContentBody'
 import CustomButton from '@/components/CustomButton'
-import { Href, Link, router } from 'expo-router';
+import { Href, Link, router, useFocusEffect } from 'expo-router';
 import { BookingType } from '@/types/BookingType'
 import BookingList from '@/components/home/BookingList'
 import { fetchBookings, fetchWalletDetails } from '@/utils/BookingService'
@@ -54,9 +54,13 @@ const index = () => {
   }
 
 
-  useEffect(() => {
-    refreshWalletSummary()
-  }, [])
+
+
+  useFocusEffect(
+    useCallback(() => {
+      refreshWalletSummary()
+    }, [])
+  );
   
 
 

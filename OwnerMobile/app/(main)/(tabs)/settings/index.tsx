@@ -63,10 +63,10 @@ const index = () => {
                 <Text className='font-bold text-black'>View Personal Info</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={customStyle.shadow} onPress={() => router.push("/caretaker")} className='flex flex-row bg-white rounded-xl items-center space-x-5 p-5 bg-slate-20'>
+            <TouchableOpacity style={customStyle.shadow} onPress={() => router.push("/caretaker")} className='flex flex-row bg-blue-900 rounded-xl items-center space-x-5 p-5 bg-slate-20'>
               <View className='justify-center items-center w-full'>
-                <Image source={require('@/assets/icons/admin-panel.png')} className='w-12 h-12 rounded-full'/>
-                <Text className='text-slate-800 text-lg font-bold'>Caretaker manager</Text>
+                <Image source={require('@/assets/icons/admin-panel.png')} className='w-12 h-12 rounded-full' tintColor={"#ffffff"}/>
+                <Text className='text-white text-lg font-bold'>Caretaker manager</Text>
               </View>
             </TouchableOpacity>
         </View>
