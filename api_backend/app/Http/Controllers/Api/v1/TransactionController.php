@@ -222,8 +222,6 @@ class TransactionController extends Controller
             'xendit_transaction_id' => 'required',
         ]);
 
-        
-
     
         // Find data
         $transactionData = Transaction::find($transaction->id);

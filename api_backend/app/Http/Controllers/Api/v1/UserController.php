@@ -13,12 +13,10 @@ use Illuminate\Support\Str;
 class UserController extends Controller
 {
 
-    public function index()
-    {
-        return User::all();
-    }
-
-
+    // public function index()
+    // {
+    //     return User::all();
+    // }
     public function store(Request $request)
     {
         $validate = $request->validate([
@@ -31,8 +29,11 @@ class UserController extends Controller
     }
 
 
-    public function show(User $user)
+    public function show(Request $request, User $user)
     {
+        if ($user->id !== $request->user()->id) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
         return $user;
     }
 
@@ -42,7 +43,6 @@ class UserController extends Controller
         if ($user->id !== $request->user()->id) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
-
 
         $validate = $request->validate([
             'first_name' => 'required',
@@ -62,6 +62,10 @@ class UserController extends Controller
     }
 
     public function changePassword(Request $request, User $user){
+        if ($user->id !== $request->user()->id) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
         $request->validate([
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -75,8 +79,12 @@ class UserController extends Controller
     }
 
 
-    public function destroy(User $user)
+    public function destroy(Request $request, User $user)
     {
+        if ($user->id !== $request->user()->id) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
         $oldData = $user;
         $user->delete();
         return response()->json(

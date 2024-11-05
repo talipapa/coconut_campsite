@@ -336,7 +336,6 @@ class BookingController extends Controller
                 case 'cancel':
                     # code...
                     $booking->status = 'CANCELLED';
-                    $booking->transaction->status = 'CANCELLED';
                     break;
                 default:
                     return response()->json(['message' => 'Something went wrong', 'error', 'Action not acceptable'], 500);

@@ -53,9 +53,9 @@ const Dashboard = () => {
         .then((res) => {
           openNotification('success', 'Success', res.data.message);
           setResponse(res.data);
-          // setTimeout(() => {
-          //   navigate(`/setting-up/${inputValue}`);
-          // }, 5000);
+          setTimeout(() => {
+            navigate(`/logbook/${inputValue}`);
+          }, 5000);
         })
         .catch((err) => {
           if (err.response.status === 404){
