@@ -94,6 +94,7 @@ class BookingController extends Controller
                 case 'confirm':
                     # code...
                     $booking->status = 'VERIFIED';
+                    $booking->transaction->status = 'VERIFIED';
                     break;
 
                 case 'cancel':
