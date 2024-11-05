@@ -1,5 +1,5 @@
 {
-    "name": "CoconutCampsite/CoconutCampsite",
+    "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
     "keywords": ["laravel", "framework"],
@@ -37,18 +37,18 @@
     "scripts": {
         "post-autoload-dump": [
             "api_backend/Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
+            "@cd api_backend \" php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
-            "api_backend/@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+            "@cd api_backend \" php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
         "post-root-package-install": [
-            "api_backend/@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+            "@cd api_backend \" php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "api_backend/@php artisan key:generate --ansi",
-            "api_backend/@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
-            "api_backend/@php artisan migrate --graceful --ansi"
+            "@cd api_backend \" php artisan key:generate --ansi",
+            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php artisan migrate --graceful --ansi"
         ]
     },
     "extra": {
