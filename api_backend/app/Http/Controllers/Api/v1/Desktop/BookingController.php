@@ -94,13 +94,11 @@ class BookingController extends Controller
                 case 'confirm':
                     # code...
                     $booking->status = 'VERIFIED';
-                    $booking->transaction->status = 'SUCCEEDED';
                     break;
 
                 case 'cancel':
                     # code...
                     $booking->status = 'FAILED';
-                    $booking->transaction->status = 'FAILED';
                     break;
                 default:
                     return response()->json(['message' => 'Something went wrong', 'error', 'Action not acceptable'], 500);
