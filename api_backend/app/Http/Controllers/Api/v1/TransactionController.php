@@ -19,6 +19,35 @@ use Illuminate\Support\Facades\Log;
 class TransactionController extends Controller
 {
 
+    public function calculateSubPrice($booking, $prices)
+    {
+        $adultTotal = $prices['adultPrice'] * ((int) $booking->adultCount);
+        $childTotal = $prices['childPrice'] * ((int) $booking->childCount);
+        $tentPitchTotal = $prices['tentPitchPrice'] * ((int) $booking->tent_pitching_count);
+        $bonfireKitTotal = $prices['bonfireKitPrice'] * ((int) $booking->bonfire_kit_count);
+        $cabinTotal = $booking->is_cabin ? (int) $prices['cabinPrice'] : 0;
+    
+        return number_format($adultTotal + $childTotal + $tentPitchTotal + $bonfireKitTotal + $cabinTotal, 2, '.', '');
+    }
+
+    public function calculateFee($subTotalPrice, $eWalletProviderName)
+    {
+        $eWalletFees = [
+            "PH_GCASH" => 0.023,
+            "PH_PAYMAYA" => 0.018,
+            "PH_GRABPAY" => 0.020,
+            "PH_SHOPEEPAY" => 0.020,
+        ];
+
+        $fee = isset($eWalletFees[$eWalletProviderName]) ? $subTotalPrice * $eWalletFees[$eWalletProviderName] : 0;
+        return number_format($fee, 2);
+    }
+
+    public function calculateTotalPrice($subTotal, $fee)
+    {
+        return number_format($subTotal + $fee, 2);
+    }
+
 
     // Admin should be able to view all transactions
     //
@@ -68,15 +97,32 @@ class TransactionController extends Controller
             'paymentMethod' => 'required',
             'payment_type' => 'required',
         ]);
+    
+        $booking = Booking::findOrFail($validated['booking_id']);
         
+        // Define prices for each item
+        $prices = [
+            'adultPrice' => 100.00,
+            'childPrice' => 50.00,
+            'tentPitchPrice' => 70.00,
+            'bonfireKitPrice' => 150.00,
+            'cabinPrice' => 650.00,
+        ];
+    
+        // Calculate subtotal, fee, and total price
+        $subTotalPrice = $this->calculateSubPrice($booking, $prices);
+        $fee = $this->calculateFee($subTotalPrice, $validated['paymentMethod']);
+        $totalPrice = $this->calculateTotalPrice($subTotalPrice, $fee);
 
-
-
-        $transaction = Transaction::where('booking_id', $validated['booking_id'])->first();
+        Log::info("fee", [$fee]);
+    
+        // Update transaction details
+        $transaction = Transaction::where('booking_id', $validated['booking_id'])->firstOrFail();
         $transaction->payment_type = $validated['payment_type'];
-        $transaction->price = $validated['price'];
-        $transaction->price = $validated['price'];
+        $transaction->fee = $fee;
+        $transaction->price = $totalPrice;
         $transaction->save();
+
         // if (!$transaction) {
         //     // Create transaction
         //     $transaction = Transaction::create([

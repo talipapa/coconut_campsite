@@ -24,8 +24,10 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     response => response,
     error => {
-        if (error.response?.status === 401) {
-            setToken(null)
+        if (error.response?.status === 401 && error.response?.data?.message === 'Unauthenticated') {
+            setToken(null).then(() => {
+                window.location.reload()
+            })
         }
         return Promise.reject(error);
     }

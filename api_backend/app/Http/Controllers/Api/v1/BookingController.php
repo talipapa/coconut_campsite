@@ -274,6 +274,7 @@ class BookingController extends Controller
                 'user_id' => $request->user()->id,
                 'booking_id' => $booking->id,
                 'price' => $validated['price'],
+                'fee' => 0,
             ]);  
 
             $transactionId = $transaction->id;
