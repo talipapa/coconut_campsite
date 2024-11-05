@@ -77,7 +77,7 @@ class BookingController extends Controller
             //code...
             // sort by check in date
             $perPage = $request->query('per_page', 10);
-            $scannedBooking = Booking::whereIn('status', ['SCANNED', 'PAID', 'PENDING'])->paginate($perPage);
+            $scannedBooking = Booking::whereIn('status', ['SCANNED', 'PAID', 'CASH_PENDING'])->paginate($perPage);
             return response()->json($scannedBooking);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Something went wrong', 'error' => $th], 500);
