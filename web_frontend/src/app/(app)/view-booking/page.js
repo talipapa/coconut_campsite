@@ -200,7 +200,7 @@ export default async function Page() {
                                     Adult x {bookingData.data.adult_count}
                                 </div>
                                 <div>
-                                    P {calculateItem(pricesData.data[0].price.toFixed(1), bookingData.data.adult_count)}
+                                    ₱ {calculateItem(pricesData.data[0].price.toFixed(1), bookingData.data.adult_count)}
                                 </div>
                             </div>
                             { bookingData.data.child_count > 0 && (
@@ -209,7 +209,7 @@ export default async function Page() {
                                         Child x {bookingData.data.child_count}
                                     </div>
                                     <div>
-                                        P {calculateItem(pricesData.data[1].price.toFixed(1), bookingData.data.child_count)}
+                                        ₱ {calculateItem(pricesData.data[1].price.toFixed(1), bookingData.data.child_count)}
                                     </div>
                                 </div>
                             ) }
@@ -219,7 +219,7 @@ export default async function Page() {
                                         Tent pitching x {bookingData.data.tent_pitching_count}
                                     </div>
                                     <div>
-                                        P {calculateItem(pricesData.data[3].price.toFixed(2), bookingData.data.tent_pitching_count)}
+                                        ₱ {calculateItem(pricesData.data[3].price.toFixed(2), bookingData.data.tent_pitching_count)}
                                     </div>
                                 </div>
                             ) }
@@ -229,7 +229,7 @@ export default async function Page() {
                                         Bonfire kit x {bookingData.data.bonfire_kit_count}
                                     </div>
                                     <div>
-                                        P {calculateItem(pricesData.data[3].price.toFixed(4), bookingData.data.bonfire_kit_count)}
+                                        ₱ {calculateItem(pricesData.data[3].price.toFixed(4), bookingData.data.bonfire_kit_count)}
                                     </div>
                                 </div>
                             ) }
@@ -239,7 +239,7 @@ export default async function Page() {
                                         Cabin (4-5 Person)
                                     </div>
                                     <div>
-                                        P {pricesData.data[4].price.toFixed(2)}
+                                        ₱ {pricesData.data[4].price.toFixed(2)}
                                     </div>
                                 </div>
                             ) }
@@ -252,24 +252,16 @@ export default async function Page() {
                                     Fee
                                 </div>
                                 <div>
-                                     P {parseInt(bookingData.data.fee).toFixed(2)}
+                                    ₱ {Number(bookingData.data.fee).toFixed(2)}
                                 </div>
                             </div>
-                            <div className="flex flex-row justify-between text-slate-500 text-md font-semibold">
-                                <div>
-                                    Subtotal
-                                </div>
-                                <div>
-                                     
-                                     P {parseInt(bookingData.data.price).toFixed(2)}
-                                </div>
-                            </div>
+           
                             <div className="flex flex-row justify-between text-lg font-bold">
                                 <div>
                                     Booking Total
                                 </div>
                                 <div>
-                                    P {(parseInt(Number(bookingData.data.price) + Number(bookingData.data.fee)).toFixed(2))}
+                                    ₱ {Number(bookingData.data.price).toFixed(2)}
                                 </div>
                             </div>
                         </div>
