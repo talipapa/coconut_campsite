@@ -69,7 +69,7 @@ const index = () => {
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='absolute top-[-70px]'>
             <View className='flex flex-row items-center justify-center'>
               <TouchableOpacity activeOpacity={1} onPress={() => router.push('/scanned' as Href)}>
-                <StatisticCard title={`Scanned bookings`} data="Confirm campers that visited your campsite" isLoading={isLoading} dataStyle='text-green-500 text-xs mt-1' titleStyle='text-slate-200' rootStyle='bg-slate-900 h-[100px] w-[220px] ml-5'/>
+                <StatisticCard title={`Scanned bookings`} data="View and confirm campers that visited your campsite here" isLoading={isLoading} dataStyle='text-green-500 text-xs mt-1' titleStyle='text-slate-200' rootStyle='bg-slate-900 h-[100px] w-[220px] ml-5'/>
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={1} onPress={() => router.push('/allsuccessful' as Href)}>
                 <StatisticCard title={`Total Revenue`} data={FormatCurrency(dashboardData?.totalYearEarnings)} isLoading={isLoading} dataStyle='text-green-500' titleStyle='text-slate-200' rootStyle='bg-[#256560] h-[100px] w-[220px] ml-5'/>

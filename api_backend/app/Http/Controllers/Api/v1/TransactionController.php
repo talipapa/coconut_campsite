@@ -119,8 +119,8 @@ class TransactionController extends Controller
         // Update transaction details
         $transaction = Transaction::where('booking_id', $validated['booking_id'])->firstOrFail();
         $transaction->payment_type = $validated['payment_type'];
-        $transaction->fee = $fee;
-        $transaction->price = $totalPrice;
+        $transaction->fee = floatval($fee);
+        $transaction->price = floatval($totalPrice);
         $transaction->save();
 
         // if (!$transaction) {

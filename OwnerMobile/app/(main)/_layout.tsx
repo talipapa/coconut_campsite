@@ -236,7 +236,7 @@ const _layout = () => {
                     color: 'white'
                 },
                 headerStyle: {
-                    backgroundColor: "#38b000"
+                    backgroundColor: "#0f172a"
                 },
                 headerTintColor: 'white'
             }}

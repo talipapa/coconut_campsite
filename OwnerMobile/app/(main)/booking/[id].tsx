@@ -402,7 +402,7 @@ const index = () => {
             </View>
             <View className='flex-row justify-between'>
               <Text className='font-black text-xl'>Net earnings</Text>
-              <Text className='font-black text-xl'>{FormatCurrency(booking.transaction.price - booking.transaction.fee)}</Text>
+              <Text className='font-black text-xl'>{FormatCurrency(Number(booking.transaction.price) - Number(booking.transaction.fee))}</Text>
             </View>
           </View>
 
@@ -429,7 +429,7 @@ const index = () => {
             <View className='mx-5 my-6'>
               <View className='flex flex-row justify-between items-center'>
               <Text className='text-green-200 text-xl'>Net earnings</Text>
-              <Text className='text-white font-bold text-xl'>{FormatCurrency(booking.transaction.price - booking.transaction.fee)}</Text>         
+              <Text className='text-white font-bold text-xl'>{FormatCurrency(Number(booking.transaction.price) - Number(booking.transaction.fee))}</Text>         
               </View>
               <View className='flex flex-row justify-between w-full mt-4'>
                 <PressButton 

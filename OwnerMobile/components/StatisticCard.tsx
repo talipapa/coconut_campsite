@@ -1,5 +1,5 @@
 import React from 'react'
-import { ActivityIndicator, Text, View } from 'react-native'
+import { Image, ImagePropsBase, Text, View } from 'react-native'
 
 const StatisticCard = (
     // Parameters
@@ -12,7 +12,7 @@ const StatisticCard = (
         rootStyle?: string,
         titleStyle?: string,
         dataStyle?: string,
-        isLoading: boolean
+        isLoading: boolean,
   }) => {
 
     const customStyles = {
@@ -32,13 +32,13 @@ const StatisticCard = (
 
 
     return (
-      <View style={customStyles.shadow} className={`flex w-full flex-row justify-between items-center bg-slate-100 rounded-xl shadow-xl p-5 mb-5 ${rootStyle}`}>
-          <View>
+      <View style={customStyles.shadow} className={`flex space-x-4 flex-row justify-between items-center bg-slate-100 rounded-xl shadow-xl p-5 mb-5 ${rootStyle}`}>
+          <View className='flex-1'>
               <Text className={`font-semibold text-xl ${titleStyle}`}>{title}</Text>
               {!isLoading ? 
                   <Text className={`font-semibold text-3xl ${dataStyle}`}>{data?.toString()}</Text> 
                 :
-                  <View className={`font-semibold bg-slate-800 text-3xl rounded-lg w-[80%] h-8 ${dataStyle}`}/>
+                  <View className={`font-semibold grow bg-slate-800 w-full text-3xl rounded-lg h-8 ${dataStyle}`}/>
               }
           </View>
       </View>

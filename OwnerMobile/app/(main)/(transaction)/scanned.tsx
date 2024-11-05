@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, ActivityIndicator, RefreshControl } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useGlobalContext } from '@/Context/GlobalProvider';
-import { router, useNavigation } from 'expo-router';
+import { router, useFocusEffect, useNavigation } from 'expo-router';
 import ContentBody from '@/components/ContentBody';
 import { fetchBookings, fetchCashOnlyBookingHistory, fetchCurrentMonthBookingHistory, fetchEwalletOnlyBookingHistory, fetchPreviousMonthBookingHistory, fetchScannedBookingHistory, fetchSuccessfulBookingHistory, fetchVerifiedCurrentMonthBookingHistory } from '@/utils/BookingService';
 import Toast from 'react-native-toast-message';
@@ -58,9 +58,11 @@ const scanned = () => {
             })
     }
 
-    useEffect(() => {
-        refreshPageBooking()
-    }, [])
+    useFocusEffect(
+        useCallback(() => {
+            refreshPageBooking()
+        }, [])
+    );
 
     const handleFilter = (searchText: string | undefined) => {
         setIsLoading(true)

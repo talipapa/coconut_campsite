@@ -1,5 +1,7 @@
 import axiosLab from 'axios';
 import { getToken, setToken } from './TokenService';
+import { router } from 'expo-router';
+
 
 const axios = axiosLab.create({
     baseURL: `${process.env.EXPO_PUBLIC_BACKEND_API_URL}/api/${process.env.EXPO_PUBLIC_BACKEND_API_VERSION}`,
@@ -24,9 +26,9 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     response => response,
     error => {
-        if (error.response?.status === 401 && error.response?.data?.message === 'Unauthenticated') {
+        if (error.response?.status === 401 && error.response?.data?.message === 'Unauthenticated.') {
             setToken(null).then(() => {
-                window.location.reload()
+                router.replace('/login')
             })
         }
         return Promise.reject(error);

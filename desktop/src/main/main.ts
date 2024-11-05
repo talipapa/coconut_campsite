@@ -60,14 +60,13 @@ ipcMain.handle('generate-pdf', async (event, reservationData) => {
     if (!filePath) {
       return { success: false, error: 'Save canceled by user' };
     }
-
-    // Load the HTML template and inject reservation data
-    const htmlTemplate = fs.readFileSync(
-      path.join(__dirname, '../../assets/Templates/reservationTemplate.html'),
-      'utf8'
+    const htmlTemplatePath = path.join(
+      app.isPackaged ? process.resourcesPath : __dirname, // if packaged, use resourcesPath
+      'assets', 'Templates', 'reservationTemplate.html'
     );
 
-    // Inject data into the HTML template
+    const htmlTemplate = fs.readFileSync(htmlTemplatePath, 'utf8'); 
+  
     const rows = reservationData
     .map((reservation: IBookingData) => {
       console.log(reservation); // Log the reservation object
@@ -89,14 +88,17 @@ ipcMain.handle('generate-pdf', async (event, reservationData) => {
       `<tbody>${rows}</tbody>`
     );
 
-    // Launch Puppeteer and convert the HTML to a PDF
-    const browser = await puppeteer.launch();
+
+    const browser = await puppeteer.launch({
+      executablePath: puppeteer.executablePath(),
+      headless: false, 
+    });
+
     const page = await browser.newPage();
     await page.setContent(populatedHtml);
 
-    // Generate PDF
     const pdf = await page.pdf({
-      path: filePath, // Save the PDF to the specified location
+      path: filePath, 
       format: 'A4',
       margin: {
         top: '20px',
@@ -115,6 +117,14 @@ ipcMain.handle('generate-pdf', async (event, reservationData) => {
     return { success: true, filePath };
   } catch (error) {
     console.error('Failed to generate PDF:', error);
+    // Get the path to the Downloads folder
+    const downloadsFolder = app.getPath('downloads');
+    const errorLogPath = path.join(downloadsFolder, 'generate-pdf-error-log.txt');
+
+    // Write the error message to the error log file
+    const errorMessage = `Error occurred on ${new Date().toISOString()}:\n${(error as Error).stack || (error as Error).message}\n\n`;
+    fs.appendFileSync(errorLogPath, errorMessage, 'utf8');  // Append error to the log file
+
     return { success: false, error: (error as Error).message };
   }
 });

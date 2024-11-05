@@ -16,9 +16,9 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const [formData, setFormData] = useState<IFormData>({
-        email: '',
-        password: '',
-        device_name: 'desktop'
+        email: 'davilajohn810@gmail.com',
+        password: 'elaina181017',
+        device_name: 'kiosk'
     });
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
     const [serverAccountError, setServerAccountError] = useState<string | null>(null);
@@ -28,10 +28,14 @@ const Login = () => {
         if (accessToken) {
             navigate('/dashboard');
         }
+
+        handleLogin()
     }, []);
 
-    const handleLogin = async (e: any) => {
-        e.preventDefault()
+    const handleLogin = async (e?: any) => {
+        if (e) {
+            e.preventDefault();
+        }
         setErrors({});
         setServerAccountError(null);
         setIsLoading(true);

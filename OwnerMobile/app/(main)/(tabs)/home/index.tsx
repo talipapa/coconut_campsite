@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Button, RefreshControl } from 'react-native'
+import { View, Text, StyleSheet, Button, RefreshControl, TouchableOpacity, Image } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MainHeader from '@/components/MainHeader'
@@ -12,6 +12,7 @@ import BookingList from '@/components/home/BookingList'
 import { fetchBookings, fetchWalletDetails } from '@/utils/BookingService'
 import FormatCurrency from '@/utils/FormatCurrency'
 import Toast from 'react-native-toast-message'
+import StatisticCard from '@/components/StatisticCard'
 
 interface walletSummaryType {
   wallet: number,
@@ -98,6 +99,19 @@ const index = () => {
               </View>
             </View>
           </View>
+          <TouchableOpacity activeOpacity={1} onPress={() => router.push('/scanned' as Href)}>
+            <View className={`flex space-x-4 flex-row justify-between items-center rounded-xl shadow-xl p-5 mb-5 bg-slate-900 h-[100px] w-full mt-4`}>
+                <Image source={require('@/assets/icons/camping.png')} tintColor={"#5CBCB6"} className='w-12 h-12'/>
+                <View className='flex-1 grow'>
+                    <Text className={`font-semibold text-xl text-white`}>View scanned bookings</Text>
+                    {!isLoading ? 
+                        <Text className={`font-semibold  w-full h-8 text-green-500 text-xs mt-1`}>View and confirm campers that visited your campsite here</Text> 
+                      :
+                        <View className={`font-semibold bg-slate-800 w-full rounded-lg grow`}/>
+                    }
+                </View>
+            </View>
+          </TouchableOpacity>
           <BookingList isLoading={isLoading} bookings={bookings}/>
         </View>
       </ContentBody>
