@@ -38,3 +38,5 @@ git commit -m "$commit_message"
 
 # Confirm success
 echo "Committed with message: '$commit_message'"
+
+git push
