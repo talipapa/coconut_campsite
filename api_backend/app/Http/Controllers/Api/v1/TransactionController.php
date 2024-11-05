@@ -161,7 +161,7 @@ class TransactionController extends Controller
 
                     $xenditRequest = [
                         'reference_id' => $transaction->id,
-                        'amount' => floatval($validated['price']),
+                        'amount' => floatval($validated['price'] + $fee),
                         'currency' => 'PHP',
                         'checkout_method' => 'ONE_TIME_PAYMENT',
                         'channel_code' => $validated['paymentMethod'],
