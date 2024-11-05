@@ -24,29 +24,29 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "api_backend/app/",
-            "Database\\Factories\\": "api_backend/database/factories/",
-            "Database\\Seeders\\": "api_backend/database/seeders/"
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "api_backend/tests/"
+            "Tests\\": "tests/"
         }
     },
     "scripts": {
         "post-autoload-dump": [
-            "api_backend/Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@cd api_backend \" php artisan package:discover --ansi"
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
-            "@cd api_backend \" php artisan vendor:publish --tag=laravel-assets --ansi --force"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
         "post-root-package-install": [
-            "@cd api_backend \" php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@cd api_backend \" php artisan key:generate --ansi",
+            "@php artisan key:generate --ansi",
             "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --graceful --ansi"
         ]
