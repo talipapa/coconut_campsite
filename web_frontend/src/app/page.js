@@ -211,7 +211,7 @@ const Home = () => {
                     </div>
 
                     <div className=' min-h-[300px] w-full flex flex-col justify-between space-y-12 items-start'>
-                        <div className='hidden md:block columns-1 md:columns-3'>
+                        <div className='columns-1 md:columns-3 space-y-5 md:space-y-0'>
                             <AntImage  src="/img/gallery/gallery1.jpg" />
                             <AntImage src="/img/gallery/gallery2.jpg" />
                             <AntImage src="/img/gallery/gallery3.jpg" />
