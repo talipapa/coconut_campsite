@@ -186,23 +186,32 @@ class BookingController extends Controller
             'check_in' => 'required',
         ]);
 
-        $booking->update([
-            'booking_type' => $validated['booking_type'],
-            'check_in' => Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d'),
-            'check_out' => Carbon::parse($validated['check_in'])->addDay(1)->timezone('Asia/Manila')->format('Y-m-d'),
-        ]);
-
-        $booking->save();
-
-        // Change value of date & booking type
-
-        // Create a new refund record to refund_table and store the refund status
-
-
-        // Save the changes
-        
-
-        return response()->json(['message' => 'Reschedule request sent'], 200);
+        switch ($validated['booking_type']) {
+            case 'daytour':
+                $booking->update([
+                    'booking_type' => $validated['booking_type'],
+                    'check_in' => Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d'),
+                    'check_out' => Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d'),
+                ]);
+                $booking->save();
+                return response()->json(['message' => 'Reschedule request sent'], 200);
+            break;
+            case 'overnight':
+                $booking->update([
+                    'booking_type' => $validated['booking_type'],
+                    'check_in' => Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d'),
+                    'check_out' => Carbon::parse($validated['check_in'])->addDay(1)->timezone('Asia/Manila')->format('Y-m-d'),
+                ]);
+                $booking->save();
+                return response()->json(['message' => 'Reschedule request sent'], 200);
+                # code...
+            break;
+            
+            default:
+                # code...
+                return response()->json(['message' => 'Invalid booking type'], 400);
+            break;
+        }
     }
 
 

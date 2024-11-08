@@ -309,15 +309,34 @@ class BookingController extends Controller
             'check_in' => 'required',
         ]);
 
-        $booking->update([
-            'booking_type' => $validated['booking_type'],
-            'check_in' => Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d'),
-            'check_out' => Carbon::parse($validated['check_in'])->addDay(1)->timezone('Asia/Manila')->format('Y-m-d'),
-        ]);
+        switch ($validated['booking_type']) {
+            case 'daytour':
+                $booking->update([
+                    'booking_type' => $validated['booking_type'],
+                    'check_in' => Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d'),
+                    'check_out' => Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d'),
+                ]);
+        
+                $booking->save();        
+                return response()->json($booking, 200);
+                break;
+            case 'overnight':
+                $booking->update([
+                    'booking_type' => $validated['booking_type'],
+                    'check_in' => Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d'),
+                    'check_out' => Carbon::parse($validated['check_in'])->addDay(1)->timezone('Asia/Manila')->format('Y-m-d'),
+                ]);
+        
+                $booking->save();
+        
+                return response()->json($booking, 200);
 
-        $booking->save();
+                break;
+            default:
+                return response()->json(['message' => 'Invalid booking type'], 400);
+                break;
+        }
 
-        return response()->json($booking, 200);
     }
 
     public function bookingAction(Request $request, Booking $booking){
