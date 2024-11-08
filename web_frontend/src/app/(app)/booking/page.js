@@ -316,8 +316,43 @@ export default function Page() {
                         <p className="text-[#555555]">Thank you for choosing Coconut Campsite for your forthcoming visit to Wawa Dam. It is our pleasure to confirm your reservation!</p>
                     </div>
 
+                    
+                    {/* Booking date */}
+                    <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 justify-between items-start w-full border-b-2 border-slate-400 md:border-slate-300 pb-10">
+                        <div className="1/4">
+                            <span className="font-semibold">When would you like to make the reservation?</span>
+                        </div>
+                        <div className="basis-1/2 grid grid-cols-1 gap-5 w-full">
+                            {/* Check in field */}
+                            <div className="space-y-2 w-full">
+                                <label htmlFor="checkInDate">Check in</label>
+                                <DatePicker className="w-full h-[50px] text-[#3D736C] font-bold"
+                                    id="checkInDate"
+                                    minDate={dayjs().add(2, 'day')}
+                                    value={checkInDate}
+                                    size="large"
+                                    onChange={date => setCheckInDate(date)}
+                                    maxDate={dayjs().add(3, 'month')}
+                                    format="MMMM DD, YYYY"
+                                    // disabledDate={disabledDate}
+                                    // disabledTime={disabledDateTime}
+                                />
+                                <InputError messages={errors.checkInDate} className="mt-2" />
+                            </div>
+                            {/* Booking type field */}
+                            <div className="space-y-2">
+                                <div className="space-x-4">
+                                    <label htmlFor="bookingType">Booking type</label>
+                                    {/* <span className="text-[#555555]">Price ₱ {isCabin ? cabinPrice : "0.00"}</span> */}
+                                </div>
+                                <Radio.Group value={bookingType} onChange={event => setBookingType(event.target.value)} block options={bookingTypeOption} defaultValue="daytour" optionType="button" buttonStyle="solid" size="large" id="bookingType" />
+                                <InputError messages={errors.bookingType} className="mt-2" />
+
+                            </div>
+                        </div>
+                    </div>
                     {/* Reservation holder details */}
-                    <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 justify-between items-start w-full">
+                    <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 justify-between items-start w-full border-b-2 border-slate-400 md:border-slate-300 pb-10">
                         <div className="1/4">
                             <span className="font-semibold">Reservation holder details</span>
                         </div>
@@ -349,42 +384,10 @@ export default function Page() {
                         </div>
                     </div>
 
-                    {/* Booking date */}
-                    <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 justify-between items-start w-full">
-                        <div className="1/4">
-                            <span className="font-semibold">When would you like to make the reservation?</span>
-                        </div>
-                        <div className="basis-1/2 grid grid-cols-1 gap-5 w-full">
-                            {/* Check in field */}
-                            <div className="space-y-2 w-full">
-                                <label htmlFor="checkInDate">Check in</label>
-                                <DatePicker className="w-full"
-                                    id="checkInDate"
-                                    minDate={dayjs().add(2, 'day')}
-                                    value={checkInDate}
-                                    onChange={date => setCheckInDate(date)}
-                                    maxDate={dayjs().add(3, 'month')}
-                                    format="MMMM DD, YYYY"
-                                    // disabledDate={disabledDate}
-                                    // disabledTime={disabledDateTime}
-                                />
-                                <InputError messages={errors.checkInDate} className="mt-2" />
-                            </div>
-                            {/* Booking type field */}
-                            <div className="space-y-2">
-                                <div className="space-x-4">
-                                    <label htmlFor="bookingType">Booking type</label>
-                                    {/* <span className="text-[#555555]">Price ₱ {isCabin ? cabinPrice : "0.00"}</span> */}
-                                </div>
-                                <Radio.Group value={bookingType} onChange={event => setBookingType(event.target.value)} block options={bookingTypeOption} defaultValue="daytour" optionType="button" buttonStyle="solid" size="large" id="bookingType" />
-                                <InputError messages={errors.bookingType} className="mt-2" />
 
-                            </div>
-                        </div>
-                    </div>
 
                     {/* PAX Counts */}
-                    <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 justify-between items-start w-full">
+                    <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 justify-between items-start w-full border-b-2 border-slate-400 md:border-slate-300 pb-10">
                         <div className="1/4">
                             <span className="font-semibold">How many persons you booking for?</span>
                         </div>
@@ -414,7 +417,7 @@ export default function Page() {
                     </div>
 
                     {/* Camping setup */}
-                    <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 justify-between items-start w-full">
+                    <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 justify-between items-start w-full border-b-2 border-slate-400 md:border-slate-300 pb-10">
                         <div className="1/4">
                             <span className="font-semibold">Camping setup</span>
                         </div>
