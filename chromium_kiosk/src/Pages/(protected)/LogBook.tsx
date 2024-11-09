@@ -5,7 +5,7 @@ import { AnimatePresence, motion, Variants } from 'framer-motion';
 import PageWrapper from '../PageWrapper';
 import { FaSquareMinus } from "react-icons/fa6";
 import { FaUserPlus } from "react-icons/fa";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeftLong } from "react-icons/fa6";
 
 interface ICamper {
     id: number;
@@ -52,6 +52,12 @@ const LogBook = () => {
         exit: { x: 100, opacity: 0 }
     };
 
+
+    const submitCamperName = () => {
+        console.log(campersName);
+    };
+
+
     useEffect(() => {
         // Scroll to the top of the list whenever a new camper is added
         if (isNewCamperAdded && listRef.current) {
@@ -60,52 +66,31 @@ const LogBook = () => {
         }
     }, [campersName, isNewCamperAdded]);
 
-    useEffect(() => {
-        // Submit form in delay if campersName array length reach 10
-        if (campersName.length === 10) {
-            setFormDelaySubmit(5000);
-        }
-        const timeout = setTimeout(() => {
-            setFormDelaySubmit(0);
-        }, formDelaySubmit);
-
-        return () => clearTimeout(timeout);
-    }, [formDelaySubmit])
 
     return (
         <PageWrapper contentClass='justify-start'>
             <div className='w-full h-full flex flex-col'>
-                <div className='flex flex-col mx-10 h-full space-y-6 items-start'>
-                    <Button type='primary' onClick={() => navigate(-1)}>
-                        <FaArrowLeft className='text-xl' /> Back
-                    </Button>
+                <div className='flex flex-col mx-10 h-full space-y-10 items-start my-5'>
+                    <FaArrowLeftLong className='text-5xl transition-all duration-100 hover:scale-125 active:scale-110' onClick={() => navigate("/dashboard", {replace: true})}/>
                     <div className='w-full h-full flex flex-col items-start justify-start text-3xl font-bold'>
-                        <div className='w-full h-full flex flex-col gap-10 items-start'>
+                        <div className='w-full h-full flex flex-col md:flex-row-reverse gap-10 items-start'>
                             <div className='w-full h-full relative space-y-12'>
                                 <div className='h-full w-full'>
-                                    <div className='flex flex-row items-center justify-between'>
+                                    <div className='flex flex-row items-center justify-between mb-3'>
                                         <h1 className='text-lg font-bold text-black uppercase'>Arrival logbook</h1>
                                         <div className='text-lg font-bold text-slate-500'>
-                                            <span className='text-green-700'>{campersName.length}</span> / 10
+                                            <span className='text-green-700'>{campersName.length}</span> / 5
                                         </div>
                                     </div>
 
                                     <div className='w-full h-[50px] items-center flex flex-row gap-7'>
-                                        <input
-                                            type="text"
-                                            placeholder='Input full name'
-                                            value={newCamper}
-                                            onChange={(e) => setNewCamper(e.target.value)}
-                                            className='w-full  bg-slate-100 px-4 h-full text-[1.3rem] rounded-md border-2 border-blue-700'
-                                        />
-
                                         {
-                                            campersName.length >= 10 ? (
+                                            campersName.length >= 5 ? (
                                                 <Button
                                                     type='primary'
                                                 
-                                                    className=' text-xl px-16 gap-4 bg-green-700 h-full'
-                                                    onClick={addCamper}
+                                                    className=' text-xl px-6 gap-4 bg-green-700 h-full'
+                                                    onClick={submitCamperName}
                                                 >
                                                     <FaUserPlus className='text-2xl' /> Submit
                                                 </Button>
@@ -113,13 +98,20 @@ const LogBook = () => {
                                             :
                                                 <Button
                                                     type='primary'
-                                                    className='text-xl px-16 gap-4 h-full'
+                                                    className='text-xl px-6 gap-4 h-full'
                                                     onClick={addCamper}
                                                     disabled={campersName.length >= 10}
                                                 >
                                                     <FaUserPlus className='text-2xl' /> Add
                                                 </Button>
                                         }
+                                        <input
+                                            type="text"
+                                            placeholder='Input full name'
+                                            value={newCamper}
+                                            onChange={(e) => setNewCamper(e.target.value)}
+                                            className='w-full  bg-slate-100 px-4 h-full text-[1.3rem] rounded-md border-2 border-blue-700'
+                                        />
                                     </div>
                                 </div>
 
@@ -155,7 +147,7 @@ const LogBook = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className='flex flex-col  bg-slate-700 p-5 rounded-xl w-full'>
+                            <div className='flex flex-col  bg-slate-700 p-5 rounded-xl w-full md:w-[40vw]'>
                                 <h1 className='text-sm font-bold text-slate-300'>Booking id</h1>
                                 <h1 className='text-xl font-bold text-white'>{id}</h1>
                             </div>

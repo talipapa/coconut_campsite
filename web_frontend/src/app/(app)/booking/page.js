@@ -290,7 +290,7 @@ export default function Page() {
         <>
             {contextHolder}
             <div>
-                <header className="bg-white shadow">
+                <header className="bg-[#B1CE90] shadow">
                     <div className="max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
 
                         <h2 className="font-semibold text-xl text-gray-800 leading-tight">
@@ -303,7 +303,7 @@ export default function Page() {
                                 title: <span className="text-black cursor-pointer">Booking</span>,
                             },
                             {
-                                title: <a href="/booking" className="text-slate-400">Checkout</a>,
+                                title: <a href="/booking" className="text-black">Checkout</a>,
                             }
                             ]}
                         />

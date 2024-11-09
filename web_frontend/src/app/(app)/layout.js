@@ -42,7 +42,7 @@ const AppLayout = ({ children }) => {
             <div className="min-h-screen bg-gray-100">
                 <AuthenticatedNavbar user={user} />
 
-                <main className='min-h-[100vh]'>
+                <main>
                     {children}    
                 </main>
 

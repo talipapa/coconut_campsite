@@ -18,7 +18,7 @@ const CheckoutCard = ({totalPrice, booking_id}) => {
       },
   ]
   return (
-    <div className="bg-white w-full h-full px-[30px] py-[50px] flex flex-col justify-between space-y-6">
+    <div className="col-span-2 h-full px-[50px] bg-white lg:px-[200px] py-[50px] flex flex-col justify-center space-y-6 text-black">
     <Radio.Group
         block
         value={componentPaymentMethod}
