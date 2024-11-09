@@ -23,13 +23,13 @@ class BookingController extends Controller
         
         // Check if $page is number
         if (is_numeric($page) && $page > 0) {
-            $bookings = Booking::whereIn('status', ['SCANNED', 'PAID', 'CASH_PENDING'])->orderBy('check_in', 'asc')->paginate($page);
+            $bookings = Booking::whereIn('status', ['PAID', 'CASH_PENDING'])->orderBy('check_in', 'asc')->paginate($page);
 
             // $bookings = Booking::whereHas('transaction', function ($query) {
             //     $query->whereIn('status', ['CASH_PENDING', 'SUCCEEDED']);
             // })->orderBy('check_in', 'asc')->paginate($page);
         } else {
-            $bookings = Booking::whereIn('status', ['SCANNED', 'PAID', 'CASH_PENDING'])->orderBy('check_in', 'asc');
+            $bookings = Booking::whereIn('status', ['PAID', 'CASH_PENDING'])->orderBy('check_in', 'asc');
             // $bookings = Booking::all()->filter(function ($booking) {
             //     return $booking->transaction !== null && in_array($booking->transaction->status, ['CASH_PENDING', 'SUCCEEDED']);
             // })->sortByAsc('check_in');
