@@ -377,8 +377,8 @@ export default function Page() {
                             </div>
                             {/* Tel num field */}
                             <div className="space-y-2">
-                                <label htmlFor="telNumber">Telephone number</label>
-                                <Input size="large" value={telNumber} onChange={event=>setTelNumber(event.target.value)} addonBefore="+63" id="telNumber" placeholder="992 5606 298"/>
+                                <label htmlFor="telNumber">Telephone number <span className="text-slate-400">(ex: 9921234567)</span></label>
+                                <Input size="large" value={telNumber} onChange={event=>setTelNumber(event.target.value)} addonBefore="+63" id="telNumber" placeholder="9921234567"/>
                                 <InputError messages={errors.telNumber} className="mt-2" />
                             </div>
                         </div>

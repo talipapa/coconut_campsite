@@ -10,9 +10,6 @@ use Illuminate\Support\Facades\Log;
 
 class KioskController extends Controller
 {
-
-    
-    
     public function scanQrCode(Request $request)
     {
         Log::info($request->all());
@@ -49,6 +46,27 @@ class KioskController extends Controller
 
         return response()->json([
             'message' => 'QR code scanned successfully',
+        ]);
+    }
+
+    public function inputLogBook(Request $request){
+        $validated = $request->validate([
+            'qr_code' => 'required|string',
+            'camper_names' => 'required'
+        ]);
+
+        $booking = Booking::find($validated['qr_code']);
+        if (!$booking) {
+            return response()->json([
+                'message' => 'QR code not found',
+            ], 404);
+        }
+
+        $booking->log_book = $validated['log_book'];
+        $booking->save();
+
+        return response()->json([
+            'message' => 'Log book updated successfully',
         ]);
     }
 }

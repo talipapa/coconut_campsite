@@ -21,6 +21,7 @@ const LogBook = () => {
     const [nextId, setNextId] = useState(4);
     const listRef = useRef<HTMLDivElement | null>(null);
     const [isNewCamperAdded, setIsNewCamperAdded] = useState(false);
+    const [formDelaySubmit, setFormDelaySubmit] = useState(5000);
 
     const handleNameChange = (id: number, newName: string) => {
         setCampersName(campersName.map(camper =>
@@ -59,6 +60,18 @@ const LogBook = () => {
         }
     }, [campersName, isNewCamperAdded]);
 
+    useEffect(() => {
+        // Submit form in delay if campersName array length reach 10
+        if (campersName.length === 10) {
+            setFormDelaySubmit(5000);
+        }
+        const timeout = setTimeout(() => {
+            setFormDelaySubmit(0);
+        }, formDelaySubmit);
+
+        return () => clearTimeout(timeout);
+    }, [formDelaySubmit])
+
     return (
         <PageWrapper contentClass='justify-start'>
             <div className='w-full h-full flex flex-col'>
@@ -67,12 +80,7 @@ const LogBook = () => {
                         <FaArrowLeft className='text-xl' /> Back
                     </Button>
                     <div className='w-full h-full flex flex-col items-start justify-start text-3xl font-bold'>
-                        <div className='w-full h-full flex flex-row gap-10 items-start'>
-                            <div className='flex flex-col  bg-slate-700 p-5 rounded-xl w-[35vw]'>
-                                <h1 className='text-sm font-bold text-slate-300'>Booking id</h1>
-                                <h1 className='text-xl font-bold text-white'>{id}</h1>
-                            </div>
-
+                        <div className='w-full h-full flex flex-col gap-10 items-start'>
                             <div className='w-full h-full relative space-y-12'>
                                 <div className='h-full w-full'>
                                     <div className='flex flex-row items-center justify-between'>
@@ -146,6 +154,10 @@ const LogBook = () => {
                                         </AnimatePresence>
                                     </div>
                                 </div>
+                            </div>
+                            <div className='flex flex-col  bg-slate-700 p-5 rounded-xl w-full'>
+                                <h1 className='text-sm font-bold text-slate-300'>Booking id</h1>
+                                <h1 className='text-xl font-bold text-white'>{id}</h1>
                             </div>
                         </div>
                     </div>

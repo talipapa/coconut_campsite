@@ -176,10 +176,7 @@ class BookingController extends Controller
 
     }
 
-    // TODO LIST: 2
-    // Reschedule booking & change booking type
     public function rescheduleBooking(Request $request, Booking $booking){
-        // Verify if the booking exists
 
         $validated = $request->validate([
             'booking_type' => 'required',
@@ -243,7 +240,7 @@ class BookingController extends Controller
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required',
-            'telNumber' => 'required',
+            'telNumber' => 'required|regex:/^9\d{9}$/',
             'adultCount' => 'required|numeric|min:1|max:20',
             'childCount' => 'required|numeric|min:0|max:10',
             'checkInDate' => 'required',

@@ -30,6 +30,7 @@ const QrCard = ({id}) => {
         <div className="w-full flex flex-col items-center space-y-4">
           <QRCode
             value={id}
+            size={300}
           />
           <Alert
             message="Important note!"

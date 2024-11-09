@@ -71,13 +71,6 @@ const PageWrapper = ({children, contentClass} : {children: React.ReactElement, c
     return (
         <Layout className='min-h-[100vh]'>
             <Layout>
-                <Header className='bg-[#5CBCB6] px-6 py-16 flex flex-row items-center justify-between border-slate-200 border-b-2'>
-                  <div className='flex flex-row items-center w-full justify-center space-x-4'>
-                    <img src='/logo.png' alt='logo' className='w-16 h-16' />
-                    <span className='text-2xl font-bold uppercase'>Coconut campsite | KIOSK</span> 
-                  </div>
-                </Header>
-
                 <Content className={`bg-[#dfdede] overflow-hidden flex flex-col items-center  relative py-4 ${contentClass ? contentClass : 'justify-center'}`}>
                     {children}
                 </Content>
