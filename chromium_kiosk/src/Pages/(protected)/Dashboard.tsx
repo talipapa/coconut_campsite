@@ -81,12 +81,13 @@ const Dashboard = () => {
       <PageWrapper>
         <>
           {contextHolder}
-          <motion.div
+          <motion.div className='flex flex-col items-center justify-center space-y-10'
             initial={{ opacity: 0, y: -200 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 200 }}
             
           >
+            <img src="/qr-code.gif" alt="Success" className="w-[25vw] rounded-2xl" />
             {isLoading ? (
               <div className='flex flex-col items-center'>
                 <motion.span
@@ -102,6 +103,7 @@ const Dashboard = () => {
                 </motion.span>
               </div>
             ) : (
+              
               <motion.span
                 animate={{ opacity: [0.3, 1, 0.3] }}
                 transition={{
@@ -111,7 +113,7 @@ const Dashboard = () => {
                 }}
                 className='text-2xl font-bold'
               >
-                Scanning for input...
+                Scanner is waiting for QR Code....
               </motion.span>
             )}
           </motion.div>

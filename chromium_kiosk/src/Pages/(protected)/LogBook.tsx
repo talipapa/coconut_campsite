@@ -1,4 +1,4 @@
-import { Button } from 'antd';
+import { Button, Skeleton } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AnimatePresence, motion, Variants } from 'framer-motion';
@@ -6,22 +6,52 @@ import PageWrapper from '../PageWrapper';
 import { FaSquareMinus } from "react-icons/fa6";
 import { FaUserPlus } from "react-icons/fa";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import axios from '../../Utils/auth';
+import { FaSun } from "react-icons/fa";
+import { WiMoonAltWaningCrescent4 } from "react-icons/wi";
+import { IoBonfireOutline } from "react-icons/io5";
+import { FaTentArrowDownToLine } from "react-icons/fa6";
+import { MdOutlineCabin } from "react-icons/md";
+import ProtectedMiddleware from './ProtectedMiddleware';
+
 
 interface ICamper {
     id: number;
     name: string;
 }
 
+interface ITransaction {
+    price: number;
+    fee: number;
+}
+
+interface IBooking {
+    id: number;
+    total_campers: number;
+    payment_type: 'XENDIT'|'CASH';
+    booking_type: 'daytour'|'overnight';
+    email: string;
+    tel_number: string;
+    check_in: string;
+    check_out: string;
+    bonfire_kit_count: number;
+    is_cabin: true;
+    tent_pitching_count: number;
+    transaction: ITransaction;
+}
+
+
 const LogBook = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-
+    const [isLoading, setIsLoading] = useState(true);
     const [campersName, setCampersName] = useState<ICamper[]>([]);
     const [newCamper, setNewCamper] = useState('');
     const [nextId, setNextId] = useState(4);
     const listRef = useRef<HTMLDivElement | null>(null);
     const [isNewCamperAdded, setIsNewCamperAdded] = useState(false);
     const [formDelaySubmit, setFormDelaySubmit] = useState(5000);
+    const [booking, setBooking] = useState<IBooking|undefined>();
 
     const handleNameChange = (id: number, newName: string) => {
         setCampersName(campersName.map(camper =>
@@ -34,11 +64,13 @@ const LogBook = () => {
     };
 
     const addCamper = () => {
-        if (newCamper.trim() !== '' && campersName.length < 10) {
-            setCampersName([{ id: nextId, name: newCamper }, ...campersName]);
-            setNewCamper('');
-            setNextId(nextId + 1);
-            setIsNewCamperAdded(true);
+        if (booking) {
+            if (newCamper.trim() !== '' && campersName.length < booking.total_campers) {
+                setCampersName([{ id: nextId, name: newCamper }, ...campersName]);
+                setNewCamper('');
+                setNextId(nextId + 1);
+                setIsNewCamperAdded(true);
+            }
         }
     };
 
@@ -54,8 +86,34 @@ const LogBook = () => {
 
 
     const submitCamperName = () => {
-        console.log(campersName);
+        setIsLoading(true);
+        axios.post(`/kiosk/logbook/${id}`, { camper_names: campersName.map(camper => camper.name) })
+            .then((res) => {
+                navigate(`/logbook/${id}/success`, {replace: true});
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            })
     };
+
+
+    useEffect(() => {
+        setIsLoading(true);
+        axios.get(`/kiosk/logbook/${id}`)
+            .then((res) => {
+                setBooking(res.data['booking'])
+            })
+            .catch((err) => {
+                navigate('/dashboard', {replace: true});
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+
+    }, [])
 
 
     useEffect(() => {
@@ -66,96 +124,268 @@ const LogBook = () => {
         }
     }, [campersName, isNewCamperAdded]);
 
+    if (isLoading && !booking) {
+        return (
+            <PageWrapper contentClass='justify-start'>
+                <div className='w-full h-full flex flex-col'>
+                    <div className='flex flex-col mx-10 h-full space-y-10 items-start my-5'>
+                        <FaArrowLeftLong className='text-5xl transition-all duration-100 hover:scale-125 active:scale-110' onClick={() => navigate("/dashboard", {replace: true})}/>
+                        <div className='w-full h-full flex flex-col items-start justify-start text-3xl font-bold'>
+                            <div className='w-full h-full flex flex-col md:flex-row-reverse gap-10 items-start'>
+                                <div className='w-full h-full relative space-y-12'>
+                                    <div className='h-full w-full'>
+                                        <div className='flex flex-row items-center justify-between mb-3'>
+                                            <h1 className='text-lg font-bold text-black uppercase'>Arrival logbook</h1>
+                                            <div className='text-lg font-bold text-slate-500'>
+                                                - / -
+                                            </div>
+                                        </div>
 
-    return (
-        <PageWrapper contentClass='justify-start'>
-            <div className='w-full h-full flex flex-col'>
-                <div className='flex flex-col mx-10 h-full space-y-10 items-start my-5'>
-                    <FaArrowLeftLong className='text-5xl transition-all duration-100 hover:scale-125 active:scale-110' onClick={() => navigate("/dashboard", {replace: true})}/>
-                    <div className='w-full h-full flex flex-col items-start justify-start text-3xl font-bold'>
-                        <div className='w-full h-full flex flex-col md:flex-row-reverse gap-10 items-start'>
-                            <div className='w-full h-full relative space-y-12'>
-                                <div className='h-full w-full'>
-                                    <div className='flex flex-row items-center justify-between mb-3'>
-                                        <h1 className='text-lg font-bold text-black uppercase'>Arrival logbook</h1>
-                                        <div className='text-lg font-bold text-slate-500'>
-                                            <span className='text-green-700'>{campersName.length}</span> / 5
+                                        <div className='w-full h-[50px] items-center flex flex-row gap-7'>
+                                            {
+                                                campersName.length >= 10 ? (
+                                                    <Button
+                                                        type='primary'
+                                                    
+                                                        className=' text-xl px-6 gap-4 bg-green-700 h-full'
+                                                        onClick={submitCamperName}
+                                                        loading={isLoading}
+                                                    >
+                                                        <FaUserPlus className='text-2xl' /> Submit
+                                                    </Button>
+                                                )
+                                                :
+                                                    <Button
+                                                        type='primary'
+                                                        className='text-xl px-6 gap-4 h-full'
+                                                        onClick={addCamper}
+                                                        disabled={campersName.length >= 10}
+                                                    >
+                                                        <FaUserPlus className='text-2xl' /> Add
+                                                    </Button>
+                                            }
+                                            <input
+                                                type="text"
+                                                placeholder='Input full name'
+                                                value={newCamper}
+                                                onChange={(e) => setNewCamper(e.target.value)}
+                                                className='w-full  bg-slate-100 px-4 h-full text-[1.3rem] rounded-md border-2 border-blue-700'
+                                            />
                                         </div>
                                     </div>
 
-                                    <div className='w-full h-[50px] items-center flex flex-row gap-7'>
-                                        {
-                                            campersName.length >= 5 ? (
-                                                <Button
-                                                    type='primary'
-                                                
-                                                    className=' text-xl px-6 gap-4 bg-green-700 h-full'
-                                                    onClick={submitCamperName}
-                                                >
-                                                    <FaUserPlus className='text-2xl' /> Submit
-                                                </Button>
-                                            )
-                                            :
-                                                <Button
-                                                    type='primary'
-                                                    className='text-xl px-6 gap-4 h-full'
-                                                    onClick={addCamper}
-                                                    disabled={campersName.length >= 10}
-                                                >
-                                                    <FaUserPlus className='text-2xl' /> Add
-                                                </Button>
-                                        }
-                                        <input
-                                            type="text"
-                                            placeholder='Input full name'
-                                            value={newCamper}
-                                            onChange={(e) => setNewCamper(e.target.value)}
-                                            className='w-full  bg-slate-100 px-4 h-full text-[1.3rem] rounded-md border-2 border-blue-700'
-                                        />
+                                    <div className='h-full flex flex-col items-start space-y-8 w-full'>
+                                        <div
+                                            ref={listRef}
+                                            className='flex flex-col items-start space-y-6 w-full max-h-[50vh] pr-10 overflow-y-scroll overflow-x-hidden'
+                                        >
+                                            <AnimatePresence mode='popLayout'>
+                                                {campersName.map((camper, index) => (
+                                                    <motion.div
+                                                        key={camper.id}
+                                                        layout
+                                                        variants={variants}
+                                                        custom={index}
+                                                        initial='hidden'
+                                                        animate='visible'
+                                                        exit='exit'
+                                                        className='flex flex-row items-center justify-between w-full gap-10 select-none'
+                                                    >
+                                                        <input
+                                                            className='w-full bg-slate-100 px-4 py-2 text-[1.3rem] rounded-md border-2 border-slate-500'
+                                                            value={camper.name}
+                                                            onChange={(e) => handleNameChange(camper.id, e.target.value)}
+                                                        />
+                                                        <FaSquareMinus
+                                                            className='text-[50px] text-red-500 hover:scale-125 active:scale-105 transition-all duration-100'
+                                                            onClick={() => handleDelete(camper.id)}
+                                                        />
+                                                    </motion.div>
+                                                ))}
+                                            </AnimatePresence>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div className='h-full flex flex-col items-start space-y-8 w-full'>
-                                    <div
-                                        ref={listRef}
-                                        className='flex flex-col items-start space-y-6 w-full max-h-[50vh] pr-10 overflow-y-scroll overflow-x-hidden'
-                                    >
-                                        <AnimatePresence mode='popLayout'>
-                                            {campersName.map((camper, index) => (
-                                                <motion.div
-                                                    key={camper.id}
-                                                    layout
-                                                    variants={variants}
-                                                    custom={index}
-                                                    initial='hidden'
-                                                    animate='visible'
-                                                    exit='exit'
-                                                    className='flex flex-row items-center justify-between w-full gap-10 select-none'
-                                                >
-                                                    <input
-                                                        className='w-full bg-slate-100 px-4 py-2 text-[1.3rem] rounded-md border-2 border-slate-500'
-                                                        value={camper.name}
-                                                        onChange={(e) => handleNameChange(camper.id, e.target.value)}
-                                                    />
-                                                    <FaSquareMinus
-                                                        className='text-[50px] text-red-500 hover:scale-125 active:scale-105 transition-all duration-100'
-                                                        onClick={() => handleDelete(camper.id)}
-                                                    />
-                                                </motion.div>
-                                            ))}
-                                        </AnimatePresence>
+                                <div className='space-y-3'>
+                                    <div className='flex flex-col  bg-slate-700 p-5 rounded-xl w-full md:w-[40vw] space-y-3'>
+                                        <Skeleton active={true} className='w-full'/>
+                                    </div>
+                                    <div className='flex flex-col  bg-slate-700 p-5 rounded-xl w-full md:w-[40vw] space-y-3'>
+                                        <Skeleton active={true} className='w-full'/>
                                     </div>
                                 </div>
-                            </div>
-                            <div className='flex flex-col  bg-slate-700 p-5 rounded-xl w-full md:w-[40vw]'>
-                                <h1 className='text-sm font-bold text-slate-300'>Booking id</h1>
-                                <h1 className='text-xl font-bold text-white'>{id}</h1>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </PageWrapper>
+            </PageWrapper>
+        );
+    }
+
+
+    return (
+        <ProtectedMiddleware>
+            <PageWrapper contentClass='justify-start'>
+                <div className='w-full h-full flex flex-col'>
+                    <div className='flex flex-col mx-10 h-full space-y-10 items-start my-5'>
+                        <FaArrowLeftLong className='text-5xl transition-all duration-100 hover:scale-125 active:scale-110' onClick={() => navigate("/dashboard", {replace: true})}/>
+                        <div className='w-full h-full flex flex-col items-start justify-start text-3xl font-bold'>
+                            <div className='w-full h-full flex flex-col md:flex-row-reverse gap-10 items-start'>
+                                <div className='w-full h-full relative space-y-12'>
+                                    <div className='h-full w-full'>
+                                        <div className='flex flex-row items-center justify-between mb-3'>
+                                            <h1 className='text-lg font-bold text-black uppercase'>Arrival logbook</h1>
+                                            <div className='text-lg font-bold text-slate-500'>
+                                                <span className='text-green-700'>{campersName.length}</span> / {booking?.total_campers}
+                                            </div>
+                                        </div>
+
+                                        {booking && (
+                                            <div className='w-full h-[50px] items-center flex flex-row gap-7'>
+                                                {
+                                                    campersName.length >= booking.total_campers ? (
+                                                        <Button
+                                                            type='primary'
+                                                            loading={isLoading}
+                                                            className=' text-xl px-6 gap-4 bg-green-700 h-full'
+                                                            onClick={submitCamperName}
+                                                        >
+                                                            <FaUserPlus className='text-2xl' /> Submit
+                                                        </Button>
+                                                    )
+                                                    :
+                                                        <Button
+                                                            type='primary'
+                                                            className='text-xl px-6 gap-4 h-full'
+                                                            onClick={addCamper}
+                                                            loading={isLoading}
+                                                            disabled={campersName.length >= 10}
+                                                        >
+                                                            <FaUserPlus className='text-2xl' /> Add
+                                                        </Button>
+                                                }
+                                                <input
+                                                    type="text"
+                                                    placeholder='Input full name'
+                                                    value={newCamper}
+                                                    onChange={(e) => setNewCamper(e.target.value)}
+                                                    className='w-full  bg-slate-100 px-4 h-full text-[1.3rem] rounded-md border-2 border-blue-700'
+                                                />
+                                            </div>
+                                        )}
+
+                                    </div>
+
+                                    <div className='h-full flex flex-col items-start space-y-8 w-full'>
+                                        <div
+                                            ref={listRef}
+                                            className='flex flex-col items-start space-y-6 w-full max-h-[50vh] pr-10 overflow-y-scroll overflow-x-hidden'
+                                        >
+                                            <AnimatePresence mode='popLayout'>
+                                                {campersName.map((camper, index) => (
+                                                    <motion.div
+                                                        key={camper.id}
+                                                        layout
+                                                        variants={variants}
+                                                        custom={index}
+                                                        initial='hidden'
+                                                        animate='visible'
+                                                        exit='exit'
+                                                        className='flex flex-row items-center justify-between w-full gap-10 select-none'
+                                                    >
+                                                        <input
+                                                            className='w-full bg-slate-100 px-4 py-2 text-[1.3rem] rounded-md border-2 border-slate-500'
+                                                            value={camper.name}
+                                                            onChange={(e) => handleNameChange(camper.id, e.target.value)}
+                                                        />
+                                                        <FaSquareMinus
+                                                            className='text-[50px] text-red-500 hover:scale-125 active:scale-105 transition-all duration-100'
+                                                            onClick={() => handleDelete(camper.id)}
+                                                        />
+                                                    </motion.div>
+                                                ))}
+                                            </AnimatePresence>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='flex flex-col w-full md:w-[40vw] space-y-3'>
+                                <div className='bg-slate-700 p-5 rounded-xl space-y-3'>
+                                        <div className='flex flex-col items-center'>
+                                            {booking?.booking_type === 'daytour' ? (
+                                                <div className='bg-yellow-400 rounded-full px-5 flex items-center flex-row justify-center space-x-3'>
+                                                    <FaSun className='text-lg'/>
+                                                    <span className='text-lg'>Day tour</span>
+                                                </div>
+                                            ) : (
+                                                <div className='bg-slate-900 text-slate-100 rounded-full px-5 flex items-center flex-row justify-center space-x-3'>
+                                                    <WiMoonAltWaningCrescent4 className='text-lg'/>
+                                                    <span className='text-lg'>Overnight</span>
+                                                </div>
+                                            )}
+                                        </div>
+        
+                                        <div className='space-y-1'>
+                                            <h1 className='text-sm font-bold text-slate-300'>Bonfire kit</h1>
+                                            <div className='flex flex-row items-start space-x-3'>
+                                                <IoBonfireOutline className='text-md text-orange-400'/>
+                                                <h1 className='text-xl font-bold text-white'>{booking?.bonfire_kit_count}</h1>
+                                            </div>
+                                        </div>
+                                        <div className='space-y-1'>
+                                            <h1 className='text-sm font-bold text-slate-300'>Tent pitch</h1>
+                                            <div className='flex flex-row items-end space-x-3'>
+                                                <FaTentArrowDownToLine className='text-md text-blue-400'/>
+                                                <h1 className='text-xl font-bold text-white'>{booking?.tent_pitching_count}</h1>
+                                            </div>
+                                        </div>
+                                        <div className='space-y-1'>
+                                            <h1 className='text-sm font-bold text-slate-300'>Cabin?</h1>
+                                            <div className='flex flex-row items-end space-x-3'>
+                                                {booking?.is_cabin ? (
+                                                    <>
+                                                        <MdOutlineCabin className='text-md text-green-600'/>
+                                                        <h1 className='text-xl font-bold text-white'>YES</h1>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <MdOutlineCabin className='text-md text-red-600'/>
+                                                        <h1 className='text-xl font-bold text-white'>NO</h1>
+                                                    </>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className='bg-slate-700 p-5 rounded-xl space-y-3'>
+
+                                        <div>
+                                            <h1 className='text-sm font-bold text-slate-300'>Booking id</h1>
+                                            <h1 className='text-xl font-bold text-white'>{id}</h1>
+                                        </div>
+                                        <div>
+                                            <h1 className='text-sm font-bold text-slate-300'>Payment method</h1>
+                                            <h1 className='text-xl font-bold text-white'>{booking?.payment_type}</h1>
+                                        </div>
+                                        <div>
+                                            <h1 className='text-sm font-bold text-slate-300'>Total Campers</h1>
+                                            <h1 className='text-xl font-bold text-white'>{booking?.total_campers}</h1>
+                                        </div>
+                                        <div>
+                                            <h1 className='text-sm font-bold text-slate-300'>Email</h1>
+                                            <h1 className='text-xl font-bold text-white'>{booking?.email}</h1>
+                                        </div>
+                                        <div>
+                                            <h1 className='text-sm font-bold text-slate-300'>Mobile number</h1>
+                                            <h1 className='text-xl font-bold text-white'>{booking?.tel_number}</h1>
+                                        </div>
+                                    </div>
+                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </PageWrapper>
+        </ProtectedMiddleware>
     );
 };
 

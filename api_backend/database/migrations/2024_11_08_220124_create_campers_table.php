@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('campers', function (Blueprint $table) {
             $table->id();
+            $table->string('full_name');
+            $table->foreignIdFor(\App\Models\Booking::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

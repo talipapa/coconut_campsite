@@ -7,6 +7,7 @@ import NotFound from './Pages/NotFound';
 import Dashboard from './Pages/(protected)/Dashboard';
 import Login from './Pages/(public)/Login';
 import LogBook from './Pages/(protected)/LogBook';
+import LogBookSuccess from './Pages/(protected)/LogBookSuccess';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/logbook/:id" element={<LogBook />} />
+            <Route path="/logbook/:id/success" element={<LogBookSuccess />} />
             <Route path="/" element={<Login />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
