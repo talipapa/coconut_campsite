@@ -1,7 +1,7 @@
 import axiosLab from 'axios';
 
 const axios = axiosLab.create({
-    baseURL: `http://localhost:8000/api/v1`,
+    baseURL: `https://server.coconutcampsite.com/api/v1`,
     headers: {
         'Accept': 'application/json',
     }
