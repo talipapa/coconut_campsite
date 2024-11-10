@@ -66,7 +66,6 @@ export default async function Page() {
     if (bookingData.message === 'No bookings found'){
         redirect("/booking")
     }
-    console.log(bookingData)
 
     var xenditData 
     
