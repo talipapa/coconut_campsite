@@ -44,12 +44,12 @@ class BookingController extends Controller
     public function dashboardSummary(Request $request){
         try {
             // total earnings of current year
-            $totalYearEarnings = Transaction::whereYear('updated_at', Carbon::now()->year)
+            $totalYearEarnings = Booking::whereYear('updated_at', Carbon::now()->year)
             ->whereIn('status', ['VERIFIED'])
             ->sum('price');
 
             // total earnings this month
-            $totalMonthEarnings = Transaction::whereYear('updated_at', Carbon::now()->year)
+            $totalMonthEarnings = Booking::whereYear('updated_at', Carbon::now()->year)
             ->whereMonth('updated_at', Carbon::now()->month)
             ->where('status', ['VERIFIED', 'SCANNED', 'SUCCEEDED'])
             ->sum('price');
@@ -83,7 +83,7 @@ class BookingController extends Controller
             // cancelled booking this month
             $cancelledBookingThisMonth = Booking::whereYear('updated_at', Carbon::now()->year)
             ->whereMonth('updated_at', Carbon::now()->month)
-            ->whereIn('status', ['CANCELLED', 'VOIDED', 'REFUNDED', 'FAILED'])
+            ->whereIn('status', ['CANCELLED'])
             ->count();
     
 

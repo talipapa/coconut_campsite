@@ -14,7 +14,7 @@ class KioskController extends Controller
     
     public function scanQrCode(Request $request) {
         Log::info($request->all());
-        $bannedStatus = ['CASH_CANCELLED', 'VOIDED', 'REFUNDED', 'FAILED', 'PENDING'];
+        $bannedStatus = ['CASH_CANCELLED', 'VOIDED', 'REFUNDED', 'FAILED', 'PENDING', 'REFUND_PENDING'];
         $validated = $request->validate([
             'qr_code' => 'required|string'
         ]);
