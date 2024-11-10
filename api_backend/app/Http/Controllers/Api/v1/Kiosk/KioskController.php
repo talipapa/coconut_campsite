@@ -42,11 +42,9 @@ class KioskController extends Controller
             ], 400);
         }
 
-        $booking->status = 'SCANNED';
-        $booking->save(); 
 
         return response()->json([
-            'message' => 'QR code scanned successfully',
+            'message' => 'QR code has been verified!',
         ]);
     }
 
@@ -66,6 +64,8 @@ class KioskController extends Controller
         }, $validated['camper_names']);
 
         Camper::insert($insertData);
+        $booking->status = 'SCANNED';
+        $booking->save(); 
 
         return response()->json(['message' => 'Data inserted successfully.']);
     }
@@ -76,7 +76,6 @@ class KioskController extends Controller
                 'message' => 'Booking not found',
             ], 404);
         }
-
 
         return response()->json([
             'booking' => $booking,

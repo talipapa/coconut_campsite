@@ -16,9 +16,9 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const [formData, setFormData] = useState<IFormData>({
-        email: 'davilajohn810@gmail.com',
-        password: 'elaina181017',
-        device_name: 'kiosk'
+        email: 'kiosk_device@gmail.com',
+        password: 'kiosk1_device_181017',
+        device_name: 'kiosk_device_1'
     });
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
     const [serverAccountError, setServerAccountError] = useState<string | null>(null);
