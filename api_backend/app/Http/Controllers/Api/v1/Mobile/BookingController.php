@@ -44,12 +44,12 @@ class BookingController extends Controller
     public function dashboardSummary(Request $request){
         try {
             // total earnings of current year
-            $totalYearEarnings = Booking::whereYear('updated_at', Carbon::now()->year)
+            $totalYearEarnings = Transaction::whereYear('updated_at', Carbon::now()->year)
             ->whereIn('status', ['VERIFIED'])
             ->sum('price');
 
             // total earnings this month
-            $totalMonthEarnings = Booking::whereYear('updated_at', Carbon::now()->year)
+            $totalMonthEarnings = Transaction::whereYear('updated_at', Carbon::now()->year)
             ->whereMonth('updated_at', Carbon::now()->month)
             ->where('status', ['VERIFIED', 'SCANNED', 'SUCCEEDED'])
             ->sum('price');
@@ -58,32 +58,32 @@ class BookingController extends Controller
             $startOfPreviousMonth = Carbon::now()->startOfMonth()->subMonth();
             $endOfPreviousMonth = Carbon::now()->subMonth()->endOfMonth();
 
-            $totalPreviousMonthEarnings = Booking::whereBetween('updated_at', [$startOfPreviousMonth, $endOfPreviousMonth])->whereIn('status', ['VERIFIED'])->sum('price');
+            $totalPreviousMonthEarnings = Transaction::whereBetween('updated_at', [$startOfPreviousMonth, $endOfPreviousMonth])->whereIn('status', ['VERIFIED'])->sum('price');
 
             // cash revenue this month
-            $cashRevenueThisMonth = Booking::whereYear('updated_at', Carbon::now()->year)
+            $cashRevenueThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
             ->whereMonth('updated_at', Carbon::now()->month)
             ->whereIn('status', ['VERIFIED'])
             ->where('payment_type', 'CASH')
             ->sum('price');
 
             // e-payment revenue this month
-            $ePaymentRevenueThisMonth = Booking::whereYear('updated_at', Carbon::now()->year)
+            $ePaymentRevenueThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
             ->whereMonth('updated_at', Carbon::now()->month)
             ->whereIn('status', ['VERIFIED'])
             ->where('payment_type', 'XENDIT')
             ->sum('price');
 
             // success booking this month
-            $successBookingThisMonth = Booking::whereYear('updated_at', Carbon::now()->year)
+            $successBookingThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
             ->whereMonth('updated_at', Carbon::now()->month)
             ->whereIn('status', ['VERIFIED'])
             ->count();
-
+ 
             // cancelled booking this month
-            $cancelledBookingThisMonth = Booking::whereYear('updated_at', Carbon::now()->year)
+            $cancelledBookingThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
             ->whereMonth('updated_at', Carbon::now()->month)
-            ->whereIn('status', ['CANCELLED'])
+            ->whereIn('status', ['CANCELLED', 'VOIDED', 'REFUNDED', 'FAILED'])
             ->count();
     
 
