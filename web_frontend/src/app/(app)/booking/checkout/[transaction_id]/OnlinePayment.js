@@ -82,16 +82,10 @@ const OnlinePayment = ({paymentType, totalPrice, bookId}) => {
         value: "PH_GCASH"
     },
     {
-        label: "Paymaya",
-        value: "PH_PAYMAYA"
-    },
-    {
         label: "GrabPay",
         value: "PH_GRABPAY"
     },
 ]
-
-
   return (
     <>
       {contextHolder}
