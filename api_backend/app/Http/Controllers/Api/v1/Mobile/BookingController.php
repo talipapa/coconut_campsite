@@ -58,30 +58,30 @@ class BookingController extends Controller
             $startOfPreviousMonth = Carbon::now()->startOfMonth()->subMonth();
             $endOfPreviousMonth = Carbon::now()->subMonth()->endOfMonth();
 
-            $totalPreviousMonthEarnings = Transaction::whereBetween('updated_at', [$startOfPreviousMonth, $endOfPreviousMonth])->whereIn('status', ['VERIFIED'])->sum('price');
+            $totalPreviousMonthEarnings = Booking::whereBetween('updated_at', [$startOfPreviousMonth, $endOfPreviousMonth])->whereIn('status', ['VERIFIED'])->sum('price');
 
             // cash revenue this month
-            $cashRevenueThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
+            $cashRevenueThisMonth = Booking::whereYear('updated_at', Carbon::now()->year)
             ->whereMonth('updated_at', Carbon::now()->month)
             ->whereIn('status', ['VERIFIED'])
             ->where('payment_type', 'CASH')
             ->sum('price');
 
             // e-payment revenue this month
-            $ePaymentRevenueThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
+            $ePaymentRevenueThisMonth = Booking::whereYear('updated_at', Carbon::now()->year)
             ->whereMonth('updated_at', Carbon::now()->month)
             ->whereIn('status', ['VERIFIED'])
             ->where('payment_type', 'XENDIT')
             ->sum('price');
 
             // success booking this month
-            $successBookingThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
+            $successBookingThisMonth = Booking::whereYear('updated_at', Carbon::now()->year)
             ->whereMonth('updated_at', Carbon::now()->month)
             ->whereIn('status', ['VERIFIED'])
             ->count();
 
             // cancelled booking this month
-            $cancelledBookingThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
+            $cancelledBookingThisMonth = Booking::whereYear('updated_at', Carbon::now()->year)
             ->whereMonth('updated_at', Carbon::now()->month)
             ->whereIn('status', ['CANCELLED', 'VOIDED', 'REFUNDED', 'FAILED'])
             ->count();
