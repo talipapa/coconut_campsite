@@ -99,86 +99,28 @@ export default async function Page() {
                     <div className='w-full h-full shadow-xl rounded-xl'>
                         <iframe className="rounded-xl border-2 border-green-700" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13607.431373242382!2d121.18812472764765!3d14.72558446589735!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397bda85647cc8f%3A0xbd1a2f816c06b4c6!2sCoconut%20Campsite!5e0!3m2!1sen!2sph!4v1727672350142!5m2!1sen!2sph" width="100%" height="400px" loading="lazy" referrerPolicy="no-referrer-when-downgrade" />
                     </div>
-                    <div className="bg-white shadow-lg p-7 rounded-2xl space-y-5">
-                        <h1 className="uppercase font-bold">Reservation Holder</h1>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
-                            <div>
-                                <div className="text-[#555555]">
-                                    First Name
-                                </div>
-                                <div>
-                                    {bookingData.data.first_name}
-                                </div>
-                            </div>     
-                            <div>
-                                <div className="text-[#555555]">
-                                    Last Name
-                                </div>
-                                <div className="capitalize">
-                                    {bookingData.data.last_name}
-                                </div>
-                            </div>     
-                            <div>
-                                <div className="text-[#555555]">
-                                    Email
-                                </div>
-                                <div>
-                                    {bookingData.data.email}
-                                </div>
-                            </div>    
-                            <div>
-                                <div className="text-[#555555]">
-                                    Contact Number
-                                </div>
-                                <div className="capitalize">
-                                    {bookingData.data.tel_number}
-                                </div>
-                            </div>   
-                        </div>
-                    </div>
-                    <div className="bg-white shadow-lg p-7 rounded-2xl space-y-5">
-                        <h1 className="uppercase font-bold">Transaction Details</h1>
-                        <div className="grid grid-cols-1 gap-2 w-full">
-                            <div>
-                                <div className="text-[#555555]">
-                                    Transaction id
-                                </div>
-                                <div>
-                                    {bookingData.data.transaction_id}
-                                </div>
-                            </div>  
-                            <div>
-                                <div className="text-[#555555]">
-                                    Payment gateway
-                                </div>
-                                <div>
-                                    {bookingData.data.transactionType}
-                                </div>
-                            </div>    
-                            <div>
-                                <div className="text-[#555555]">
-                                    Status
-                                </div>
-                                <div className="capitalize">
-                                    {bookingData.data.transactionStatus}
-                                </div>
-                            </div>   
-                        </div>
-                    </div>
                     <div className="w-full flex flex-col space-y-5 bg-white shadow-lg p-7 rounded-2xl divide-y-2">
                         <h1 className="uppercase font-bold">Booking details</h1>
-                        <div className="flex flex-col pt-2">
-                            <div>
+                        <div className="flex flex-col pt-2 space-y-3">
+                            <div className="flex flex-col items-start">
                                 <div className="text-[#555555]">
                                     Check in
                                 </div>
-                                <div>
+                                <div className="bg-yellow-300 px-2 rounded-md">
                                     {dayjs(bookingData.data.check_in).format("MMMM DD, YYYY")}
+                                </div>
+                            </div>     
+                            <div className="flex flex-col items-start">
+                                <div className="text-[#555555]">
+                                    Check out
+                                </div>
+                                <div className="bg-yellow-100 px-2 rounded-md">
+                                    {dayjs(bookingData.data.check_out).format("MMMM DD, YYYY")}
                                 </div>
                             </div>     
                             <div>
                                 <div className="text-[#555555]">
-                                    Booking type
+                                    Stay duration
                                 </div>
                                 <div className="capitalize">
                                     {bookingData.data.booking_type}
@@ -265,6 +207,73 @@ export default async function Page() {
                             </div>
                         </div>
                     </div>
+                    <div className="bg-white shadow-lg p-7 rounded-2xl space-y-5">
+                        <h1 className="uppercase font-bold">Reservation Holder</h1>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
+                            <div>
+                                <div className="text-[#555555]">
+                                    First Name
+                                </div>
+                                <div>
+                                    {bookingData.data.first_name}
+                                </div>
+                            </div>     
+                            <div>
+                                <div className="text-[#555555]">
+                                    Last Name
+                                </div>
+                                <div className="capitalize">
+                                    {bookingData.data.last_name}
+                                </div>
+                            </div>     
+                            <div>
+                                <div className="text-[#555555]">
+                                    Email
+                                </div>
+                                <div>
+                                    {bookingData.data.email}
+                                </div>
+                            </div>    
+                            <div>
+                                <div className="text-[#555555]">
+                                    Contact Number
+                                </div>
+                                <div className="capitalize">
+                                    {bookingData.data.tel_number}
+                                </div>
+                            </div>   
+                        </div>
+                    </div>
+                    <div className="bg-white shadow-lg p-7 rounded-2xl space-y-5">
+                        <h1 className="uppercase font-bold">Transaction Details</h1>
+                        <div className="grid grid-cols-1 gap-2 w-full">
+                            <div>
+                                <div className="text-[#555555]">
+                                    Transaction id
+                                </div>
+                                <div>
+                                    {bookingData.data.transaction_id}
+                                </div>
+                            </div>  
+                            <div>
+                                <div className="text-[#555555]">
+                                    Payment gateway
+                                </div>
+                                <div>
+                                    {bookingData.data.transactionType}
+                                </div>
+                            </div>    
+                            <div>
+                                <div className="text-[#555555]">
+                                    Status
+                                </div>
+                                <div className="capitalize">
+                                    {bookingData.data.transactionStatus}
+                                </div>
+                            </div>   
+                        </div>
+                    </div>
+
 
                     {bookingData.data.xendit_id && (
                         <div className="bg-white shadow-lg p-7 rounded-2xl space-y-5">

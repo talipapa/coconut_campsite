@@ -5,7 +5,7 @@ import Input from "antd/es/input/Input"
 import { UserOutlined } from '@ant-design/icons'
 import { useEffect, useState } from "react"
 import { MdOutlineEmail } from "react-icons/md"
-import { Button, DatePicker, InputNumber, Radio, notification, Breadcrumb } from "antd"
+import { Button, DatePicker, InputNumber, Radio, notification, Breadcrumb, Modal, Checkbox, List } from "antd"
 
 import { usePrice } from "@/hooks/prices"
 import dayjs from "dayjs"
@@ -14,8 +14,6 @@ import InputError from "@/components/InputError"
 import { useAuth } from "@/hooks/auth"
 import { useLaravelBooking } from "@/hooks/booking"
 import { useRouter } from 'next/navigation'
-
-
 
 export default function Page() {
     const { user } = useAuth()
@@ -42,6 +40,13 @@ export default function Page() {
     const [errors, setErrors] = useState([])
     const [price, setPrice] = useState(0)
     const [buttonLoading, setButtonLoading] = useState(false)
+    const [open, setOpen] = useState(false);
+    const [checked, setChecked] = useState(false);
+
+    const onChange = (e) => {
+        setChecked(e.target.checked);
+    };
+
 
     useEffect(() => {
         if (!booking) return
@@ -485,14 +490,66 @@ export default function Page() {
                             </div>
                         </div>
                     </div>
-
-                    <div className="w-full flex flex-col">
-                        <Button type="primary" className="py-6" onClick={submitForm} loading={buttonLoading}>Submit</Button>
-
+                    <div className="flex flex-col items-center space-y-3">
+                        <div className="flex flex-row items-center">
+                            <Checkbox onChange={onChange}>
+                                <p className="text-[#555555] select-none text-lg">I agree to your</p>
+                            </Checkbox>
+                            <span className="text-[#3D736C] cursor-pointer text-md" onClick={() => setOpen(true)}>Terms of Service</span>
+                        </div>
+                        <div className="w-[70vh] flex flex-col">
+                            <Button className="py-6 bg-slate-800 text-white" onClick={submitForm} loading={buttonLoading} disabled={!checked}>Submit</Button>
+                        </div>
                     </div>
 
                 </div>
             </div>
+            <Modal
+                title="Terms of Service"
+                open={open}
+                onOk={() => setOpen(false)}
+                onCancel={() => setOpen(false)}
+                width={1000}
+                top={0}
+                className="top-5"
+                cancelText="Close"
+                okText="I understand"
+                rootClassName="text-center"
+            
+            >
+                <p className="m-5 h-[70vh] overflow-scroll text-2xl overflow-x-hidden mt-12">
+                    <List className="space-y-2 text-xl lg:mx-5 text-left" size="large" split={false}>
+                        <List.Item>
+                            These Consumer Terms of Service (“Terms of Service” or “Terms”) are a legal agreement between us (“us”, “our”, “we”, or “Xendit”) and you, the individual who uses our booking services for personal use under these Terms (referred to as “you” or “your”). The following Terms constitute a legally binding agreement between you and us and describe the terms and conditions applicable to your use of our Consumer Services. By using our Consumer Services, you agree to be bound by these Terms.
+                        </List.Item>
+                        <List.Item className="flex flex-col !items-start">
+                            <h1 className="font-semibold">E-wallet Refund</h1>
+                            <List.Item>
+                                1. You acknowledge that you may request a full refund if the request is submitted before the Xendit cutoff time (23:50) on the same day the transaction is made.
+                            </List.Item>
+                            <List.Item>
+                                2. You acknowledge that if a refund request is submitted more than one day after completing the transaction, a 5% service fee will be deducted to cover transaction costs.
+                            </List.Item>
+                            <List.Item>
+                                3. Refunds for transactions processed through the payment gateway are available; however, if you completed the stay and later request a refund, we reserve the right to approve or decline the request based on the circumstances and reason provided.
+                            </List.Item>
+                        </List.Item>
+                        <List.Item className="flex flex-col !items-start">
+                            <h1 className="font-semibold">Reschedule</h1>
+                            <List.Item>
+                                4. You may reschedule your reservation independently through this website up until the check-in day of the reservation.
+                            </List.Item>
+                        </List.Item>
+                        <List.Item className="flex flex-col !items-start">
+                            <h1 className="font-semibold">Email and Phone Communication</h1>
+                            <List.Item>
+                                5. By providing us with a phone number, you consent to receiving text (SMS) messages, emails, and phone calls from us. Such communications may include, but are not limited to, booking reminders, reservation updates, and inquiries. 
+                            </List.Item>
+                        </List.Item>
+                    </List>
+                </p>
+            
+            </Modal>
         </>
     )
 }

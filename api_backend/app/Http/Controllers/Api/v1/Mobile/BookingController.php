@@ -252,7 +252,7 @@ class BookingController extends Controller
                 Log::info('Void response:', [$response]);
             } else{
                 $response = Xendivel::getPayment($xenditId, 'ewallet')
-                    ->refund((int) $transaction->price * 0.9)
+                    ->refund((int) $transaction->price * 0.5)
                     ->getResponse();
                 Log::info(`Refund response:` . $transaction->price, [$response]);
             }
