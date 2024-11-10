@@ -83,7 +83,7 @@ class BookingController extends Controller
             // cancelled booking this month
             $cancelledBookingThisMonth = Transaction::whereYear('updated_at', Carbon::now()->year)
             ->whereMonth('updated_at', Carbon::now()->month)
-            ->whereIn('status', ['CANCELLED', 'VOIDED', 'REFUNDED', 'FAILED'])
+            ->whereIn('status', ['CANCELLED', 'VOIDED', 'REFUNDED', 'FAILED', 'CASH_CANCELLED'])
             ->count();
     
 
