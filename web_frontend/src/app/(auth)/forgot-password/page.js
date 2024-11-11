@@ -55,7 +55,7 @@ const Page = () => {
                 </div>
 
                 <div className="flex items-center justify-end mt-4">
-                    <Button type='primary' className="px-10 ml-3" disabled={buttonLoading}>Email Password Reset Link</Button>
+                    <Button type='primary' htmlType='submit' className="px-10 ml-3" disabled={buttonLoading}>Email Password Reset Link</Button>
                 </div>
             </form>
         </div>

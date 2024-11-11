@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api\v1\Mobile;
 use App\CustomVendors\Xendivel as CustomVendorsXendivel;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\SuccessfulBookingResource;
+use App\Mail\OwnerConfirmBookingNotifer;
+use App\Mail\StaffActionRefundNotifier;
+use App\Mail\StaffActionRescheduleNotifier;
 use App\Models\Booking;
 use App\Models\Transaction;
 use Carbon\Carbon;
@@ -12,6 +15,7 @@ use GlennRaya\Xendivel\Xendivel;
 use Hamcrest\Type\IsNumeric;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Monolog\Handler\ErrorLogHandler;
 
 class BookingController extends Controller
@@ -215,6 +219,8 @@ class BookingController extends Controller
         if (!$booking) {
             return response()->json(['message' => 'Booking not found'], 404);
         }
+
+        $refundPercentage = 0.5;
         
         // Check if the user in request owns the booking or is an owner/manager
         // if ($booking->user_id != $request->user()->id){
@@ -252,7 +258,7 @@ class BookingController extends Controller
                 Log::info('Void response:', [$response]);
             } else{
                 $response = Xendivel::getPayment($xenditId, 'ewallet')
-                    ->refund((int) $transaction->price * 0.5)
+                    ->refund((int) $transaction->price * $refundPercentage)
                     ->getResponse();
                 Log::info(`Refund response:` . $transaction->price, [$response]);
             }
@@ -260,6 +266,9 @@ class BookingController extends Controller
             $transaction->status = "REFUND_PENDING";
             $transaction->save();
             $booking->save();
+
+            // Send email to user
+            Mail::to($booking->email)->send(new StaffActionRefundNotifier($booking, $transaction, (int) $transaction->price * $refundPercentage));
 
             return response()->json($booking, 201);
         } catch (\Throwable $th) {
@@ -311,16 +320,22 @@ class BookingController extends Controller
 
         switch ($validated['booking_type']) {
             case 'daytour':
+                // Send email to user
+                Mail::to($booking->email)->send(new StaffActionRescheduleNotifier($booking, $booking->transaction, $booking->check_in, Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d')));
+
                 $booking->update([
                     'booking_type' => $validated['booking_type'],
                     'check_in' => Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d'),
                     'check_out' => Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d'),
                 ]);
-        
                 $booking->save();        
                 return response()->json($booking, 200);
                 break;
             case 'overnight':
+                // Send email to user
+                Mail::to($booking->email)->send(new StaffActionRescheduleNotifier($booking, $booking->transaction, $booking->check_in, Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d')));
+
+
                 $booking->update([
                     'booking_type' => $validated['booking_type'],
                     'check_in' => Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d'),
@@ -350,6 +365,7 @@ class BookingController extends Controller
                     # code...
                     $booking->status = 'VERIFIED';
                     $booking->transaction->status = 'VERIFIED';
+                    Mail::to($booking->email)->send(new OwnerConfirmBookingNotifer($booking, $booking->transaction));
                     break;
 
                 case 'cancel':

@@ -2,7 +2,9 @@
 
 namespace App\Listeners;
 
+use App\CustomVendors\Xemaphore;
 use App\Events\eWalletEvents;
+use App\Mail\EpaymentConfirmation;
 use App\Models\Booking;
 use App\Models\Payout;
 use App\Models\Refund;
@@ -10,6 +12,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use GlennRaya\Xendivel\Xendivel;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class eWalletWebhookListener
 {
@@ -48,10 +51,9 @@ class eWalletWebhookListener
         // Check if webhook_data array contains the 'event' key
         // If webhook_data array does not contain the 'event' key, the transaction is probably a disbursements or a payout
         if (!array_key_exists('event', $event->webhook_data)){
-            Log::alert('Webhook debug', [
-                'webhook_data' => json_encode($event->webhook_data[])
-            ]);
-            
+            // Log::alert('Webhook debug', [
+            //     'webhook_data' => json_encode($event->webhook_data[])
+            // ]);
             $payout = Payout::find($event->webhook_data['reference']);
             $payout->status = $event->webhook_data['status'];
             $payout->save();   
@@ -93,11 +95,14 @@ class eWalletWebhookListener
                         'transaction_id' => $transaction->id,
                     ]);
                     try {
-                        
                         Log::error("Invoice succeeded?", ['Invoice' => ""]);
                     } catch (\Throwable $th) {
                         Log::error("Invoicing email error", ['Error' => $th->getMessage()]);
                     }
+
+                    // Send email receipt below
+                    Mail::to($booking->email)->send(new EpaymentConfirmation($booking, $transaction));
+
                     
                 }
                 break;
@@ -139,6 +144,7 @@ class eWalletWebhookListener
                         'status' => $transaction->status
                     ]);
                 }
+                $xemaphoreResponse = Xemaphore::sendSms($booking->tel_number, "Your booking has been successfully processed! Your money will return after a few hours or days");
                 break;
             case 'ewallet.refund':
                 // Get the transaction
@@ -180,6 +186,7 @@ class eWalletWebhookListener
                         'status' => $transaction->status
                     ]);
                 }
+                Xemaphore::sendSms($booking->tel_number, "Your booking has been successfully processed! Your money will return after a few hours or days");
                 break;
             
             default:

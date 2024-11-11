@@ -1,7 +1,7 @@
 'use client'
 
 import { useLaravelBooking } from "@/hooks/booking"
-import { Breadcrumb, Skeleton } from "antd"
+import { Breadcrumb, Skeleton, Spin } from "antd"
 import { usePrice } from "@/hooks/prices"
 import CheckoutCard from "./CheckoutCard"
 import { useEffect, useState } from "react"
@@ -41,9 +41,9 @@ export default function Page({params}) {
     if (!booking && booking?.data == undefined) {
         return (
             <>
-                <div className="m-[30px]">
-                    <Skeleton paragraph={{ rows: 10 }}/>
-                </div>
+                <main className='min-h-[100vh] p-[100px] flex flex-col items-center'>
+                    <Spin size="large" />
+                </main>
             </>
         )
     }
@@ -51,9 +51,6 @@ export default function Page({params}) {
     
     return (
         <>
-            {/* HEADER */}
-
-
             {/* BODY */}
             <div>
                 <header className="shadow bg-[#B1CE90]">
