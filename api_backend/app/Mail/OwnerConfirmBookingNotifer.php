@@ -30,6 +30,7 @@ class OwnerConfirmBookingNotifer extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
+            from: 'coconutcampsite@no-reply.com',
             subject: 'Owner Confirm Booking Notifer',
         );
     }
