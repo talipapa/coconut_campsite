@@ -6,7 +6,6 @@ import InputError from "@/components/InputError"
 import { UserOutlined } from '@ant-design/icons'
 import axios from '@/lib/axios'
 
-
 const AccountDetails = () => {
     const { user } = useAuth({middleware: 'auth'})
     

@@ -3,6 +3,7 @@ import QrCard from "./QrCard"
 import ActionButtons from "./ActionButtons"
 import { redirect } from "next/navigation"
 import dayjs from "dayjs"
+import { Alert } from "antd"
 
 
 const getData = async () => {
@@ -85,9 +86,27 @@ export default async function Page() {
     return (
         <div className="p-[30px] w-full space-y-5">
             {/* CTA Buttons */}
-            {!exclutedStatus.includes(bookingData.data.transactionStatus) && (
-                <ActionButtons checkIn={bookingData.data.check_in} bookingType={bookingData.data.booking_type} bookingId={bookingData.data.id} transactionStatus={bookingData.data.status}/>
+            {!exclutedStatus.includes(bookingData.data.transactionStatus) || bookingData.data.status !== 'SCANNED' && (
+                <ActionButtons checkIn={bookingData.data.check_in} bookingType={bookingData.data.booking_type} bookingId={bookingData.data.id} bookingDataStatus={bookingData.data.status}/>
             )}
+
+            {
+                bookingData.data.status === 'SCANNED' && (
+                    <>
+                        <div className="mb-4">
+                            <Alert
+                            message="Thank you for booking in our campsite! 🎉🎉🎉"
+                            description="Enjoy your stay at Coconut Campsite. Any issues or concerns, please contact the caretaker of the campsite."
+                            type="success"
+                            showIcon
+                            />
+                        </div>
+                    </>
+                )
+            }
+
+
+            
                 
 
             <div className="flex flex-col md:flex-row space-y-10 md:space-y-0 md:space-x-10">

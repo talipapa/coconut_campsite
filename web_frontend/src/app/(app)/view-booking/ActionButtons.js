@@ -7,7 +7,7 @@ import { useState } from 'react'
 import axios from '@/lib/axios'
 
 
-const ActionButtons = ({checkIn, bookingType, bookingId, transactionStatus}) => {
+const ActionButtons = ({checkIn, bookingType, bookingId, bookingDataStatus}) => {
     const [open, setOpen] = useState(false)
     const [confirmLoading, setConfirmLoading] = useState(false)
     const showPopconfirm = () => {
@@ -36,7 +36,7 @@ const ActionButtons = ({checkIn, bookingType, bookingId, transactionStatus}) => 
 
     const handleOk = () => {
         // Refund or Cancel logic here
-        switch (transactionStatus) {
+        switch (bookingDataStatus) {
             case 'CASH_PENDING':
                 axios.post('/api/v1/booking/cancel/' + bookingId, bookingId)
                 .then(() => {
@@ -94,7 +94,7 @@ const ActionButtons = ({checkIn, bookingType, bookingId, transactionStatus}) => 
                     />
                     }
                 >
-                    {transactionStatus != 'CASH_PENDING' ? <Button color="danger" variant="outlined" onClick={showPopconfirm}>Refund</Button> : <Button color="danger" variant="outlined" onClick={showPopconfirm}>Cancel booking</Button>}
+                    {bookingDataStatus != 'CASH_PENDING' && bookingDataStatus != 'SCANNED' ? <Button color="danger" variant="outlined" onClick={showPopconfirm}>Refund</Button> : <Button color="danger" variant="outlined" onClick={showPopconfirm}>Cancel booking</Button>}
                 </Popconfirm>
             </div>
         </>
