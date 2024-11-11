@@ -68,6 +68,14 @@ class BookingController extends Controller
             return response()->json(['message' => 'Booking is already cancelled'], 400);
         }
 
+        if ($booking->status === 'SCANNED') {
+            return response()->json(['message' => 'You are not allowed to cancel at this point'], 400);
+        }
+
+        if ($booking->status === 'VERIFIED') {
+            return response()->json(['message' => 'You are not allowed to cancel at this point'], 400);
+        }
+
         // Update the status of the booking to CANCELLED
         $booking->update([
             'status' => 'CANCELLED',
@@ -106,6 +114,25 @@ class BookingController extends Controller
         if ($transaction->status === "REFUND_PENDING"){
             return response()->json(['message' => "Transaction currently has pending refund"], 422);
         }
+
+        if ($booking->status === "CANCELLED"){
+            return response()->json(['message' => "Booking has already been cancelled"], 422);
+        }
+
+        if ($booking->status === "SCANNED"){
+            return response()->json(['message' => "You are not allowed to cancel at this point"], 422);
+        }
+
+        if ($booking->status === "VOIDED"){
+            return response()->json(['message' => "Booking has already been voided"], 422);
+        }
+
+        if ($booking->status === "VERIFIED"){
+            return response()->json(['message' => "You are not allowed to cancel at this point"], 422);
+        }
+
+
+
         // Check if the status of the transaction is SUCCEEDED
         try {
             if ($transaction->status !== 'SUCCEEDED') {
@@ -182,6 +209,26 @@ class BookingController extends Controller
             'booking_type' => 'required',
             'check_in' => 'required',
         ]);
+
+        if ($booking->transaction->status === "REFUND_PENDING"){
+            return response()->json(['message' => "You are not allowed to reschedule at this point"], 422);
+        }
+
+        if ($booking->status === "CANCELLED"){
+            return response()->json(['message' => "You are not allowed to reschedule at this point"], 422);
+        }
+
+        if ($booking->status === "SCANNED"){
+            return response()->json(['message' => "You are not allowed to reschedule at this point"], 422);
+        }
+
+        if ($booking->status === "VOIDED"){
+            return response()->json(['message' => "You are not allowed to reschedule at this point"], 422);
+        }
+
+        if ($booking->status === "VERIFIED"){
+            return response()->json(['message' => "You are not allowed to reschedule at this point"], 422);
+        }
 
         switch ($validated['booking_type']) {
             case 'daytour':
