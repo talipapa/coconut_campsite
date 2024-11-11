@@ -86,7 +86,7 @@ export default async function Page() {
     return (
         <div className="p-[30px] w-full space-y-5">
             {/* CTA Buttons */}
-            {!exclutedStatus.includes(bookingData.data.transactionStatus) && (
+            {!exclutedStatus.includes(bookingData.data.transactionStatus) && bookingData.data.status !== 'SCANNED' && (
                 <ActionButtons checkIn={bookingData.data.check_in} bookingType={bookingData.data.booking_type} bookingId={bookingData.data.id} bookingDataStatus={bookingData.data.status}/>
             )}
 
