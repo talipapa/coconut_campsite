@@ -1,4 +1,4 @@
-import { Button, Skeleton } from 'antd';
+import { Button, Skeleton, Spin } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AnimatePresence, motion, Variants } from 'framer-motion';
@@ -130,91 +130,8 @@ const LogBook = () => {
                 <div className='w-full h-full flex flex-col'>
                     <div className='flex flex-col mx-10 h-full space-y-10 items-start my-5'>
                         <FaArrowLeftLong className='text-5xl transition-all duration-100 hover:scale-125 active:scale-110' onClick={() => navigate("/dashboard", {replace: true})}/>
-                        <div className='w-full h-full flex flex-col items-start justify-start text-3xl font-bold'>
-                            <div className='w-full h-full flex flex-col md:flex-row-reverse gap-10 items-start'>
-                                <div className='w-full h-full relative space-y-12'>
-                                    <div className='h-full w-full'>
-                                        <div className='flex flex-row items-center justify-between mb-3'>
-                                            <h1 className='text-lg font-bold text-black uppercase'>Arrival logbook</h1>
-                                            <div className='text-lg font-bold text-slate-500'>
-                                                - / -
-                                            </div>
-                                        </div>
-
-                                        <div className='w-full h-[50px] items-center flex flex-row gap-7'>
-                                            {
-                                                campersName.length >= 10 ? (
-                                                    <Button
-                                                        type='primary'
-                                                    
-                                                        className=' text-xl px-6 gap-4 bg-green-700 h-full'
-                                                        onClick={submitCamperName}
-                                                        loading={isLoading}
-                                                    >
-                                                        <FaUserPlus className='text-2xl' /> Submit
-                                                    </Button>
-                                                )
-                                                :
-                                                    <Button
-                                                        type='primary'
-                                                        className='text-xl px-6 gap-4 h-full'
-                                                        onClick={addCamper}
-                                                        disabled={campersName.length >= 10}
-                                                    >
-                                                        <FaUserPlus className='text-2xl' /> Add
-                                                    </Button>
-                                            }
-                                            <input
-                                                type="text"
-                                                placeholder='Input full name'
-                                                value={newCamper}
-                                                onChange={(e) => setNewCamper(e.target.value)}
-                                                className='w-full  bg-slate-100 px-4 h-full text-[1.3rem] rounded-md border-2 border-blue-700'
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className='h-full flex flex-col items-start space-y-8 w-full'>
-                                        <div
-                                            ref={listRef}
-                                            className='flex flex-col items-start space-y-6 w-full max-h-[50vh] pr-10 overflow-y-scroll overflow-x-hidden'
-                                        >
-                                            <AnimatePresence mode='popLayout'>
-                                                {campersName.map((camper, index) => (
-                                                    <motion.div
-                                                        key={camper.id}
-                                                        layout
-                                                        variants={variants}
-                                                        custom={index}
-                                                        initial='hidden'
-                                                        animate='visible'
-                                                        exit='exit'
-                                                        className='flex flex-row items-center justify-between w-full gap-10 select-none'
-                                                    >
-                                                        <input
-                                                            className='w-full bg-slate-100 px-4 py-2 text-[1.3rem] rounded-md border-2 border-slate-500'
-                                                            value={camper.name}
-                                                            onChange={(e) => handleNameChange(camper.id, e.target.value)}
-                                                        />
-                                                        <FaSquareMinus
-                                                            className='text-[50px] text-red-500 hover:scale-125 active:scale-105 transition-all duration-100'
-                                                            onClick={() => handleDelete(camper.id)}
-                                                        />
-                                                    </motion.div>
-                                                ))}
-                                            </AnimatePresence>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='space-y-3'>
-                                    <div className='flex flex-col  bg-slate-700 p-5 rounded-xl w-full md:w-[40vw] space-y-3'>
-                                        <Skeleton active={true} className='w-full'/>
-                                    </div>
-                                    <div className='flex flex-col  bg-slate-700 p-5 rounded-xl w-full md:w-[40vw] space-y-3'>
-                                        <Skeleton active={true} className='w-full'/>
-                                    </div>
-                                </div>
-                            </div>
+                        <div className='w-full h-full flex flex-col items-center text-3xl font-bold'>
+                            <Spin size='large' className='font-black'/>
                         </div>
                     </div>
                 </div>
@@ -230,7 +147,7 @@ const LogBook = () => {
                     <div className='flex flex-col mx-10 h-full space-y-7 items-start my-5'>
                         <FaArrowLeftLong className='text-4xl transition-all duration-100 hover:scale-125 active:scale-110' onClick={() => navigate("/dashboard", {replace: true})}/>
                         <div className='w-full h-full flex flex-col items-start justify-start text-3xl font-bold'>
-                            <div className='w-full h-full flex flex-col lg:flex-row-reverse gap-10 items-start'>
+                            <div className='w-full h-full flex flex-col gap-10 items-start'>
                                 <div className='w-full h-full relative space-y-12'>
                                     <div className='h-full w-full'>
                                         <div className='flex flex-row items-center justify-between mb-3'>
@@ -308,8 +225,8 @@ const LogBook = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className='flex flex-col w-full lg:max-w-[25vw] space-y-3'>
-                                <div className='bg-slate-700 p-5 rounded-xl space-y-3 flex flex-col items-center text-center lg:items-start lg:text-start'>
+                                <div className='flex flex-col w-full space-y-3'>
+                                <div className='bg-slate-700 p-5 rounded-xl space-y-3 flex flex-col items-center text-center'>
                                         <div className='flex flex-col items-center'>
                                             {booking?.booking_type === 'daytour' ? (
                                                 <div className='bg-yellow-400 rounded-full px-5 flex items-center flex-row justify-center space-x-3'>
@@ -324,6 +241,10 @@ const LogBook = () => {
                                             )}
                                         </div>
         
+                                        <div className='space-y-1'>
+                                            <h1 className='text-sm font-bold text-slate-300'>Total Campers</h1>
+                                            <h1 className='text-xs font-bold text-white'>{booking?.total_campers}</h1>
+                                        </div>
                                         <div className='space-y-1'>
                                             <h1 className='text-sm font-bold text-slate-300'>Bonfire kit</h1>
                                             <div className='flex flex-row items-start space-x-3'>
@@ -355,8 +276,11 @@ const LogBook = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className='bg-slate-700 p-5 rounded-xl space-y-3 flex flex-col items-center text-center lg:text-start lg:items-start'>
-
+                                    <div className='bg-slate-700 p-5 rounded-xl space-y-3 flex flex-col items-center text-center'>
+                                        <div>
+                                            <h1 className='text-sm font-bold text-slate-300'>Price</h1>
+                                            <h1 className='text-2xl font-bold text-green-600 bg-slate-900 rounded-full px-9'>P {(booking?.transaction.price)}</h1>
+                                        </div>
                                         <div>
                                             <h1 className='text-sm font-bold text-slate-300'>Booking id</h1>
                                             <h1 className='text-xs font-bold text-white'>{id}</h1>
@@ -365,10 +289,7 @@ const LogBook = () => {
                                             <h1 className='text-sm font-bold text-slate-300'>Payment method</h1>
                                             <h1 className='text-xs font-bold text-white'>{booking?.payment_type}</h1>
                                         </div>
-                                        <div>
-                                            <h1 className='text-sm font-bold text-slate-300'>Total Campers</h1>
-                                            <h1 className='text-xs font-bold text-white'>{booking?.total_campers}</h1>
-                                        </div>
+   
                                         <div>
                                             <h1 className='text-sm font-bold text-slate-300'>Email</h1>
                                             <h1 className='text-xs font-bold text-white'>{booking?.email}</h1>
@@ -377,6 +298,7 @@ const LogBook = () => {
                                             <h1 className='text-sm font-bold text-slate-300'>Mobile number</h1>
                                             <h1 className='text-xs font-bold text-white'>{booking?.tel_number}</h1>
                                         </div>
+
                                     </div>
                 
                                 </div>

@@ -61,7 +61,7 @@ class KioskController extends Controller
 
         // Extract only the 'name' values
         $insertData = array_map(function($item) use ($booking) {
-            return ['full_name' => $item, 'booking_id' => $booking->id, 'created_at'=>date('Y-m-d H:i:s'), 'modified_at'=> date('Y-m-d H:i:s')];
+            return ['full_name' => $item, 'booking_id' => $booking->id, 'created_at'=>date('Y-m-d H:i:s'), 'updated_at'=> date('Y-m-d H:i:s')];
         }, $validated['camper_names']);
 
         Camper::insert($insertData);
