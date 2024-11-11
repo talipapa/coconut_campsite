@@ -77,7 +77,7 @@ const Login = () => {
             </div>
         </div>
         
-        <Button type='primary' loading={isLoading} onClick={handleLogin} className='bg-[#BC7B5C] w-full rounded-md py-4 text-white'>Login</Button>
+        <Button type='primary' loading={isLoading} onClick={handleLogin} className='bg-[#BC7B5C] w-full rounded-md py-8 text-white'>Login</Button>
       </div>
     );
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Camper;
 use App\Models\Transaction;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class KioskController extends Controller
@@ -60,7 +61,7 @@ class KioskController extends Controller
 
         // Extract only the 'name' values
         $insertData = array_map(function($item) use ($booking) {
-            return ['full_name' => $item, 'booking_id' => $booking->id];
+            return ['full_name' => $item, 'booking_id' => $booking->id, 'created_at'=>date('Y-m-d H:i:s'), 'modified_at'=> date('Y-m-d H:i:s')];
         }, $validated['camper_names']);
 
         Camper::insert($insertData);
@@ -81,5 +82,6 @@ class KioskController extends Controller
             'booking' => $booking,
         ]);
     }
+
 
 }

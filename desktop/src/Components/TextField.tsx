@@ -23,7 +23,7 @@ const TextField: React.FC<FormFieldProps> = ({ title, placeholder, value, handle
 
             <div className="w-full bg-black-100 rounded-2xl flex flex-row items-center">
                 <input
-                className="flex-1 font-semibold text-base border-2 rounded-md border-black-200 px-4 py-1"
+                className="flex-1 font-semibold text-base border-2 rounded-md border-black-200 px-4 py-4"
                 value={value}
                 type={isPassword ? 'password' : 'text'}
                 onChange={(e) => handleChangeText(e.target.value)}

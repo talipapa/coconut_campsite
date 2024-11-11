@@ -64,7 +64,7 @@ const Dashboard = () => {
         <Breadcrumb className='bg-slate-200 shadow-lg py-5 px-6 select-none'>
           <Breadcrumb.Item><span className='font-semibold'>Dashboard</span></Breadcrumb.Item>
         </Breadcrumb>
-        <div className='flex flex-col w-full px-6 py-8 space-y-12'>
+        <div className='flex flex-col w-full px-6 py-8 space-y-12 max-h-[80vh] overflow-y-scroll'>
           <div className='grid grid-cols-1 gap-7'>
             <StatisticCard isLoading={loading} title='Total earnings (2024)' data={formatCurrency(data?.totalYearEarnings)} IconComponent={FaPiggyBank}/>
             <div className='flex flex-row items-center space-x-5'>
@@ -86,8 +86,6 @@ const Dashboard = () => {
         </div>
       </>
     </PageWrapper>
-
-    
   )
 }
 

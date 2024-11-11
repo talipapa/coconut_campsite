@@ -9,11 +9,12 @@ import {
   UserOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Breadcrumb, Image, Layout, Menu, theme } from 'antd';
+import { Avatar, Breadcrumb, Image, Layout, Menu, theme } from 'antd';
 import { GiHamburgerMenu } from "react-icons/gi";
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { useGlobalContext } from '@/Context/GlobalProvider';
 import { logout } from '@/utils/AuthService';
+import WalkIn from './WalkIn';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -35,6 +36,7 @@ function getItem(
 
 const items: MenuItem[] = [
   getItem('Dashboard', '/dashboard', <PieChartOutlined />),
+  getItem('Walk-in', '/walkin', <TeamOutlined />),
   getItem('Reservations', 'sub1', <UserOutlined />, [
     getItem('Pending', '/pending'),
     getItem('Successful', '/successful'),
@@ -102,7 +104,7 @@ const PageWrapper = ({children} : {children: React.ReactElement}) => {
                     <GiHamburgerMenu onClick={() => setCollapsed(!collapsed)} className={`text-2xl transition-all ease-in-out hover:scale-125 ${collapsed ? 'rotate-90' : 'rotate-0'}`}/>           
                     
                     <div className='flex flex-row items-center space-x-3 select-none'>
-                        <UserOutlined className='text-xl text-white bg-slate-600 rounded-full p-2'/>
+                      <Avatar src={`https://ui-avatars.com/api/?name=${user?.first_name}+${user?.last_name}&background=random&bold=true`} />
                         <span className='text-lg'>{`${user?.first_name} ${user?.last_name}`}</span>
                     </div>
                 </Header>

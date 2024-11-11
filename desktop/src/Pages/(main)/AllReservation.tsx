@@ -66,7 +66,7 @@ const AllReservation = () => {
           </Breadcrumb>
           <span className='text-slate-400 text-xl'>Results: {bookingData?.total}</span>
         </div>
-        <div className='flex flex-col px-6 py-8 overflow-x-clip'>
+        <div className='flex flex-col px-6 py-8 overflow-x-clip max-h-[80vh] overflow-y-scroll'>
           <div className='flex flex-row gap-5'>
             <Button type='primary' onClick={generatePDF}>Generate PDF</Button>
             <Input.Search placeholder='Search here....' className='mb-5' value={searchQuery}onChange={(e) => handleSearch(e.target.value)}/>

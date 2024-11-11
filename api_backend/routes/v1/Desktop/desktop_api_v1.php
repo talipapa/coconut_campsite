@@ -15,4 +15,6 @@ Route::middleware(['auth:sanctum', 'manager'])->group(function (){
     Route::get('user', [TokenBasedAuthController::class, 'user']);   
     Route::post('logout', [TokenBasedAuthController::class, 'logout']);  
     Route::get('summary', [BookingController::class, 'dashboardSummary']);  
+    Route::post('/walkin', [BookingController::class, 'submitWalkIn']);
+
 });

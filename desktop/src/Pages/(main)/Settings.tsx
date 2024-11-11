@@ -4,6 +4,7 @@ import { Breadcrumb, Button, notification } from 'antd'
 import { useGlobalContext } from '@/Context/GlobalProvider'
 import TextField from '@/Components/TextField'
 import axios from '@/utils/auth'
+import { logout } from '@/utils/AuthService'
 
 interface IError {
   email?: string;
@@ -48,7 +49,11 @@ const Settings = () => {
       email: email
     })
     .then(res => {
-      openNotification('success', 'Profile changes', 'Profile has been changed successfuly'); // Trigger notification on success
+      openNotification('success', 'Profile changes', 'Profile has been changed successfuly! You will be logged out shortly...'); // Trigger notification on success
+      setTimeout(() => {
+        localStorage.removeItem('token');
+        window.location.href = '/';
+      }, 3000);
     })
     .catch(err => {
       setErrors(err.response.data.errors);
@@ -93,7 +98,7 @@ const Settings = () => {
         <Breadcrumb className='bg-slate-200 shadow-lg py-5 px-6 select-none'>
           <Breadcrumb.Item><span className='font-semibold'>Settings</span></Breadcrumb.Item>
         </Breadcrumb>
-        <div className='flex flex-col px-6 py-8 space-y-10'>
+        <div className='flex flex-col px-6 py-8 space-y-10 max-h-[80vh] overflow-y-scroll'>
           <div className='space-y-6 flex flex-col'>
             <span className='text-3xl font-bold'>Account settings</span>
             <div className='w-[60%] space-y-5'>

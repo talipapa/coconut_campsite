@@ -31,7 +31,7 @@ class OwnerConfirmBookingNotifer extends Mailable
     {
         return new Envelope(
             from: 'coconutcampsite@no-reply.com',
-            subject: 'Owner Confirm Booking Notifer',
+            subject: 'Booking confirmed!, Thank you for choosing Coconut Campsite',
         );
     }
 

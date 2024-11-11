@@ -10,6 +10,7 @@ import AllReservation from '@/Pages/(main)/AllReservation';
 import Settings from '@/Pages/(main)/Settings';
 import Confirmation from '@/Pages/(main)/Pending';
 import BookingDetails from '@/Pages/(main)/BookingDetails';
+import WalkIn from '@/Pages/(main)/WalkIn';
 
 export default function App() {
   return (
@@ -17,13 +18,14 @@ export default function App() {
       <ConfigProvider theme={{
         components: {
           Layout: {
-            siderBg: '#5CBCB6',
-            triggerBg: '#000000',
+            siderBg: '#001d3d',
+            triggerBg: '#ffffff',
           },
           Menu: {
-            colorBgContainer: '#5CBCB6',
+            colorBgContainer: '#001d3d',
             itemSelectedBg: '#BC7B5C',
-            itemSelectedColor: '#ffffff',
+            itemSelectedColor: '#fbfbff',
+            itemColor: '#9db4c0',
             itemHoverBg: '#BC7B5C',
             itemHoverColor: '#ffffff',
           }
@@ -37,6 +39,7 @@ export default function App() {
               <Route path="/successful" element={<Successful />} />
               <Route path="/all-reservation" element={<AllReservation />} />
               <Route path="/booking/:id" element={<BookingDetails />} />
+              <Route path="/walkin" element={<WalkIn />} />
               <Route path="/settings" element={<Settings />} />
             </Route>
 

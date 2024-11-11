@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import PageWrapper from './PageWrapper'
-import { Breadcrumb, Button, Modal } from 'antd'
+import { Avatar, Breadcrumb, Button, List, Modal, Spin } from 'antd'
 import axios from '@/utils/auth'
 import { FaLeftLong } from 'react-icons/fa6'
-import { format } from 'date-fns'
+import { format, formatDate } from 'date-fns'
 
 interface IBooking {
   adultCount: number
@@ -41,9 +41,16 @@ interface ITransaction {
   xendit_product_id: string | null | undefined
 }
 
+interface ICamper {
+  id: string
+  full_name: string
+  updated_at: Date
+}
+
 interface IPageData {
   booking : IBooking
   transaction : ITransaction
+  campers : ICamper[]
 }
 
 const BookingDetails = () => {
@@ -96,6 +103,16 @@ const BookingDetails = () => {
     }, [id])
 
     
+    if (isLoading || !bookingData) {
+      return (
+        <PageWrapper>
+          <div className='flex flex-col  items-center py-32 px-6  h-full'>
+            <Spin size='large'/>
+          </div>
+        </PageWrapper>
+      )
+    }
+
     
   return (
     <PageWrapper>
@@ -120,9 +137,28 @@ const BookingDetails = () => {
         </div> */}
       </div>
       
-      <div className='flex flex-col px-6 py-8 overflow-x-clip space-y-7'>
+      <div className='flex flex-col px-6 py-8 overflow-x-clip space-y-7 max-h-[80vh] overflow-y-scroll'>
         <div className='w-full'>
           <FaLeftLong onClick={() => navigate(-1)} className='text-3xl transition ease-in-out hover:scale-125'/> 
+        </div>
+        <div className='w-full bg-white p-6 rounded-2xl space-y-4'>
+          <h1 className='text-slate-600 text-xl font-bold'>
+            Campers Logbook
+          </h1>
+          <List
+            itemLayout="horizontal"
+            dataSource={bookingData?.campers}
+            renderItem={(item, index) => (
+              <List.Item>
+                <List.Item.Meta
+                  avatar={<Avatar size="large" src={`https://ui-avatars.com/api/?name=${item.full_name}&background=random&bold=true`} />}
+                  title={<span className='font-bold text-black'>{item.full_name}</span>}
+                  description={<span className='font-semibold text-slate-500'>{`Time-in: ${formatDate(item.updated_at, "MMMM dd, yyyy | p")}`}</span>}
+                />
+              </List.Item>
+            )}
+          />
+          
         </div>
         <div className='w-full bg-white p-6 rounded-2xl space-y-4'>
           <h1 className='text-slate-600 text-xl font-bold'>
@@ -155,6 +191,7 @@ const BookingDetails = () => {
             </div>
           </div>
         </div>
+      
         <div className='w-full bg-white p-6 rounded-2xl space-y-4'>
           <h1 className='text-slate-600 text-xl font-bold'>
             Items
@@ -223,6 +260,7 @@ const BookingDetails = () => {
             </div>
           </div>
         ) }
+
       </div>
     </>
   </PageWrapper>

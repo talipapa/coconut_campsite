@@ -10,6 +10,8 @@ class Camper extends Model
 {
     use HasFactory;
 
+    public $timestamps = true;
+
     protected $fillable = [
         'full_name',
         'booking_id'
