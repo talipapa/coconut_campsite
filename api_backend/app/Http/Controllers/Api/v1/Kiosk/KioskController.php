@@ -50,6 +50,7 @@ class KioskController extends Controller
     }
 
     public function inputLogBook(Request $request, Booking $booking){
+        $bannedStatus = ['CASH_CANCELLED', 'VOIDED', 'REFUNDED', 'FAILED', 'PENDING', 'REFUND_PENDING', 'CANCELLED'];
         $validated = $request->validate([
             'camper_names' => 'required'
         ]);
@@ -57,6 +58,29 @@ class KioskController extends Controller
             return response()->json([
                 'message' => 'QR code not found',
             ], 404);
+        }
+
+        if (!$booking) {
+            return response()->json([
+                'message' => 'QR code not found',
+            ], 404);
+        }
+
+        if (in_array($booking->status, $bannedStatus)) {
+            return response()->json([
+                'message' => 'QR code is not valid',
+            ], 400);
+        }
+        if ($booking->status == 'SCANNED') {
+            return response()->json([
+                'message' => 'QR code already scanned',
+            ], 400);
+        }
+
+        if ($booking->status == 'VERIFIED') {
+            return response()->json([
+                'message' => 'QR code already scanned',
+            ], 400);
         }
 
         // Extract only the 'name' values
