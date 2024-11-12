@@ -497,7 +497,7 @@ export default function Page() {
                             </Checkbox>
                             <span className="text-[#3D736C] cursor-pointer text-md" onClick={() => setOpen(true)}>Terms of Service</span>
                         </div>
-                        <div className="w-[70vh] flex flex-col">
+                        <div className="w-full lg:w-[70vh] flex flex-col">
                             <Button className="py-6 bg-slate-800 text-white" onClick={submitForm} loading={buttonLoading} disabled={!checked}>Submit</Button>
                         </div>
                     </div>

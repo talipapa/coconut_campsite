@@ -9,7 +9,7 @@ const CheckoutCard = ({totalPrice, booking_id}) => {
   const [componentPaymentMethod, setComponentPaymentMethod] = useState("XENDIT")
   const paymentOptions = [
       {
-          label: "Online payment",
+          label: "E-wallet",
           value: "XENDIT"
       },
       {
