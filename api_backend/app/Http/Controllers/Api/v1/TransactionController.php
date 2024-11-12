@@ -27,7 +27,7 @@ class TransactionController extends Controller
         $bonfireKitTotal = $prices['bonfireKitPrice'] * ((int) $booking->bonfire_kit_count);
         $cabinTotal = $booking->is_cabin ? (int) $prices['cabinPrice'] : 0;
     
-        return number_format(($adultTotal + $childTotal + $tentPitchTotal + $bonfireKitTotal + $cabinTotal), 2, '.', ',');
+        return ($adultTotal + $childTotal + $tentPitchTotal + $bonfireKitTotal + $cabinTotal);
     }
 
     public function calculateFee($subTotalPrice, $eWalletProviderName)
@@ -45,7 +45,7 @@ class TransactionController extends Controller
 
     public function calculateTotalPrice($subTotal, $fee)
     {
-        return number_format($subTotal + $fee, 2, '.', ',');
+        return $subTotal + $fee;
     }
 
 
