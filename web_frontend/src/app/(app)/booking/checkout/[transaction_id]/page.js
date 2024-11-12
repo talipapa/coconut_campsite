@@ -89,7 +89,7 @@ export default function Page({params}) {
                                     <li>Tel Number: {booking.booking.tel_number}</li>
                                 </ul>
                                 <ul className="space-y-1">
-                                    <li>{booking.booking.adultCount !== 0 && `Adult (${booking.booking.adultCount} pax * ${childPrice}) = P ${(booking.booking.adultCount * adultPrice).toFixed(2)}` }</li>
+                                    <li>{booking.booking.adultCount !== 0 && `Adult (${booking.booking.adultCount} pax * ${adultPrice}) = P ${(booking.booking.adultCount * adultPrice).toFixed(2)}` }</li>
 
                                     <li>{booking.booking.childCount !== 0 && `Child (${booking.booking.childCount} pax * ${childPrice}) = P ${calcPricePerUnit(childPrice, booking.booking.childCount)}` }</li>
 
