@@ -98,6 +98,15 @@ const Successful = () => {
                 </div>
               )}
             />
+            <Table.Column title='Method' dataIndex='payment_type' key='payment_type' 
+              filters={[
+                { text: 'CASH', value: 'CASH' },
+                { text: 'XENDIT', value: 'XENDIT' },
+              ]}
+              onFilter= {(value, record) => record.status.indexOf(value as string) === 0} 
+              render={(value:string) => (
+              <span className='text-xs px-3 rounded-full bg-green-400'>{value}</span>
+            )} />
             <Table.Column
               title="Name"
               key="name"

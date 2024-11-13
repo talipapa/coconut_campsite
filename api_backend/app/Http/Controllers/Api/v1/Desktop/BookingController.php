@@ -96,21 +96,8 @@ class BookingController extends Controller
             if (!$booking) {
                 return response()->json(['message' => 'Booking not found'], 404);
             }
-            switch ($request->action) {
-                case 'confirm':
-                    # code...
-                    $booking->status = 'VERIFIED';
-                    $booking->transaction->status = 'VERIFIED';
-                    break;
-
-                case 'cancel':
-                    # code...
-                    $booking->status = 'FAILED';
-                    break;
-                default:
-                    return response()->json(['message' => 'Something went wrong', 'error', 'Action not acceptable'], 500);
-                    break;
-                }
+            $booking->status = 'VERIFIED';
+            $booking->transaction->status = 'VERIFIED';
             $booking->transaction->save();
             $booking->save();
             return response()->json(['message' => 'Booking status updated']);

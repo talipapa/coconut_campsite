@@ -267,7 +267,7 @@ const Upcoming = () => {
                 <div className='flex flex-rowselect-none space-x-2'>
                   <Button onClick={() => navigate(`/booking/${record.id}`)} className='px-2 text-xs py-1 w-full text-white bg-slate-600 rounded-lg transition ease-in-out hover:scale-105'>Info</Button>
                   <Button onClick={() => showRescheduleModal(record.id, 'cancel')} className='px-2 py-1 bg-blue-600 text-white text-xs rounded-lg transition ease-in-out hover:scale-105'>Reschedule</Button>
-                  {record.payment_status === 'CASH' ? (
+                  {record.payment_type === 'CASH' ? (
                     <Button onClick={() => showCancelModal(record.id, 'cancel')} className='px-2 py-1 bg-red-600 text-white text-xs rounded-lg transition ease-in-out hover:scale-105'>Cancel</Button>
                   ) : (
                     <Button onClick={() => showRefundModal(record.id, 'cancel')} className='px-2 py-1 bg-red-600 text-white text-xs rounded-lg transition ease-in-out hover:scale-105'>Refund</Button>
@@ -275,6 +275,15 @@ const Upcoming = () => {
                 </div>
               )}
             />
+            <Table.Column title='Method' dataIndex='payment_type' key='payment_type' 
+              filters={[
+                { text: 'CASH', value: 'CASH' },
+                { text: 'XENDIT', value: 'XENDIT' },
+              ]}
+              onFilter= {(value, record) => record.status.indexOf(value as string) === 0} 
+              render={(value:string) => (
+              <span className='text-xs px-3 rounded-full bg-green-400'>{value}</span>
+            )} />
             <Table.Column
               title="Name"
               key="name"

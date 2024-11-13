@@ -34,6 +34,7 @@ const Upcoming = () => {
   const [openReschedule, setOpenReschedule] = useState(false);
   const [openRefund, setOpenRefund] = useState(false);
   const [openCancel, setOpenCancel] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [bookingType, setBookingType] = useState<string>('daytour');
   const bookingTypeOption = [
@@ -64,10 +65,13 @@ const Upcoming = () => {
   const showCancelModal = (id: string, action: 'cancel'|'confirm') => {
     setOpenCancel(true);
   };
+  const showConfirmModal = (id: string, action: 'cancel'|'confirm') => {
+    setOpenConfirm(true);
+  };
 
   const axiosBookingAction = (id: string, action: 'confirm'|'cancel') => {
     if (action === 'confirm') {
-      axios.patch(`manager/booking/action/${id}`, { action: 'confirm' })
+      axios.patch(`manager/booking/confirm/${id}`, { action: 'confirm' })
         .then((res) => {
           setCurrentPage(1)
           fetchData()
@@ -135,7 +139,15 @@ const Upcoming = () => {
   };
 
   const cancelHandleCancel = () => {
-    setOpenCancel(false);
+    setOpenConfirm(false);
+  };
+  const confirmHandleOk = () => {
+    setOpenConfirm(false);
+    axiosBookingAction(currentBookingId, 'confirm')
+  };
+
+  const confirmHandleCancel = () => {
+    setOpenConfirm(false);
   };
 
 
@@ -229,7 +241,7 @@ const Upcoming = () => {
             <>
               <Button onClick={refundHandleCancel} className='bg-slate-400 text-white'>Nevermind</Button>
               {_?.valueOf}
-              <Button onClick={refundHandleOk} className='text-white px-12 bg-red-500'>Let's refund this</Button>
+              <Button onClick={refundHandleOk} className='text-white px-12 bg-green-500'>Let's refund this</Button>
             </>
           )}
         ></Modal>
@@ -243,6 +255,19 @@ const Upcoming = () => {
               <Button onClick={cancelHandleCancel} className='bg-slate-400 text-white'>Nevermind</Button>
               {_?.valueOf}
               <Button onClick={cancelHandleOk} className='text-white px-12 bg-red-500'>Let's cancel this</Button>
+            </>
+          )}
+        ></Modal>
+        <Modal
+          open={openConfirm}
+          title="Are you sure you want to confirm this booking?"
+          onOk={confirmHandleOk}
+          onCancel={confirmHandleCancel}
+          footer={(_, { OkBtn, CancelBtn}) => (
+            <>
+              <Button onClick={confirmHandleCancel} className='bg-slate-400 text-white'>Nevermind</Button>
+              {_?.valueOf}
+              <Button onClick={confirmHandleOk} className='text-white px-12 bg-green-500'>CONFIRM</Button>
             </>
           )}
         ></Modal>
@@ -283,8 +308,9 @@ const Upcoming = () => {
               render={(_, record: IBookingData) => (
                 <div className='flex flex-rowselect-none space-x-2'>
                   <Button onClick={() => navigate(`/booking/${record.id}`)} className='px-2 text-xs py-1 w-full text-white bg-slate-600 rounded-lg transition ease-in-out hover:scale-105'>Info</Button>
+                  <Button onClick={() => showConfirmModal(record.id, 'confirm')} className='px-2 py-1 bg-green-600 text-white text-xs rounded-lg transition ease-in-out hover:scale-105'>Confirm</Button>
                   <Button onClick={() => showRescheduleModal(record.id, 'cancel')} className='px-2 py-1 bg-blue-600 text-white text-xs rounded-lg transition ease-in-out hover:scale-105'>Reschedule</Button>
-                  {record.payment_status === 'CASH' ? (
+                  {record.payment_type === 'CASH' ? (
                     <Button onClick={() => showCancelModal(record.id, 'cancel')} className='px-2 py-1 bg-red-600 text-white text-xs rounded-lg transition ease-in-out hover:scale-105'>Cancel</Button>
                   ) : (
                     <Button onClick={() => showRefundModal(record.id, 'cancel')} className='px-2 py-1 bg-red-600 text-white text-xs rounded-lg transition ease-in-out hover:scale-105'>Refund</Button>
@@ -292,19 +318,20 @@ const Upcoming = () => {
                 </div>
               )}
             />
+            <Table.Column title='Method' dataIndex='payment_type' key='payment_type' 
+              filters={[
+                { text: 'CASH', value: 'CASH' },
+                { text: 'XENDIT', value: 'XENDIT' },
+              ]}
+              onFilter= {(value, record) => record.status.indexOf(value as string) === 0} 
+              render={(value:string) => (
+              <span className='text-xs px-3 rounded-full bg-green-400'>{value}</span>
+            )} />
             <Table.Column
               title="Name"
               key="name"
               render={(_, record: IBookingData) => <span className='text-xs'>{`${record.first_name} ${record.last_name}`}</span>}
             />
-            <Table.Column title='Check Out' dataIndex='check_out' key='check_out' 
-              sortDirections={['ascend', 'descend']}
-              sorter={(a, b) => new Date(a.check_out).getTime() - new Date(b.check_out).getTime()}
-              render={(value) => (
-              <div className='flex flex-col space-y-1'>
-                <span className='text-xs'>{format(value, 'MMMM, dd, yyyy')}</span>
-              </div>
-            )} />
             <Table.Column title='Check In' dataIndex='check_in' key='check_in' 
               sorter={(a, b) => new Date(a.check_in).getTime() - new Date(b.check_in).getTime()}
               render={(value) => (
@@ -350,6 +377,7 @@ const Upcoming = () => {
               render={(value:string) => (
               <span className='text-xs px-3 rounded-full bg-green-400'>{value}</span>
             )} />
+
             <Table.Column title='Created At' dataIndex='created_at' key='created_at' 
               sorter={(a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()}
               render={(value:Date) => (
