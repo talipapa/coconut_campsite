@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\CustomVendors\Xemaphore;
 use App\Events\eWalletEvents;
 use App\Mail\EpaymentConfirmation;
+use App\Mail\StaffActionRefundNotifier;
 use App\Models\Booking;
 use App\Models\Payout;
 use App\Models\Refund;
@@ -185,6 +186,8 @@ class eWalletWebhookListener
                     ]);
                 }
                 Xemaphore::sendSms($booking->tel_number, "Your booking has been successfully processed! Your money will return after a few hours or days");
+                Mail::to($booking->email)->send(new StaffActionRefundNotifier($booking, $transaction, (int) $transaction->price));
+
                 break;
             
             default:
@@ -193,10 +196,6 @@ class eWalletWebhookListener
                 ]);
                 break;
         }
-
-
-
-        
 
         return response()->json('Webhook received', 200);
     }
