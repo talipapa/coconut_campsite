@@ -46,6 +46,7 @@ const Upcoming = () => {
     setOpenRefund(true);
   };
   const showCancelModal = (id: string, action: 'cancel'|'confirm') => {
+    setCurrentBookingId(id)
     setOpenCancel(true);
   };
 

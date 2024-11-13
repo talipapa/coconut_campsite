@@ -46,10 +46,12 @@ const Noshow = () => {
     setOpenRefund(true);
   };
   const showCancelModal = (id: string, action: 'cancel'|'confirm') => {
+    setCurrentBookingId(id)
     setOpenCancel(true);
   };
 
   const axiosBookingAction = (id: string, action: 'confirm'|'cancel') => {
+    
     if (action === 'confirm') {
       axios.patch(`manager/booking/action/${id}`, { action: 'confirm' })
         .then((res) => {

@@ -63,9 +63,11 @@ const Upcoming = () => {
     setOpenRefund(true);
   };
   const showCancelModal = (id: string, action: 'cancel'|'confirm') => {
+    setCurrentBookingId(id)
     setOpenCancel(true);
   };
   const showConfirmModal = (id: string, action: 'cancel'|'confirm') => {
+    setCurrentBookingId(id)
     setOpenConfirm(true);
   };
 
@@ -139,7 +141,7 @@ const Upcoming = () => {
   };
 
   const cancelHandleCancel = () => {
-    setOpenConfirm(false);
+    setOpenCancel(false);
   };
   const confirmHandleOk = () => {
     setOpenConfirm(false);
