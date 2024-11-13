@@ -90,7 +90,7 @@ class BookingController extends Controller
         }
     }
 
-    public function bookingAction(Request $request, Booking $booking){
+    public function confirmBooking(Request $request, Booking $booking){
         try {
             //code...
             if (!$booking) {

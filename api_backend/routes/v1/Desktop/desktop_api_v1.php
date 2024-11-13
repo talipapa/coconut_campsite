@@ -18,7 +18,7 @@ Route::middleware(['auth:sanctum', 'manager'])->group(function (){
     Route::get('/bookings/verified', [BookingController::class, 'fetchSuccessfulBooking']);
     Route::get('/booking/{booking}', [BookingController::class, 'fetchSingleBooking']);
     Route::patch('/booking/cancel/{booking}', [BookingController::class, 'cancelBooking']);
-    Route::patch('/booking/confirm/{booking}', [BookingController::class, 'bookingAction']);
+    Route::patch('/booking/confirm/{booking}', [BookingController::class, 'confirmBooking']);
     Route::get('user', [TokenBasedAuthController::class, 'user']);   
     Route::post('logout', [TokenBasedAuthController::class, 'logout']);  
     Route::get('summary', [BookingController::class, 'dashboardSummary']);  
