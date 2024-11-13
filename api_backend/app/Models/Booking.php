@@ -35,7 +35,7 @@ class Booking extends Model
         'payment_type'
     ];
 
-    protected $appends = ['full_name', 'payment_type', 'total_campers'];
+    protected $appends = ['full_name', 'payment_type', 'total_campers', 'transaction_status'];
 
     public function getFullNameAttribute()
     {
@@ -51,6 +51,12 @@ class Booking extends Model
     {
         return $this->adultCount + $this->childCount;
     }
+
+    public function getTransactionStatusAttribute()
+    {
+        return $this->transaction ? $this->transaction->status : null;
+    }
+
 
 
     public function user()

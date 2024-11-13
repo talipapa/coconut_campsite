@@ -4,17 +4,16 @@ import { Breadcrumb, Button, Input, Table } from 'antd'
 import { format } from 'date-fns'
 import { IBookingData } from './Scanned'
 import axios from '@/utils/auth'
-import { useNavigate } from 'react-router-dom'
-import moment from 'moment'
+import { useNavigate } from 'react-router'
 
-const AllReservation = () => {
+const Upcoming = () => {
   const [bookingData, setBookingData] = useState<any | undefined>(undefined)
   const [perPage, setPerPage] = useState(50)
   const [currentPage, setCurrentPage] = useState(1)
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [filteredData, setFilteredData] = useState<any | undefined>(undefined)
-
   const navigate = useNavigate()
+
 
   const generatePDF = async () => {
     window.electron.ipcRenderer.generateDataPDF(filteredData.data)
@@ -27,7 +26,7 @@ const AllReservation = () => {
   };
 
   const fetchData = () => {
-    axios.get(`manager/bookings?page=${currentPage}&per_page=${perPage}`)
+    axios.get(`manager/upcoming/bookings?page=${currentPage}&per_page=${perPage}`)
       .then((res) => {
         setBookingData(res.data)
         setFilteredData(res.data)
@@ -48,7 +47,7 @@ const AllReservation = () => {
     setPerPage(localPerPage)
   }
 
-  // Search functionality
+    // Search functionality
   const handleSearch = (value: string) => {
     setSearchQuery(value)
     const filtered = bookingData?.data.filter((booking: IBookingData) =>
@@ -64,14 +63,17 @@ const AllReservation = () => {
         <div className='flex flex-row justify-between bg-slate-200 shadow-lg py-5 px-6 select-none'>
           <Breadcrumb>
             <Breadcrumb.Item><span className='font-semibold'>Reservations</span></Breadcrumb.Item>
+            <Breadcrumb.Item><span className='font-semibold'>Successful</span></Breadcrumb.Item>
           </Breadcrumb>
           <span className='text-slate-400 text-xl'>Results: {bookingData?.total}</span>
         </div>
+        
         <div className='flex flex-col px-6 py-8 overflow-x-clip max-h-[80vh] overflow-y-scroll'>
           <div className='flex flex-row gap-5'>
             <Button type='primary' onClick={generatePDF}>Generate PDF</Button>
             <Input.Search placeholder='Search here....' className='mb-5' value={searchQuery}onChange={(e) => handleSearch(e.target.value)}/>
           </div>
+          
           <Table
             rowClassName='hover:bg-slate-200'
             rowHoverable={false}
@@ -80,8 +82,8 @@ const AllReservation = () => {
             loading={!filteredData}
             size='small'
             pagination={{
-              position: ['topRight'],
               current: currentPage,
+              position: ['topRight'],
               pageSize: bookingData?.per_page,
               showSizeChanger: true,
               total: bookingData?.total,
@@ -92,15 +94,14 @@ const AllReservation = () => {
               key="actions"
               render={(_, record: IBookingData) => (
                 <div className='flex flex-rowselect-none'>
-                  <Button onClick={() => navigate(`/booking/${record.id}`)} className='px-2 text-xs py-1 w-full text-white bg-slate-600 rounded-lg transition ease-in-out hover:scale-105'>Info</Button>
+                  <Button onClick={() => navigate(`/booking/${record.id}`)} className='px-2 text-xs py-1 w-full text-white bg-blue-400 rounded-lg transition ease-in-out hover:scale-105'>Info</Button>
                 </div>
               )}
             />
             <Table.Column
               title="Name"
               key="name"
-            onFilter={(value, record) => record.name.indexOf(value as string) === 0}
-              render={(_, record) => <span className='text-xs'>{`${(record as IBookingData).first_name} ${(record as IBookingData).last_name}`}</span>}
+              render={(_, record: IBookingData) => <span className='text-xs'>{`${record.first_name} ${record.last_name}`}</span>}
             />
             <Table.Column title='Check Out' dataIndex='check_out' key='check_out' 
               sortDirections={['ascend', 'descend']}
@@ -165,6 +166,7 @@ const AllReservation = () => {
               render={(value:Date) => (
               <span className='text-xs'>{format(value, 'MMM/dd/yyyy | hh:mm a')}</span>
             )} />
+
           </Table>
           
         </div>
@@ -173,4 +175,4 @@ const AllReservation = () => {
   )
 }
 
-export default AllReservation
+export default Upcoming

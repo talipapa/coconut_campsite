@@ -47,6 +47,9 @@ The booking is unpaid
 PAID (Only for online transaction)
 The booking is paid using online payment methods
 
+CASH_PENDING
+Payment type is CASH on Site but is not paid yet
+
 CASH_CANCELLED
 The booking is cancelled (status only available for cash payment method)
 
@@ -64,6 +67,9 @@ The booking is not refunded, voided or cash_cancelled (NO SHOW)
 
 VERIFIED
 The booking is verified by the manager/campsite_owner/caretaker
+
+CANCELLED
+Payment bookinng is CANCELLED 
 
 ## NGROK tutorial
 1. In CMD, download ngrok.exe

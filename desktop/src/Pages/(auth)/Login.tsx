@@ -59,7 +59,7 @@ const Login = () => {
   
     return (
       <>
-        <div className="min-h-screen grid md:grid-cols-3 md:justify-center sm:pt-0 bg-gray-100">
+        <div className="min-h-screen grid lg:grid-cols-3 lg:justify-center sm:pt-0 bg-gray-100">
           <div className="w-full h-full px-6 py-4 col-span-2 bg-white shadow-md sm:rounded-lg items-center justify-center">
                 <div className='h-full w-full flex flex-col items-center justify-center'>
                     <div className='w-[70%] max-w-[600px]'>
@@ -73,17 +73,17 @@ const Login = () => {
                       </div>
                       <div className='flex flex-col space-y-9 w-full'>
                             <div className='flex flex-col w-full'>
-                            <TextField title='Email' placeholder='Enter your email' value={formData['email']} handleChangeText={(e) => setFormData((prev) => ({ ...prev, email: e }))} errors={[errors.email]}  />
+                            <TextField otherStyles='shadow-sm' title='Email' placeholder='Enter your email' value={formData['email']} handleChangeText={(e) => setFormData((prev) => ({ ...prev, email: e }))} errors={[errors.email]}  />
                             </div>
                             <div className='flex flex-col w-full'>
-                            <TextField title='Password' isPassword={true} placeholder='Enter your password' value={formData['password']} handleChangeText={(e) => setFormData((prev) => ({ ...prev, password: e }))} errors={[errors.password]} />
+                            <TextField otherStyles='shadow-sm' title='Password' isPassword={true} placeholder='Enter your password' value={formData['password']} handleChangeText={(e) => setFormData((prev) => ({ ...prev, password: e }))} errors={[errors.password]} />
                             </div>
                         <Button type='primary' loading={isLoading} onClick={handleLogin} className='bg-[#BC7B5C] w-full rounded-md py-8 text-white'>Login</Button>
                       </div>
                     </div>
                 </div>
             </div>
-            <div className="md:flex overflow-y-hidden md:flex-col md:items-center md:justify-center hidden md:relative">
+            <div className="lg:flex overflow-y-hidden md:flex-col md:items-center md:justify-center hidden md:relative">
                 <img src={require('../../../assets/login_banner.jpg')}  className='h-full w-full object-cover absolute' />
             </div>
         </div>

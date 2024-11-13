@@ -4,12 +4,17 @@ namespace App\Http\Controllers\Api\v1\Desktop;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\SuccessfulBookingResource;
+use App\Mail\StaffActionRefundNotifier;
+use App\Mail\StaffActionRescheduleNotifier;
 use App\Models\Booking;
 use App\Models\Camper;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use GlennRaya\Xendivel\Xendivel;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class BookingController extends Controller
 {
@@ -76,10 +81,9 @@ class BookingController extends Controller
 
     public function fetchScannedBooking(Request $request){
         try {
-            //code...
-            // sort by check in date
+            // Scanned button: Confirm & Reschedule
             $perPage = $request->query('per_page', 10);
-            $scannedBooking = Booking::whereIn('status', ['SCANNED', 'PAID', 'CASH_PENDING'])->paginate($perPage);
+            $scannedBooking = Booking::whereIn('status', ['SCANNED'])->orderBy('updated_at', 'asc')->paginate($perPage);
             return response()->json($scannedBooking);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Something went wrong', 'error' => $th], 500);
@@ -115,12 +119,69 @@ class BookingController extends Controller
         }
     }
 
+    public function cancelBooking(Request $request, Booking $booking){
+        $transaction = $booking->transaction;
+
+        // Verify if user has a booking
+        if (!$booking) {
+            return response()->json(['message' => 'Booking not found'], 404);
+        }
+
+        // Check if the status of the booking is CANCELLED
+        if ($booking->status === 'CANCELLED') {
+            return response()->json(['message' => 'Booking is already cancelled'], 400);
+        }
+
+        // Update the status of the booking to CANCELLED
+        $booking->update([
+            'status' => 'CANCELLED',
+        ]);
+        
+        // Update the status of the booking to CASH_CANCELLED
+        $transaction->update([
+            'status' => 'CASH_CANCELLED',
+        ]);
+
+        $booking->save();
+        $transaction->save();
+        
+
+        return response()->json($booking, 200);
+    }
+
+
+    public function fetchUpcomingBooking(Request $request){
+        try {
+            //code...
+            // sort by check in date
+            $perPage = $request->query('per_page', 10);
+            $scannedBooking = Booking::whereIn('status', ['PAID', 'CASH_PENDING'])->orderBy('updated_at', 'desc')->paginate($perPage);
+            return response()->json($scannedBooking);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Something went wrong', 'error' => $th], 500);
+        }
+    }
+
+    public function fetchNoShowBooking(Request $request){
+        try {
+            //code...
+            
+            $perPage = $request->query('per_page', 10);
+            // Only fethc if the check in date is less than today
+            $scannedBooking = Booking::where('check_in', '<', Carbon::now()->timezone('Asia/Manila')->format('Y-m-d'))->whereNotIn('status', ['VERIFIED', 'SCANNED', 'CANCELLED'])->orderBy('updated_at', 'desc')->paginate($perPage);
+            // $scannedBooking = Booking::where('status', 'NO_SHOW')->orderBy('updated_at', 'desc')->paginate($perPage);
+            return response()->json($scannedBooking);
+        } catch (\Throwable $th) {
+            return response()->json(['message' => 'Something went wrong', 'error' => $th], 500);
+        }
+    }
+
     public function fetchSuccessfulBooking(Request $request){
         try {
             //code...
             // sort by check in date
             $perPage = $request->query('per_page', 10);
-            $scannedBooking = Booking::where('status', 'VERIFIED')->paginate($perPage);
+            $scannedBooking = Booking::where('status', 'VERIFIED')->orderBy('updated_at', 'desc')->paginate($perPage);
             return response()->json($scannedBooking);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Something went wrong', 'error' => $th], 500);
@@ -132,7 +193,7 @@ class BookingController extends Controller
             //code...
             // sort by check in date
             $perPage = $request->query('per_page', 10);
-            $scannedBooking = Booking::paginate($perPage);
+            $scannedBooking = Booking::whereNotIn('status', ['PENDING'])->orderBy('updated_at', 'desc')->paginate($perPage);
             return response()->json($scannedBooking);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Something went wrong', 'error' => $th], 500);
@@ -214,6 +275,115 @@ class BookingController extends Controller
                 'message' => $th->getMessage(),
             ], 500);
         }
+    }
+
+    public function rescheduleBooking(Request $request, Booking $booking){
+        // Verify if the booking exists
+
+        $validated = $request->validate([
+            'booking_type' => 'required',
+            'check_in' => 'required',
+        ]);
+
+        switch ($validated['booking_type']) {
+            case 'daytour':
+                // Send email to user
+                Mail::to($booking->email)->send(new StaffActionRescheduleNotifier($booking, $booking->transaction, $booking->check_in, Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d')));
+
+                $booking->update([
+                    'booking_type' => $validated['booking_type'],
+                    'check_in' => Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d'),
+                    'check_out' => Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d'),
+                ]);
+                $booking->save();        
+                return response()->json($booking, 200);
+                break;
+            case 'overnight':
+                // Send email to user
+                Mail::to($booking->email)->send(new StaffActionRescheduleNotifier($booking, $booking->transaction, $booking->check_in, Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d')));
+
+
+                $booking->update([
+                    'booking_type' => $validated['booking_type'],
+                    'check_in' => Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d'),
+                    'check_out' => Carbon::parse($validated['check_in'])->addDay(1)->timezone('Asia/Manila')->format('Y-m-d'),
+                ]);
+        
+                $booking->save();
+        
+                return response()->json($booking, 200);
+
+                break;
+            default:
+                return response()->json(['message' => 'Invalid booking type'], 400);
+                break;
+        }
+
+    }
+
+    public function refundBooking(Request $request, Booking $booking){
+        // Verify if user has a booking
+        if (!$booking) {
+            return response()->json(['message' => 'Booking not found'], 404);
+        }
+
+        $refundPercentage = 0.5;
+        
+        // Check if the user in request owns the booking or is an owner/manager
+        // if ($booking->user_id != $request->user()->id){
+        //     return response()->json(['message' => "Unauthorized access"], 401);
+        // }
+
+    
+        $transaction = $booking->transaction;
+        // Check if the status of the transaction is SUCCEEDED
+        try {
+            if (!in_array($transaction->status, ['SUCCEEDED', 'VERIFIED', 'SCANNED'])) {
+                return response()->json(['message' => 'Transaction is not permitted to refund'], 400);
+            }
+    
+            // Fetch the xendit id and append "ewc_" to it
+            $xenditId = 'ewc_'.$booking->transaction->xendit_product_id;
+
+            // Call the Xendit API to get the charge info
+            // Prepare data conditions
+            $response = Xendivel::getPayment($xenditId, 'ewallet')->getResponse();
+    
+            $createdAt = Carbon::parse($response->created)->timezone('Asia/Manila');
+            $now = Carbon::now()->timezone('Asia/Manila');
+            // Xendit cutoff time for voiding charge
+            $cutOffTime = $createdAt->copy()->setTime(23, 40, 0); 
+            
+            // Log::info('Date info', ['Xendit created_at' => $createdAt, 'now' => $now]);
+            // Log::info('Xendit response:', [$response]);
+    
+    
+            // Void the charge, Check if the created_at is currently in the same day and is before 23:50:00.
+            if ($createdAt->isSameDay($now) && $createdAt->lte($cutOffTime)) {
+                $response = Xendivel::void($xenditId)->getResponse();
+                Log::info('Void response:', [$response]);
+            } else{
+                $response = Xendivel::getPayment($xenditId, 'ewallet')
+                    ->refund((int) $transaction->price * $refundPercentage)
+                    ->getResponse();
+                Log::info(`Refund response:` . $transaction->price, [$response]);
+            }
+            $booking->status = "CANCELLED";
+            $transaction->status = "REFUND_PENDING";
+            $transaction->save();
+            $booking->save();
+
+            // Send email to user
+            Mail::to($booking->email)->send(new StaffActionRefundNotifier($booking, $transaction, (int) $transaction->price * $refundPercentage));
+
+            return response()->json($booking, 201);
+        } catch (\Throwable $th) {
+            //throw $th;
+            Log::info($th);
+            return response()->json(['message' => 'Something went wrong'], 400);
+        }
+
+
     }
 
 }

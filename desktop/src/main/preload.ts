@@ -1,6 +1,6 @@
 // Disable no-unused-vars, broken for spread args
 /* eslint no-unused-vars: off */
-import { IBookingData } from '@/Pages/(main)/Pending';
+import { IBookingData } from '@/Pages/(main)/Scanned';
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
 export type Channels = 'ipc-example';

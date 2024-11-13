@@ -16,12 +16,14 @@ export interface IBookingData {
   is_cabin: boolean,
   status: string,
   created_at: Date,
+  transaction_status: string,
+  payment_type: string,
 }
 
-const Pending = () => {
+const Scanned = () => {
   const [bookingData, setBookingData] = React.useState<any | undefined>(undefined)
   const [filteredData, setFilteredData] = useState<any | undefined>(undefined)
-  const [perPage, setPerPage] = React.useState(10)
+  const [perPage, setPerPage] = React.useState(50)
   const [currentPage, setCurrentPage] = React.useState(1)
   const [currentBookingId, setCurrentBookingId] = React.useState('')
   const [searchQuery, setSearchQuery] = useState<string>('')
@@ -149,6 +151,7 @@ const Pending = () => {
               pagination={{
                 position: ['topRight'],
                 current: currentPage,
+                showSizeChanger: true,
                 pageSize: filteredData?.per_page,
                 total: filteredData?.total,
                 onChange: (page, pageSize) => tableFetchOptions(page, pageSize)
@@ -161,7 +164,8 @@ const Pending = () => {
               render={(_, record: IBookingData) => (
                 <div className='flex flex-row space-x-2 select-none'>
                   <Button type='primary' onClick={() => axiosBookingAction(record.id, 'confirm')} className='px-2 text-xs py-1 bg-green-600 text-white rounded-lg transition ease-in-out hover:scale-105'>Confirm</Button>
-                  <Button onClick={() => showModal(record.id, 'cancel')} className='px-2 py-1 bg-red-600 text-white text-xs rounded-lg transition ease-in-out hover:scale-105'>No show</Button>
+                  {/* Reschdule button below */}
+
                 </div>
               )}
             />
@@ -171,32 +175,67 @@ const Pending = () => {
               width="15%"
               render={(_, record: IBookingData) => <span className='text-xs'>{`${record.first_name} ${record.last_name}`}</span>}
             />
-            <Table.Column title='Check In' dataIndex='check_in' key='check_in' render={(value) => (
-              <div className='flex flex-col items-center space-y-1'>
-                {new Date() > new Date(value) ? (
-                  <span className='px-2 text-white rounded-xl bg-red-400'>Overdue</span>
-                ) : (
-                  <span className='px-2 text-black rounded-xl bg-green-400'>On Time</span>
-                )}
-                <span className='text-xs'>{format(value, 'MMM/dd/yyyy')}</span>
+                        <Table.Column title='Check Out' dataIndex='check_out' key='check_out' 
+              sortDirections={['ascend', 'descend']}
+              sorter={(a, b) => new Date(a.check_out).getTime() - new Date(b.check_out).getTime()}
+              render={(value) => (
+              <div className='flex flex-col space-y-1'>
+                <span className='text-xs'>{format(value, 'MMMM, dd, yyyy')}</span>
               </div>
             )} />
-            <Table.Column title='Booking Type' dataIndex='booking_type' key='booking_type' render={(value: string) => (
+            <Table.Column title='Check In' dataIndex='check_in' key='check_in' 
+              sorter={(a, b) => new Date(a.check_in).getTime() - new Date(b.check_in).getTime()}
+              render={(value) => (
+              <div className='flex flex-col space-y-1'>
+                <span className='text-xs'>{format(value, 'MMMM dd, yyyy')}</span>
+              </div>
+            )} />
+            <Table.Column title='Booking Type' dataIndex='booking_type' key='booking_type' 
+              filters={[
+                { text: 'Day Tour', value: 'daytour' },
+                { text: 'Overnight', value: 'overnight' }
+              ]}
+              onFilter= {(value, record) => record.booking_type.indexOf(value as string) === 0} 
+              render={(value:string) => (
               value === 'daytour' ? (
                 <span className='bg-yellow-600 px-4 py-1 rounded-lg text-white'>Day Tour</span>
               ) : (
                 <span className='bg-slate-800 px-4 py-1 rounded-lg text-white'>Overnight</span>
-              )
+              ) 
             )} />
-            <Table.Column title='Is Cabin' dataIndex='is_cabin' key='is_cabin' render={(value: boolean) => (
+            <Table.Column title='Is Cabin' dataIndex='is_cabin' key='is_cabin' 
+              filters={[
+                { text: 'Yes', value: true },
+                { text: 'No', value: false }
+              ]}
+              onFilter={(value, record) => record.is_cabin === value}
+              render={(value:boolean) => (
               value ? (
                 <span className='bg-green-600 px-4 rounded-lg text-white'>Yes</span>
               ) : (
                 <span className='px-4 rounded-lg bg-slate-400 text-white'>No</span>
               )
             )} />
-            <Table.Column title='Status' dataIndex='status' key='status' />
-            <Table.Column title='Created At' dataIndex='created_at' key='created_at' render={(value: Date) => (
+            <Table.Column title='Status' dataIndex='status' key='status' 
+              filters={[
+                { text: 'VERIFIED', value: 'VERIFIED' },
+                { text: 'PAID', value: 'PAID' },
+                { text: 'VOIDED', value: 'VOIDED' },
+                { text: 'SCANNED', value: 'SCANNED' },
+                { text: 'CANCELLED', value: 'CANCELLED' },
+              ]}
+              onFilter= {(value, record) => record.status.indexOf(value as string) === 0} 
+              render={(value:string) => (
+              <span className='text-xs px-3 rounded-full bg-green-400'>{value}</span>
+            )} />
+            <Table.Column title='Created At' dataIndex='created_at' key='created_at' 
+              sorter={(a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()}
+              render={(value:Date) => (
+              <span className='text-xs'>{format(value, 'MMM/dd/yyyy | hh:mm a')}</span>
+            )} />
+            <Table.Column title='Updated At' dataIndex='updated_at' key='updated_at' 
+              sorter={(a, b) => new Date(a.updated_at).getTime() - new Date(b.updated_at).getTime()}
+              render={(value:Date) => (
               <span className='text-xs'>{format(value, 'MMM/dd/yyyy | hh:mm a')}</span>
             )} />
           </Table>
@@ -220,4 +259,4 @@ const Pending = () => {
   )
 }
 
-export default Pending
+export default Scanned

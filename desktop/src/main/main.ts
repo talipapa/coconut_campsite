@@ -6,7 +6,7 @@ import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import fs from 'fs';
 import { PDFDocument, rgb } from 'pdf-lib';
-import { IBookingData } from '@/Pages/(main)/Pending';
+import { IBookingData } from '@/Pages/(main)/Scanned';
 import puppeteer from 'puppeteer';
 
 class AppUpdater {

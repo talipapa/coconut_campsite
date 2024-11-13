@@ -94,7 +94,6 @@ class BookingController extends Controller
     }
 
 
-
     // Refund booking
     public function refundBooking(Request $request, Booking $booking){
         // Verify if user has a booking
@@ -182,9 +181,6 @@ class BookingController extends Controller
 
 
     }
-
-
-
 
     // Check refund status if the refund is successfully processed or still processsing
     public function checkRefundStatus(Request $request, Booking $booking){
