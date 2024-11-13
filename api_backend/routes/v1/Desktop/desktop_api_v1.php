@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Route;
 // Authentication for mobile
 Route::post('login', [TokenBasedAuthController::class, 'loginManager']);
 Route::middleware(['auth:sanctum', 'manager'])->group(function (){
-    Route::get('/confirmation/bookings', [BookingController::class, 'fetchScannedBooking']);
+    Route::get('/scanned/bookings', [BookingController::class, 'fetchScannedBooking']);
     Route::get('/upcoming/bookings', [BookingController::class, 'fetchUpcomingBooking']);
     Route::get('/nowshow/bookings', [BookingController::class, 'fetchNoShowBooking']);
 

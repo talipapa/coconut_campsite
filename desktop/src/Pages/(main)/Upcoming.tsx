@@ -1,19 +1,130 @@
 import React, { useEffect, useState } from 'react'
 import PageWrapper from './PageWrapper'
-import { Breadcrumb, Button, Input, Table } from 'antd'
+import { Breadcrumb, Button, DatePicker, Input, Modal, notification, Radio, Table } from 'antd'
 import { format } from 'date-fns'
 import { IBookingData } from './Scanned'
 import axios from '@/utils/auth'
 import { useNavigate } from 'react-router'
+import dayjs from 'dayjs'
 
 const Upcoming = () => {
   const [bookingData, setBookingData] = useState<any | undefined>(undefined)
   const [perPage, setPerPage] = useState(50)
+  const [currentBookingId, setCurrentBookingId] = React.useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [filteredData, setFilteredData] = useState<any | undefined>(undefined)
   const navigate = useNavigate()
+  const [openReschedule, setOpenReschedule] = useState(false);
+  const [openRefund, setOpenRefund] = useState(false);
+  const [openCancel, setOpenCancel] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [bookingType, setBookingType] = useState<string>('daytour');
+  const bookingTypeOption = [
+    { label: 'Day Tour', value: 'daytour' },
+    { label: 'Overnight', value: 'overnight' }
+  ];
 
+
+  const [api, contextHolder] = notification.useNotification();
+  const openNotification = (notifType: 'success'|'error'|'warning'|'info', title: string, body: string) => {
+    api.open({
+      type: notifType,
+      message: title,
+      description: body,
+      showProgress: true,
+      pauseOnHover: false,
+    });
+  };
+
+  const showRescheduleModal = (id: string, action: 'cancel'|'confirm') => {
+    setCurrentBookingId(id)
+    setOpenReschedule(true);
+  };
+  const showRefundModal = (id: string, action: 'cancel'|'confirm') => {
+    setCurrentBookingId(id)
+    setOpenRefund(true);
+  };
+  const showCancelModal = (id: string, action: 'cancel'|'confirm') => {
+    setOpenCancel(true);
+  };
+
+  const axiosBookingAction = (id: string, action: 'confirm'|'cancel') => {
+    if (action === 'confirm') {
+      axios.patch(`manager/booking/action/${id}`, { action: 'confirm' })
+        .then((res) => {
+          setCurrentPage(1)
+          fetchData()
+          openNotification('success', 'Booking confirmed', 'Booking has been confirmed successfuly');
+        })
+        .catch((err) => {
+          openNotification('error', 'System failure', `Something went wrong, ${JSON.stringify(err)}`);
+          console.log(err)
+        })
+        
+      } else {
+        axios.patch(`manager/booking/cancel/${id}`, { action: 'cancel' })
+        .then((res) => {
+          setCurrentPage(1)
+          fetchData()
+          openNotification('info', 'Booking cancelled', 'Booking has successfully been cancelled!');
+        })
+        .catch((err) => {
+          openNotification('error', 'System failure', `Something went wrong, ${JSON.stringify(err)}`);
+          console.log(err)
+        })
+    }
+  }
+
+  const rescheduleHandleOk = () => {
+    axios.patch(`manager/booking/reschedule/${currentBookingId}`, { check_in: selectedDate, booking_type: bookingType })
+      .then((res) => {
+        openNotification('success', 'Booking rescheduled!', 'Booking has been rescheduled successfuly');
+        setOpenReschedule(false);
+      })
+      .catch((res) => {
+        openNotification('error', 'Reschedule has failed!', 'Rescheduling has failed, please try again');
+      })
+      .finally(() => {
+        fetchData()
+      })
+  };
+
+  const rescheduleHandleCancel = () => {
+    setOpenReschedule(false);
+  };
+  const refundHandleOk = () => {
+    setOpenRefund(false);
+    axios.patch(`manager/booking/refund/${currentBookingId}`)
+    .then((res) => {
+      openNotification('success', 'Booking has been Refunded!', 'Booking has been refunded successfuly');
+      setOpenReschedule(false);
+    })
+    .catch((res) => {
+      openNotification('error', 'Refund has been failed!', 'Refunding has failed, please try again');
+    })
+    .finally(() => {
+      fetchData()
+    })
+  };
+
+  const refundHandleCancel = () => {
+    setOpenRefund(false);
+  };
+
+  const cancelHandleOk = () => {
+    setOpenCancel(false);
+    axiosBookingAction(currentBookingId, 'cancel')
+  };
+
+  const cancelHandleCancel = () => {
+    setOpenCancel(false);
+  };
+
+
+
+
+  
 
   const generatePDF = async () => {
     window.electron.ipcRenderer.generateDataPDF(filteredData.data)
@@ -37,7 +148,6 @@ const Upcoming = () => {
       }
     )
   }
-  
   useEffect(() => {
     fetchData()
   }, [currentPage, perPage])
@@ -60,6 +170,67 @@ const Upcoming = () => {
   return (
     <PageWrapper>
       <>
+        <Modal
+          open={openReschedule}
+          title="Reschedule"
+          onOk={rescheduleHandleOk}
+          onCancel={rescheduleHandleCancel}
+          footer={(_, { OkBtn, CancelBtn }) => (
+            <>
+              <Button onClick={rescheduleHandleCancel} className='bg-slate-400 text-white'>Nevermind</Button>
+              <Button onClick={rescheduleHandleOk} className='text-white px-12 bg-blue-500'>Reschedule</Button>
+            </>
+          )}
+        >
+            <DatePicker className="w-full h-[50px] text-[#3D736C] font-bold"
+                          id="checkInDate"
+                          minDate={dayjs().add(2, 'day')}
+                          value={selectedDate}
+                          size="large"
+                          onChange={date => setSelectedDate(date)}
+                          maxDate={dayjs().add(3, 'month')}
+                          format="MMMM DD, YYYY"
+                          // disabledDate={disabledDate}
+                          // disabledTime={disabledDateTime}
+                      />
+
+            <div className="space-y-2">
+                <div className="space-x-4">
+                    <label htmlFor="bookingType">Booking type</label>
+                    {/* <span className="text-[#555555]">Price ₱ {isCabin ? cabinPrice : "0.00"}</span> */}
+                </div>
+                <Radio.Group value={bookingType} onChange={event => setBookingType(event.target.value)} block options={bookingTypeOption} defaultValue="daytour" optionType="button" buttonStyle="solid" size="large" id="bookingType" />
+
+            </div>
+        </Modal>
+        <Modal
+          open={openRefund}
+          title="Are you sure you want to Refund this booking?"
+          onOk={refundHandleOk}
+          onCancel={refundHandleCancel}
+          footer={(_, { OkBtn, CancelBtn}) => (
+            <>
+              <Button onClick={refundHandleCancel} className='bg-slate-400 text-white'>Nevermind</Button>
+              {_?.valueOf}
+              <Button onClick={refundHandleOk} className='text-white px-12 bg-red-500'>Let's refund this</Button>
+            </>
+          )}
+        ></Modal>
+        <Modal
+          open={openCancel}
+          title="Are you sure you want to cancel this booking?"
+          onOk={cancelHandleOk}
+          onCancel={cancelHandleCancel}
+          footer={(_, { OkBtn, CancelBtn}) => (
+            <>
+              <Button onClick={cancelHandleCancel} className='bg-slate-400 text-white'>Nevermind</Button>
+              {_?.valueOf}
+              <Button onClick={cancelHandleOk} className='text-white px-12 bg-red-500'>Let's cancel this</Button>
+            </>
+          )}
+        ></Modal>
+        {contextHolder}
+        
         <div className='flex flex-row justify-between bg-slate-200 shadow-lg py-5 px-6 select-none'>
           <Breadcrumb>
             <Breadcrumb.Item><span className='font-semibold'>Reservations</span></Breadcrumb.Item>
@@ -93,8 +264,14 @@ const Upcoming = () => {
               title="Actions"
               key="actions"
               render={(_, record: IBookingData) => (
-                <div className='flex flex-rowselect-none'>
-                  <Button onClick={() => navigate(`/booking/${record.id}`)} className='px-2 text-xs py-1 w-full text-white bg-blue-400 rounded-lg transition ease-in-out hover:scale-105'>Info</Button>
+                <div className='flex flex-rowselect-none space-x-2'>
+                  <Button onClick={() => navigate(`/booking/${record.id}`)} className='px-2 text-xs py-1 w-full text-white bg-slate-600 rounded-lg transition ease-in-out hover:scale-105'>Info</Button>
+                  <Button onClick={() => showRescheduleModal(record.id, 'cancel')} className='px-2 py-1 bg-blue-600 text-white text-xs rounded-lg transition ease-in-out hover:scale-105'>Reschedule</Button>
+                  {record.payment_status === 'CASH' ? (
+                    <Button onClick={() => showCancelModal(record.id, 'cancel')} className='px-2 py-1 bg-red-600 text-white text-xs rounded-lg transition ease-in-out hover:scale-105'>Cancel</Button>
+                  ) : (
+                    <Button onClick={() => showRefundModal(record.id, 'cancel')} className='px-2 py-1 bg-red-600 text-white text-xs rounded-lg transition ease-in-out hover:scale-105'>Refund</Button>
+                  )}
                 </div>
               )}
             />

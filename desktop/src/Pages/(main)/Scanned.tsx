@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import PageWrapper from './PageWrapper'
-import { Breadcrumb, Button, Input, Modal, notification, Table } from 'antd'
+import { Breadcrumb, Button, DatePicker, Input, Modal, notification, Radio, Table } from 'antd'
 import axios from '@/utils/auth'
 import { format } from 'date-fns'
+import dayjs from 'dayjs'
+import { useNavigate } from 'react-router-dom'
 
 export interface IBookingData {
   id: string,
@@ -17,16 +19,29 @@ export interface IBookingData {
   status: string,
   created_at: Date,
   transaction_status: string,
-  payment_type: string,
+  payment_status: string,
+  payment_type: string
 }
 
-const Scanned = () => {
-  const [bookingData, setBookingData] = React.useState<any | undefined>(undefined)
-  const [filteredData, setFilteredData] = useState<any | undefined>(undefined)
-  const [perPage, setPerPage] = React.useState(50)
-  const [currentPage, setCurrentPage] = React.useState(1)
+const Upcoming = () => {
+  const [bookingData, setBookingData] = useState<any | undefined>(undefined)
+  const [perPage, setPerPage] = useState(50)
   const [currentBookingId, setCurrentBookingId] = React.useState('')
+  const [currentPage, setCurrentPage] = useState(1)
   const [searchQuery, setSearchQuery] = useState<string>('')
+  const [filteredData, setFilteredData] = useState<any | undefined>(undefined)
+  const navigate = useNavigate()
+  const [openReschedule, setOpenReschedule] = useState(false);
+  const [openRefund, setOpenRefund] = useState(false);
+  const [openCancel, setOpenCancel] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [bookingType, setBookingType] = useState<string>('daytour');
+  const bookingTypeOption = [
+    { label: 'Day Tour', value: 'daytour' },
+    { label: 'Overnight', value: 'overnight' }
+  ];
+
+
   const [api, contextHolder] = notification.useNotification();
   const openNotification = (notifType: 'success'|'error'|'warning'|'info', title: string, body: string) => {
     api.open({
@@ -37,29 +52,18 @@ const Scanned = () => {
       pauseOnHover: false,
     });
   };
-  
-  const generatePDF = async () => {
-    window.electron.ipcRenderer.generateDataPDF(filteredData.data)
-      .then((result) => {
-        console.log('Result', result);
-      })
-      .catch((error) => {
-        console.error('Error generating PDF:', error);
-      });
+
+  const showRescheduleModal = (id: string, action: 'cancel'|'confirm') => {
+    setCurrentBookingId(id)
+    setOpenReschedule(true);
   };
-
-  const fetchData = () => {
-    axios.get(`manager/confirmation/bookings?page=${currentPage}&per_page=${perPage}`)
-      .then((res) => {
-        setBookingData(res.data)
-        setFilteredData(res.data) // Initialize filtered data with all data
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }
-
-  const [open, setOpen] = useState(false);
+  const showRefundModal = (id: string, action: 'cancel'|'confirm') => {
+    setCurrentBookingId(id)
+    setOpenRefund(true);
+  };
+  const showCancelModal = (id: string, action: 'cancel'|'confirm') => {
+    setOpenCancel(true);
+  };
 
   const axiosBookingAction = (id: string, action: 'confirm'|'cancel') => {
     if (action === 'confirm') {
@@ -75,11 +79,11 @@ const Scanned = () => {
         })
         
       } else {
-        axios.patch(`manager/booking/action/${id}`, { action: 'cancel' })
+        axios.patch(`manager/booking/cancel/${id}`, { action: 'cancel' })
         .then((res) => {
           setCurrentPage(1)
           fetchData()
-          openNotification('info', 'No show', 'Booking has been tagged as no show');
+          openNotification('info', 'Booking cancelled', 'Booking has successfully been cancelled!');
         })
         .catch((err) => {
           openNotification('error', 'System failure', `Something went wrong, ${JSON.stringify(err)}`);
@@ -88,20 +92,79 @@ const Scanned = () => {
     }
   }
 
-  const showModal = (id: string, action: 'cancel'|'confirm') => {
-    setCurrentBookingId(id)
-    setOpen(true);
+  const rescheduleHandleOk = () => {
+    axios.patch(`manager/booking/reschedule/${currentBookingId}`, { check_in: selectedDate, booking_type: bookingType })
+      .then((res) => {
+        openNotification('success', 'Booking rescheduled!', 'Booking has been rescheduled successfuly');
+        setOpenReschedule(false);
+      })
+      .catch((res) => {
+        openNotification('error', 'Reschedule has failed!', 'Rescheduling has failed, please try again');
+      })
+      .finally(() => {
+        fetchData()
+      })
   };
 
-  const handleOk = () => {
-    setOpen(false);
+  const rescheduleHandleCancel = () => {
+    setOpenReschedule(false);
+  };
+
+  const refundHandleOk = () => {
+    setOpenRefund(false);
+    axios.patch(`manager/booking/refund/${currentBookingId}`)
+    .then((res) => {
+      openNotification('success', 'Booking has been Refunded!', 'Booking has been refunded successfuly');
+      setOpenReschedule(false);
+    })
+    .catch((res) => {
+      openNotification('error', 'Refund has been failed!', 'Refunding has failed, please try again');
+    })
+    .finally(() => {
+      fetchData()
+    })
+  };
+
+  const refundHandleCancel = () => {
+    setOpenRefund(false);
+  };
+
+  const cancelHandleOk = () => {
+    setOpenCancel(false);
     axiosBookingAction(currentBookingId, 'cancel')
   };
 
-  const handleCancel = () => {
-    setOpen(false);
+  const cancelHandleCancel = () => {
+    setOpenCancel(false);
   };
 
+
+
+
+  
+
+  const generatePDF = async () => {
+    window.electron.ipcRenderer.generateDataPDF(filteredData.data)
+      .then((result) => {
+        console.log('Result', result);
+      })
+      .catch((error) => {
+        console.error('Error generating PDF:', error);
+      });
+  };
+
+  const fetchData = () => {
+    axios.get(`manager/scanned/bookings?page=${currentPage}&per_page=${perPage}`)
+      .then((res) => {
+        setBookingData(res.data)
+        setFilteredData(res.data)
+      }
+    )
+      .catch((err) => {
+        console.log(err)
+      }
+    )
+  }
   useEffect(() => {
     fetchData()
   }, [currentPage, perPage])
@@ -111,7 +174,7 @@ const Scanned = () => {
     setPerPage(localPerPage)
   }
 
-  // Search functionality
+    // Search functionality
   const handleSearch = (value: string) => {
     setSearchQuery(value)
     const filtered = bookingData?.data.filter((booking: IBookingData) =>
@@ -121,61 +184,120 @@ const Scanned = () => {
     );
     setFilteredData({ ...bookingData, data: filtered });
   }
-
-
-
   return (
     <PageWrapper>
       <>
+        <Modal
+          open={openReschedule}
+          title="Reschedule"
+          onOk={rescheduleHandleOk}
+          onCancel={rescheduleHandleCancel}
+          footer={(_, { OkBtn, CancelBtn }) => (
+            <>
+              <Button onClick={rescheduleHandleCancel} className='bg-slate-400 text-white'>Nevermind</Button>
+              <Button onClick={rescheduleHandleOk} className='text-white px-12 bg-blue-500'>Reschedule</Button>
+            </>
+          )}
+        >
+            <DatePicker className="w-full h-[50px] text-[#3D736C] font-bold"
+                          id="checkInDate"
+                          minDate={dayjs().add(2, 'day')}
+                          value={selectedDate}
+                          size="large"
+                          onChange={date => setSelectedDate(date)}
+                          maxDate={dayjs().add(3, 'month')}
+                          format="MMMM DD, YYYY"
+                          // disabledDate={disabledDate}
+                          // disabledTime={disabledDateTime}
+                      />
+
+            <div className="space-y-2">
+                <div className="space-x-4">
+                    <label htmlFor="bookingType">Booking type</label>
+                    {/* <span className="text-[#555555]">Price ₱ {isCabin ? cabinPrice : "0.00"}</span> */}
+                </div>
+                <Radio.Group value={bookingType} onChange={event => setBookingType(event.target.value)} block options={bookingTypeOption} defaultValue="daytour" optionType="button" buttonStyle="solid" size="large" id="bookingType" />
+
+            </div>
+        </Modal>
+        <Modal
+          open={openRefund}
+          title="Are you sure you want to Refund this booking?"
+          onOk={refundHandleOk}
+          onCancel={refundHandleCancel}
+          footer={(_, { OkBtn, CancelBtn}) => (
+            <>
+              <Button onClick={refundHandleCancel} className='bg-slate-400 text-white'>Nevermind</Button>
+              {_?.valueOf}
+              <Button onClick={refundHandleOk} className='text-white px-12 bg-red-500'>Let's refund this</Button>
+            </>
+          )}
+        ></Modal>
+        <Modal
+          open={openCancel}
+          title="Are you sure you want to cancel this booking?"
+          onOk={cancelHandleOk}
+          onCancel={cancelHandleCancel}
+          footer={(_, { OkBtn, CancelBtn}) => (
+            <>
+              <Button onClick={cancelHandleCancel} className='bg-slate-400 text-white'>Nevermind</Button>
+              {_?.valueOf}
+              <Button onClick={cancelHandleOk} className='text-white px-12 bg-red-500'>Let's cancel this</Button>
+            </>
+          )}
+        ></Modal>
         {contextHolder}
+        
         <div className='flex flex-row justify-between bg-slate-200 shadow-lg py-5 px-6 select-none'>
           <Breadcrumb>
             <Breadcrumb.Item><span className='font-semibold'>Reservations</span></Breadcrumb.Item>
-            <Breadcrumb.Item><span className='font-semibold'>Pending</span></Breadcrumb.Item>
+            <Breadcrumb.Item><span className='font-semibold'>Successful</span></Breadcrumb.Item>
           </Breadcrumb>
-          <span className='text-slate-400 text-xl'>Results: {filteredData?.total}</span>
+          <span className='text-slate-400 text-xl'>Results: {bookingData?.total}</span>
         </div>
+        
         <div className='flex flex-col px-6 py-8 overflow-x-clip max-h-[80vh] overflow-y-scroll'>
           <div className='flex flex-row gap-5'>
             <Button type='primary' onClick={generatePDF}>Generate PDF</Button>
             <Input.Search placeholder='Search here....' className='mb-5' value={searchQuery}onChange={(e) => handleSearch(e.target.value)}/>
           </div>
-
+          
           <Table
-              rowClassName='hover:bg-slate-200'
-              rowHoverable={false}
-              scroll={{ x: 768 }}
-              dataSource={filteredData?.data}
-              loading={!filteredData}
-              size='small'
-              pagination={{
-                position: ['topRight'],
-                current: currentPage,
-                showSizeChanger: true,
-                pageSize: filteredData?.per_page,
-                total: filteredData?.total,
-                onChange: (page, pageSize) => tableFetchOptions(page, pageSize)
-            }}>
-
+            rowClassName='hover:bg-slate-200'
+            rowHoverable={false}
+            scroll={{ x: 768 }}
+            dataSource={filteredData?.data}
+            loading={!filteredData}
+            size='small'
+            pagination={{
+              current: currentPage,
+              position: ['topRight'],
+              pageSize: bookingData?.per_page,
+              showSizeChanger: true,
+              total: bookingData?.total,
+              onChange: (page, pageSize) => tableFetchOptions(page, pageSize)
+          }}>
             <Table.Column
-              width="15%"
               title="Actions"
               key="actions"
               render={(_, record: IBookingData) => (
-                <div className='flex flex-row space-x-2 select-none'>
-                  <Button type='primary' onClick={() => axiosBookingAction(record.id, 'confirm')} className='px-2 text-xs py-1 bg-green-600 text-white rounded-lg transition ease-in-out hover:scale-105'>Confirm</Button>
-                  {/* Reschdule button below */}
-
+                <div className='flex flex-rowselect-none space-x-2'>
+                  <Button onClick={() => navigate(`/booking/${record.id}`)} className='px-2 text-xs py-1 w-full text-white bg-slate-600 rounded-lg transition ease-in-out hover:scale-105'>Info</Button>
+                  <Button onClick={() => showRescheduleModal(record.id, 'cancel')} className='px-2 py-1 bg-blue-600 text-white text-xs rounded-lg transition ease-in-out hover:scale-105'>Reschedule</Button>
+                  {record.payment_status === 'CASH' ? (
+                    <Button onClick={() => showCancelModal(record.id, 'cancel')} className='px-2 py-1 bg-red-600 text-white text-xs rounded-lg transition ease-in-out hover:scale-105'>Cancel</Button>
+                  ) : (
+                    <Button onClick={() => showRefundModal(record.id, 'cancel')} className='px-2 py-1 bg-red-600 text-white text-xs rounded-lg transition ease-in-out hover:scale-105'>Refund</Button>
+                  )}
                 </div>
               )}
             />
             <Table.Column
               title="Name"
               key="name"
-              width="15%"
               render={(_, record: IBookingData) => <span className='text-xs'>{`${record.first_name} ${record.last_name}`}</span>}
             />
-                        <Table.Column title='Check Out' dataIndex='check_out' key='check_out' 
+            <Table.Column title='Check Out' dataIndex='check_out' key='check_out' 
               sortDirections={['ascend', 'descend']}
               sorter={(a, b) => new Date(a.check_out).getTime() - new Date(b.check_out).getTime()}
               render={(value) => (
@@ -238,25 +360,13 @@ const Scanned = () => {
               render={(value:Date) => (
               <span className='text-xs'>{format(value, 'MMM/dd/yyyy | hh:mm a')}</span>
             )} />
+
           </Table>
+          
         </div>
-        <Modal
-          open={open}
-          title="Are you sure you want to cancel this booking?"
-          onOk={handleOk}
-          onCancel={handleCancel}
-          footer={(_, { OkBtn, CancelBtn }) => (
-            <>
-              <Button onClick={handleCancel} className='bg-slate-400 text-white'>Nevermind</Button>
-              <Button onClick={handleOk} className='text-white px-12 bg-red-500'>Yes</Button>
-            </>
-          )}
-        >
-          <p></p>
-        </Modal>
       </>
     </PageWrapper>
   )
 }
 
-export default Scanned
+export default Upcoming
