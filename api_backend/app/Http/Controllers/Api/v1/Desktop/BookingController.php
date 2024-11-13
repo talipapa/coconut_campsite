@@ -313,8 +313,6 @@ class BookingController extends Controller
         if (!$booking) {
             return response()->json(['message' => 'Booking not found'], 404);
         }
-
-        $refundPercentage = 0.5;
         
         // Check if the user in request owns the booking or is an owner/manager
         // if ($booking->user_id != $request->user()->id){
@@ -351,7 +349,7 @@ class BookingController extends Controller
                 Log::info('Void response:', [$response]);
             } else{
                 $response = Xendivel::getPayment($xenditId, 'ewallet')
-                    ->refund((int) $transaction->price * $refundPercentage)
+                    ->refund((int) $transaction->price)
                     ->getResponse();
                 Log::info(`Refund response:` . $transaction->price, [$response]);
             }
@@ -361,7 +359,7 @@ class BookingController extends Controller
             $booking->save();
 
             // Send email to user
-            Mail::to($booking->email)->send(new StaffActionRefundNotifier($booking, $transaction, (int) $transaction->price * $refundPercentage));
+            Mail::to($booking->email)->send(new StaffActionRefundNotifier($booking, $transaction, $transaction->price));
 
             return response()->json($booking, 201);
         } catch (\Throwable $th) {

@@ -102,8 +102,6 @@ class eWalletWebhookListener
 
                     // Send email receipt below
                     Mail::to($booking->email)->send(new EpaymentConfirmation($booking, $transaction));
-
-                    
                 }
                 break;
             case 'ewallet.void':
