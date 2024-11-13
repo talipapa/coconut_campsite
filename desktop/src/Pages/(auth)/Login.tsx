@@ -56,7 +56,6 @@ const Login = () => {
     }
   
   
-  
     return (
       <>
         <div className="min-h-screen grid lg:grid-cols-3 lg:justify-center sm:pt-0 bg-gray-100">
