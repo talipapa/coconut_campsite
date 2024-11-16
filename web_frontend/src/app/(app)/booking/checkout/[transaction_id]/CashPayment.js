@@ -10,9 +10,7 @@ const CashPayment = ({paymentType, totalPrice, bookId}) => {
   const { user } = useAuth({ middleware: 'auth' })
   const [invoiceEmail] = React.useState(user?.email)
   const router = useRouter()
-  const {calculateFee, calculateTotalPrice} = usePrice()
   const [buttonLoading, setButtonLoading] = React.useState(false)
-  const [paymentMethodVal] = React.useState("PH_GCASH")
   const subTotal = totalPrice
 
   const confirmBooking = async () => {

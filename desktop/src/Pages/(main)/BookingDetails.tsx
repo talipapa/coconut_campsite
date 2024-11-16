@@ -160,6 +160,16 @@ const BookingDetails = () => {
           />
           
         </div>
+        { bookingData?.booking.note && (
+          <div className='w-full bg-yellow-300 p-6 rounded-2xl space-y-4'>
+            <h1 className='text-slate-600 text-xl font-bold'>
+              Note Details
+            </h1>
+            <div className='flex flex-col space-y-3 items-start'>
+              {bookingData?.booking.note}
+            </div>
+          </div>
+        ) }
         <div className='w-full bg-white p-6 rounded-2xl space-y-4'>
           <h1 className='text-slate-600 text-xl font-bold'>
             Booking Details
@@ -260,6 +270,8 @@ const BookingDetails = () => {
             </div>
           </div>
         ) }
+
+
 
       </div>
     </>

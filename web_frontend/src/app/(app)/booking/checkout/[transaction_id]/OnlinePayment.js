@@ -5,13 +5,13 @@ import { usePrice } from '@/hooks/prices'
 import { useLaravelBooking } from '@/hooks/booking'
 import axios from '@/lib/axios'
 
-const OnlinePayment = ({paymentType, totalPrice, bookId}) => {
+const OnlinePayment = ({paymentType, totalPrice, bookId, calculateFee, calculateTotalPrice}) => {
   const { user } = useAuth({ middleware: 'auth' })
   const [invoiceEmail] = React.useState(user?.email)
   const [api, contextHolder] = notification.useNotification()
   const [buttonLoading, setButtonLoading] = React.useState(false)
   const {mutate} = useLaravelBooking(`api/v1/booking/${bookId}`)
-  const {calculateFee, calculateTotalPrice} = usePrice()
+  
   const [paymentMethodVal, setPaymentMethodVal] = React.useState("PH_GCASH")
   const subTotal = totalPrice
 
@@ -124,9 +124,6 @@ const OnlinePayment = ({paymentType, totalPrice, bookId}) => {
               <span>P {calculateTotalPrice(subTotal, calculateFee(subTotal, paymentMethodVal))}</span>
             </div>
           </div>
-
-
-
 
         </div>
         <Button className="w-full" type="primary" size='large' onClick={confirmBooking} loading={buttonLoading}>Confirm Booking</Button>

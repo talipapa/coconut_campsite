@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -26,7 +25,7 @@ return new class extends Migration
             $table->string('booking_type');
             $table->integer('tent_pitching_count');
             $table->integer('bonfire_kit_count');
-            $table->boolean('is_cabin');
+            $table->foreignIdFor(\App\Models\Cabin::class)->nullable()->constrained()->nullOnDelete();
             $table->text('note')->nullable();
             $table->string('status')->default('PENDING');
             $table->timestamps();

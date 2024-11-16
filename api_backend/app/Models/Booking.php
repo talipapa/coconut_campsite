@@ -11,9 +11,6 @@ class Booking extends Model
 {
     use HasFactory, HasUlids;
 
-    protected $casts = [
-        'is_cabin' => 'boolean'
-    ];
     
     protected $fillable = [
         'user_id',
@@ -29,13 +26,13 @@ class Booking extends Model
         'booking_type',
         'tent_pitching_count',
         'bonfire_kit_count',
-        'is_cabin',
+        'cabin_id',
         'note',
         'status',
         'payment_type'
     ];
 
-    protected $appends = ['full_name', 'payment_type', 'total_campers', 'transaction_status'];
+    protected $appends = ['full_name', 'payment_type', 'total_campers', 'transaction_status', 'cabin_name', 'cabin_price'];
 
     public function getFullNameAttribute()
     {
@@ -57,6 +54,16 @@ class Booking extends Model
         return $this->transaction ? $this->transaction->status : null;
     }
 
+    public function getCabinNameAttribute()
+    {
+        return $this->cabin_id ? $this->cabin->name : null;
+    }
+
+    public function getCabinPriceAttribute()
+    {
+        return $this->cabin_id ? $this->cabin->price : null;
+    }
+
 
 
     public function user()
@@ -72,4 +79,11 @@ class Booking extends Model
     {
         return $this->hasMany(Camper::class);
     }
+
+    public function cabin()
+    {
+        return $this->belongsTo(Cabin::class);
+    }
+
+    
 }

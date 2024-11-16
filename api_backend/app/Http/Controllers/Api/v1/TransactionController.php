@@ -25,7 +25,7 @@ class TransactionController extends Controller
         $childTotal = $prices['childPrice'] * ((int) $booking->childCount);
         $tentPitchTotal = $prices['tentPitchPrice'] * ((int) $booking->tent_pitching_count);
         $bonfireKitTotal = $prices['bonfireKitPrice'] * ((int) $booking->bonfire_kit_count);
-        $cabinTotal = $booking->is_cabin ? (int) $prices['cabinPrice'] : 0;
+        $cabinTotal = $booking->cabin ? (int) $booking->cabin->price : 0;
     
         return ($adultTotal + $childTotal + $tentPitchTotal + $bonfireKitTotal + $cabinTotal);
     }
@@ -114,7 +114,7 @@ class TransactionController extends Controller
         $fee = $this->calculateFee($subTotalPrice, $validated['paymentMethod']);
         $totalPrice = $this->calculateTotalPrice($subTotalPrice, $fee);
 
-        Log::info("fee", [$fee]);
+        // Log::info("fee", [$fee]);
     
         // Update transaction details
         $transaction = Transaction::where('booking_id', $validated['booking_id'])->firstOrFail();

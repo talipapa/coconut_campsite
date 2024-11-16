@@ -1,17 +1,65 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLaravelBooking } from './booking'
+import axios from '@/lib/axios'
 
 export const usePrice = () => {
-
     const { booking } = useLaravelBooking()
 
     const [adultPrice, setAdultPrice] = useState(100.00)
     const [childPrice, setChildPrice] = useState(50.00)
     const [tentPitchPrice, setTentPitchPrice] = useState(70.00)
     const [bonfireKitPrice, setBonfireKitPrice] = useState(150.00)
-    const [cabinPrice, setCabinPrice] = useState(650.00)
+
+    const [isLoadingCabin, setIsLoadingCabin] = useState(true)
+    const [cabin, setCabin] = useState([])
+
+    useEffect(() => {
+        axios.get('/api/v1/price')
+            .then((res) => {
+                Object.keys(res.data['data']).forEach((key) => {
+                    Object.keys(res.data['data'][key]).forEach((subKey) => {
+                        switch (res.data['data'][key]['name']) {
+                            case 'adult':
+                                setAdultPrice(res.data['data'][key][subKey])
+                                break;
+                            case 'child':
+                                setChildPrice(res.data['data'][key][subKey])
+                                break;
+                            case 'tent_pitch':
+                                setTentPitchPrice(res.data['data'][key][subKey])
+                                break;
+                            case 'bonfire':
+                                setBonfireKitPrice(res.data['data'][key][subKey])
+                                break;
+                            default:
+                                break;
+                        }
+                    })
+                        
+
+                })
+                
+            })
+            
+            .catch((err) => {
+                console.log(err)
+            })
+
+    }, [])
+
+    useEffect(() => {
+        axios.get('/api/v1/cabin')
+            .then((res) => {
+                setCabin(res.data)
+            })
+            .finally(() => {
+                setIsLoadingCabin(false)
+            })
+    }, [])
+
+
 
     const [eWalletFee, setEWalletFee] = useState({
         "PH_GCASH" : 0.023,
@@ -29,11 +77,7 @@ export const usePrice = () => {
         const childTotal = childPrice * booking?.data.child_count
         const tentPitchTotal = tentPitchPrice * booking?.data.bonfire_kit_count
         const bonfireKitTotal = bonfireKitPrice * booking?.data.bonfire_kit_count
-        var cabinTotal = 0
-        if (booking?.data.is_cabin === true) {
-            cabinTotal = cabinPrice
-        }
-        return (adultTotal + childTotal + tentPitchTotal + bonfireKitTotal + cabinTotal).toFixed(2)
+        return (adultTotal + childTotal + tentPitchTotal + bonfireKitTotal).toFixed(2)
     }
 
 
@@ -56,7 +100,6 @@ export const usePrice = () => {
         childPrice,
         tentPitchPrice,
         bonfireKitPrice,
-        cabinPrice,
         calcPricePerUnit,
         calculateSubPrice,
         calculateFee,
@@ -65,9 +108,10 @@ export const usePrice = () => {
         setChildPrice,
         setTentPitchPrice,
         setBonfireKitPrice,
-        setCabinPrice,
         setEWalletFee,
         subPrice,
-        setSubPrice
+        setSubPrice,
+        isLoadingCabin,
+        cabin
     }
 }

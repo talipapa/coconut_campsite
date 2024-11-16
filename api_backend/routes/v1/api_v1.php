@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\v1\BookingController;
+use App\Http\Controllers\Api\v1\CabinController;
 use App\Http\Controllers\Api\v1\ManagerController;
 use App\Http\Controllers\Api\v1\Mobile\WalletController;
 use App\Http\Controllers\Api\v1\TransactionController;
@@ -13,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 // Route::apiResource('/campsite/settings/picture', CampsitePictureController::class)->except(['store', 'destroy']);
 Route::apiResource('/price', PriceController::class)->only(['index', 'show']);
 
-
+Route::apiResource('/cabin', CabinController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/user', UserController::class)->except(['store', 'update', 'destroy']);

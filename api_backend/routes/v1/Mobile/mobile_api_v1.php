@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\v1\CabinController;
 use App\Http\Controllers\Api\v1\Mobile\BookingController;
 use App\Http\Controllers\Api\v1\Mobile\OwnerAccountController;
 use App\Http\Controllers\Api\v1\Mobile\WalletController;
@@ -54,5 +55,9 @@ Route::middleware(['auth:sanctum', 'owner'])->group(function (){
     Route::patch('/manager/{manager}', [OwnerAccountController::class, 'updateManager']);
     Route::patch('/manager/change-password/{manager}', [OwnerAccountController::class, 'changePasswordManager']);
     Route::delete('/manager/{manager}', [OwnerAccountController::class, 'deleteManager']);
+
+    // Owner handling cabins
+    Route::apiResource('/cabin', CabinController::class)->only(['index', 'show', 'store', 'update', 'destroy']);
+    Route::post('/cabin/{cabin}/change-image', [CabinController::class, 'updateImage']);
 
 });

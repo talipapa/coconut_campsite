@@ -37,7 +37,7 @@ class BookingController extends Controller
     public function showSelfBooking(Request $request){
         // Check if user has existing booking
         $booking = Booking::where('user_id', $request->user()->id)
-        ->whereNotIn('status', ['PENDING', 'CANCELLED', 'VOIDED', 'REFUNDED', 'VERIFIED'])
+        ->whereNotIn('status', ['PENDING', 'CANCELLED', 'VOIDED', 'REFUNDED', 'VERIFIED', 'FAILED'])
         ->first();
     
 
@@ -289,8 +289,10 @@ class BookingController extends Controller
             'bookingType' => 'required',
             'tentPitchingCount' => 'required|numeric|min:0|max:10',
             'bonfireKitCount' => 'required|numeric|min:0|max:10',
-            'isCabin' => 'required',
             'price' => 'required',
+            'cabin_id' => 'nullable|integer'
+        ],[
+            'telNumber' => 'Invalid number. Example: 9921234567',
         ]);
 
         $authenticatedUser = User::find($request->user()->id);
@@ -313,9 +315,9 @@ class BookingController extends Controller
                 'booking_type' => $validated['bookingType'],
                 'tent_pitching_count' => $validated['tentPitchingCount'],
                 'bonfire_kit_count' => $validated['bonfireKitCount'],
-                'is_cabin' => $validated['isCabin'],
+                'cabin_id' => $validated['cabin_id'] ?? null,
                 'note' => $request->note,
-                'status' => 'PENDING',
+                    'status' => 'PENDING',
             ]);
 
             $transaction = Transaction::create([
@@ -328,8 +330,10 @@ class BookingController extends Controller
             $transactionId = $transaction->id;
             $bookingJson = new BookingResource($booking);
         } catch (\Throwable $th) {
-            $transaction->delete();
+
             Log::info("Error", [$th]);
+            $booking->delete();
+            $transaction->delete();
             throw $th;
         }
 

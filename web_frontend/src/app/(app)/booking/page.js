@@ -2,11 +2,11 @@
 
 import axios from "@/lib/axios"
 import Input from "antd/es/input/Input"
-import { UserOutlined } from '@ant-design/icons'
+import { CloseCircleFilled, CloseSquareFilled, UserOutlined } from '@ant-design/icons'
 import { useEffect, useState } from "react"
 import { MdOutlineEmail } from "react-icons/md"
-import { Button, DatePicker, InputNumber, Radio, notification, Breadcrumb, Modal, Checkbox, List } from "antd"
-
+import { Button, DatePicker, InputNumber, Radio, notification, Breadcrumb, Modal, Checkbox, List, Drawer, Space, Image } from "antd"
+import 'app/Calendar.css'
 import { usePrice } from "@/hooks/prices"
 import dayjs from "dayjs"
 import TextArea from "antd/es/input/TextArea"
@@ -14,11 +14,14 @@ import InputError from "@/components/InputError"
 import { useAuth } from "@/hooks/auth"
 import { useLaravelBooking } from "@/hooks/booking"
 import { useRouter } from 'next/navigation'
+import Calendar from "react-calendar"
+import { FaHouseChimneyUser } from "react-icons/fa6";
+
 
 export default function Page() {
     const { user } = useAuth()
     const router = useRouter()
-    const { adultPrice, childPrice, tentPitchPrice, bonfireKitPrice, cabinPrice, calcPricePerUnit } = usePrice()
+    const { adultPrice, childPrice, tentPitchPrice, bonfireKitPrice, cabinPrice, calcPricePerUnit, cabin, isLoadingCabin } = usePrice()
     const {
         booking,
         apiVersion,
@@ -35,17 +38,33 @@ export default function Page() {
     const [bookingType, setBookingType] = useState('daytour')
     const [tentPitchingCount, setTentPitchingCount] = useState(0)
     const [bonfireKitCount, setBonfireKitCount] = useState(0)
-    const [isCabin, setIsCabin] = useState(false)
+    const [selectedCabin, setSelectedCabin] = useState(undefined)
     const [note, setNote] = useState('')
     const [errors, setErrors] = useState([])
     const [price, setPrice] = useState(0)
     const [buttonLoading, setButtonLoading] = useState(false)
     const [open, setOpen] = useState(false);
     const [checked, setChecked] = useState(false);
+    const [openDrawer, setOpenDrawer] = useState(false);
+
+
+    const showDrawer = () => {
+        setOpenDrawer(true);
+    };
+
+    const onClose = () => {
+        setOpenDrawer(false);
+    };
 
     const onChange = (e) => {
         setChecked(e.target.checked);
     };
+
+    const onSelectCabin = (cabinData) => {
+        setSelectedCabin(cabinData)
+        console.log(cabinData)
+        setOpenDrawer(false)
+    }
 
 
     useEffect(() => {
@@ -69,11 +88,16 @@ export default function Page() {
             setBookingType(booking.booking_type)
             setTentPitchingCount(booking.tent_pitching_count)
             setBonfireKitCount(booking.bonfire_kit_count)
-            setIsCabin(booking.is_cabin)
             setNote(booking.note)
         } 
         
     }, [booking])
+
+    useEffect(() => {
+        if (!isLoadingCabin) {
+            console.log(cabin)
+        }
+    }, [isLoadingCabin])
 
 
     const calculateSubPrice = () => {
@@ -81,12 +105,8 @@ export default function Page() {
         const childTotal = childPrice * childCount
         const tentPitchTotal = tentPitchPrice * tentPitchingCount
         const bonfireKitTotal = bonfireKitPrice * bonfireKitCount
-        var cabinTotal = 0
-        
-        if (isCabin === true) {
-            cabinTotal = cabinPrice
-        }
-        return (adultTotal + childTotal + tentPitchTotal + bonfireKitTotal + cabinTotal).toFixed(2)
+
+        return (adultTotal + childTotal + tentPitchTotal + bonfireKitTotal).toFixed(2)
     }
 
 
@@ -141,9 +161,9 @@ export default function Page() {
             bookingType,
             tentPitchingCount,
             bonfireKitCount,
-            isCabin,
             note,
             errors,
+            cabin_id: selectedCabin?.id,
             setErrors,
         }
         
@@ -220,7 +240,6 @@ export default function Page() {
             bookingType,
             tentPitchingCount,
             bonfireKitCount,
-            isCabin,
             note,
             errors,
             setErrors,
@@ -295,20 +314,20 @@ export default function Page() {
         <>
             {contextHolder}
             <div>
-                <header className="bg-[#B1CE90] shadow">
+                <header className="bg-[#363636] shadow">
                     <div className="max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
 
-                        <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                        <h2 className="font-semibold text-xl text-[#ffffff] leading-tight">
                         <Breadcrumb
                             items={[
                             {
-                                title: <a href="/" className="text-slate-400">Home</a>,
+                                title: <a href="/" className="!text-[#acabab]">Home</a>,
                             },
                             {
-                                title: <span className="text-black cursor-pointer">Booking</span>,
+                                title: <span className="text-white cursor-pointer">Booking</span>,
                             },
                             {
-                                title: <a href="/booking" className="text-black">Checkout</a>,
+                                title: <a href="/booking" className="!text-[#acabab]">Checkout</a>,
                             }
                             ]}
                         />
@@ -328,10 +347,28 @@ export default function Page() {
                             <span className="font-semibold">When would you like to make the reservation?</span>
                         </div>
                         <div className="basis-1/2 grid grid-cols-1 gap-5 w-full">
+                            {/* Booking type field */}
+                            <div className="space-y-2">
+                                <div className="space-x-4">
+                                    <label htmlFor="bookingType">Booking type <span className="text-red-600 text-lg">*</span></label>
+                                    {/* <span className="text-[#555555]">Price ₱ {isCabin ? cabinPrice : "0.00"}</span> */}
+                                </div>
+                                <Radio.Group value={bookingType} onChange={event => setBookingType(event.target.value)} block options={bookingTypeOption} defaultValue="daytour" optionType="button" buttonStyle="solid" size="large" id="bookingType" />
+                                <InputError messages={errors.bookingType} className="mt-2" />
+
+                            </div>
                             {/* Check in field */}
                             <div className="space-y-2 w-full">
-                                <label htmlFor="checkInDate">Check in</label>
-                                <DatePicker className="w-full h-[50px] text-[#3D736C] font-bold"
+                                <label htmlFor="checkInDate">Check in <span className="text-red-600 text-lg">*</span></label>
+                                <Calendar 
+                                    minDate={new Date(dayjs().add(2, 'day').format('YYYY-MM-DD'))} 
+                                    maxDate={new Date('2025-02-28')}
+                                    onChange={date => setCheckInDate(date)} 
+        
+                                    
+                                    value={checkInDate} />
+
+                                {/* <DatePicker className="w-full h-[50px] text-[#3D736C] font-bold"
                                     id="checkInDate"
                                     minDate={dayjs().add(2, 'day')}
                                     value={checkInDate}
@@ -341,19 +378,10 @@ export default function Page() {
                                     format="MMMM DD, YYYY"
                                     // disabledDate={disabledDate}
                                     // disabledTime={disabledDateTime}
-                                />
+                                /> */}
                                 <InputError messages={errors.checkInDate} className="mt-2" />
                             </div>
-                            {/* Booking type field */}
-                            <div className="space-y-2">
-                                <div className="space-x-4">
-                                    <label htmlFor="bookingType">Booking type</label>
-                                    {/* <span className="text-[#555555]">Price ₱ {isCabin ? cabinPrice : "0.00"}</span> */}
-                                </div>
-                                <Radio.Group value={bookingType} onChange={event => setBookingType(event.target.value)} block options={bookingTypeOption} defaultValue="daytour" optionType="button" buttonStyle="solid" size="large" id="bookingType" />
-                                <InputError messages={errors.bookingType} className="mt-2" />
 
-                            </div>
                         </div>
                     </div>
                     {/* Reservation holder details */}
@@ -361,35 +389,33 @@ export default function Page() {
                         <div className="1/4">
                             <span className="font-semibold">Reservation holder details</span>
                         </div>
-                        <div className="basis-1/2 grid md:grid-cols-2 gap-5 w-full">
+                        <div className="basis-1/2 grid xl:grid-cols-2 gap-5 w-full">
                             {/* First name field */}
                             <div className="space-y-2">
-                                <label htmlFor="first_name">First name</label>
+                                <label htmlFor="first_name">First name <span className="text-red-600 text-lg">*</span></label>
                                 <Input size="large" value={first_name} onChange={event=>setFirstName(event.target.value)} prefix={<UserOutlined/>} id="first_name" placeholder="Enter your first name"/>
                                 <InputError messages={errors.first_name} className="mt-2" />
                             </div>
                             {/* Last name field */}
                             <div className="space-y-2">
-                                <label htmlFor="last_name">Last name</label>
+                                <label htmlFor="last_name">Last name <span className="text-red-600 text-lg">*</span></label>
                                 <Input size="large" value={last_name} onChange={event=>setLastName(event.target.value)} prefix={<UserOutlined/>} id="last_name" placeholder="Enter your Last name"/>
                                 <InputError messages={errors.last_name} className="mt-2" />
                             </div>
                             {/* Email field */}
                             <div className="space-y-2">
-                                <label htmlFor="email">Email</label>
+                                <label htmlFor="email">Email <span className="text-red-600 text-lg">*</span></label>
                                 <Input size="large" value={email} onChange={event=>setEmail(event.target.value)} prefix={<MdOutlineEmail/>} id="email" placeholder="Enter your first name"/>
                                 <InputError messages={errors.email} className="mt-2" />
                             </div>
                             {/* Tel num field */}
                             <div className="space-y-2">
-                                <label htmlFor="telNumber">Telephone number <span className="text-slate-400">(ex: 9921234567)</span></label>
+                                <label htmlFor="telNumber">Telephone number <span className="text-red-600 text-lg">*</span> <span className="text-slate-400">(ex: 9921234567)</span></label>
                                 <Input size="large" value={telNumber} onChange={event=>setTelNumber(event.target.value)} addonBefore="+63" id="telNumber" placeholder="9921234567"/>
                                 <InputError messages={errors.telNumber} className="mt-2" />
                             </div>
                         </div>
                     </div>
-
-
 
                     {/* PAX Counts */}
                     <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 justify-between items-start w-full border-b-2 border-slate-400 md:border-slate-300 pb-10">
@@ -399,7 +425,7 @@ export default function Page() {
                         <div className="basis-1/2 grid grid-cols-1 gap-5">
                             {/* Adult count field */}
                             <div className="space-y-2">
-                                <label htmlFor="adultCount">Adult</label>
+                                <label htmlFor="adultCount">Adult <span className="text-red-600 text-lg">*</span> ( ₱ {adultPrice} )</label>
                                 <div className="space-x-5">
                                     <InputNumber min={1} size="large" prefix={<UserOutlined/>} value={adultCount} onChange={event => setAdultCount(event)} id="adultCount" className="w-64"/>
                                     <span className="text-[#555555]">Price ₱ {calcPricePerUnit(adultPrice, adultCount)}</span>
@@ -408,7 +434,7 @@ export default function Page() {
 
                             </div>
                             <div className="space-y-2">
-                                <label htmlFor="childCount">Child</label>
+                                <label htmlFor="childCount">Child ( ₱ {childPrice} )</label>
                                 <div className="space-x-5">
                                     <InputNumber min={0} size="large" prefix={<UserOutlined/>} value={childCount} onChange={event => setChildCount(event)} id="childCount" className="w-64"/>
                                     <span className="text-[#555555]">Price ₱ {calcPricePerUnit(childPrice, childCount)}</span>
@@ -429,7 +455,7 @@ export default function Page() {
                         <div className="basis-1/2 grid grid-cols-1 gap-5 w-full">
                             {/* Tent pitching count field */}
                             <div className="space-y-2">
-                                <label htmlFor="tentPitching">Tent pitching</label>
+                                <label htmlFor="tentPitching">Tent pitching ( ₱ {tentPitchPrice} )</label>
                                 <div className="space-x-5">
                                     <InputNumber min={0} size="large" prefix={<UserOutlined/>} value={tentPitchingCount} onChange={event => setTentPitchingCount(event)} id="tentPitching" className="w-64"/>
                                 
@@ -441,7 +467,7 @@ export default function Page() {
                             {/* Bonfire count field */}
 
                             <div className="space-y-2">
-                                <label htmlFor="bonfireKit">Bonfire Kit</label>
+                                <label htmlFor="bonfireKit">Bonfire Kit ( ₱ {bonfireKitPrice} )</label>
                                 <div className="space-x-5">
                                     <InputNumber min={0} size="large" prefix={<UserOutlined/>} value={bonfireKitCount} onChange={event => setBonfireKitCount(event)} id="bonfireKit" className="w-64"/>
                                     <span className="text-[#555555]">Price ₱ {calcPricePerUnit(bonfireKitPrice, bonfireKitCount)}</span>
@@ -449,18 +475,51 @@ export default function Page() {
                                 <InputError messages={errors.bonfireKit} className="mt-2" />
 
                             </div>
-                            {/* Cabin radio field */}
-                            <div className="space-y-2">
-                                <div className="space-x-4">
-                                    <label htmlFor="bonfireKit">Cabin (4-5 pax)</label>
-                                    <span className="text-[#555555]">Price ₱ {isCabin ? cabinPrice.toFixed(2) : "0.00"}</span>
-                                </div>
-                                <Radio.Group value={isCabin} onChange={event => setIsCabin(event.target.value)} block options={cabinOption} defaultValue={false} optionType="button" buttonStyle="solid" size="large" />
-                            </div>
-                            <InputError messages={errors.isCabin} className="mt-2" />
+                        </div>
+                    </div>
 
+                    {/* Cabin */}
+                    <div className="flex flex-col md:flex-row space-y-3 md:space-y-0 justify-between items-start w-full border-b-2 border-slate-400 md:border-slate-300 pb-10">
+                        <div className="1/4">
+                            <span className="font-semibold">Cabin</span>
+                        </div>
+                        <div className="basis-1/2 grid grid-cols-1 gap-5 w-full">        
+                            {selectedCabin !== undefined ? (
+                                <>
+                                    <div className="w-full min-h-[300px] relative rounded-xl overflow-hidden">
+                                        <div className="absolute top-0 left-0 z-20 text-white px-10 w-full h-full flex flex-col items-center justify-center text-center">
+                                            <div className="absolute top-0 right-0 w-full flex flex-row justify-between items-center p-5">
+                                                <div className="flex flex-row items-center gap-2">
+                                                    <div className="flex flex-row items-center gap-2">
+                                                        <FaHouseChimneyUser className="text-2xl font-bold"/>
+                                                        <span>{selectedCabin.capacity}</span>
+                                                    </div>
+                                                    |
+                                                    <p className="text-md md:text-lg font-semibold text-green-500 flex flex-row items-center gap-2">₱ {cabinPrice}</p>
+                                                </div>
+                                                <CloseSquareFilled onClick={() => setSelectedCabin(undefined)} className="select-none   text-4xl text-red-500 cursor-pointer hover:scale-125 active:scale-105 ease-in-out duration-200 transition-all"/>
+                                            </div>
+                                            <h3 className="text-lg md:text-3xl font-bold mt-6">{selectedCabin.name}</h3>
+                                            {/* <p className="text-lg mt-2">{selectedCabin.description}</p> */}
+                                            <p className="text-md md:text-lg mt-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo repudiandae sapiente vitae cupiditate odit blanditiis suscipit vero officiis sed fugit?</p>
+                                        </div>
+                                        <div className="w-full h-full text-white z-10 absolute top-0 left-0 bg-black opacity-60"/>
+                                        <img src={selectedCabin.image} alt={selectedCabin.name} className="w-full h-full object-cover object-center absolute top-0 left-0"/>
+
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="w-full h-[300px]">
+                                        <div className="w-full h-full flex flex-row justify-between gap-5 md:gap-10">
+                                            <div onClick={() => showDrawer()} className="select-none cursor-pointer w-full h-full rounded-xl flex flex-col items-center justify-center border-2 border-dashed outline-offset-4 border-indigo-400 bg-indigo-100 hover:bg-slate-400 active:bg-slate-300 transition-all ease-in-out duration-300 text-slate-500">
+                                                Choose cabin
+                                            </div>
+                                        </div>
         
-
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
 
@@ -479,6 +538,7 @@ export default function Page() {
                                         value={note}
                                         onChange={event => setNote(event.target.value)}
                                         placeholder="Write your notes here"
+                                        className="bg-yellow-100"
                                         style={{
                                         height: 120,
                                         resize: 'none',
@@ -497,8 +557,8 @@ export default function Page() {
                             </Checkbox>
                             <span className="text-[#3D736C] cursor-pointer text-md" onClick={() => setOpen(true)}>Terms of Service</span>
                         </div>
-                        <div className="w-full lg:w-[70vh] flex flex-col">
-                            <Button className="py-6 bg-slate-800 text-white" onClick={submitForm} loading={buttonLoading} disabled={!checked}>Submit</Button>
+                        <div className="w-full lg:w-[60vw] h-[70px] flex flex-col">
+                            <Button type="primary" className="h-full" onClick={submitForm} loading={buttonLoading} disabled={!checked}>Submit</Button>
                         </div>
                     </div>
 
@@ -550,6 +610,43 @@ export default function Page() {
                 </p>
             
             </Modal>
+            <Drawer
+                title="Select your cabin"
+                placement='bottom'
+                width={500}
+                height={600}
+                onClose={onClose}
+                open={openDrawer}
+            >
+                {!isLoadingCabin && cabin.length === 0 && (
+                    <div className="flex flex-col items-center justify-center space-y-2">
+                        <h1 className="text-2xl font-bold">No cabin available</h1>
+                        <p className="text-[#555555]">There are no cabins available for booking at the moment</p>
+                    </div>
+                )}
+                <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-10">
+
+                    {cabin.map((cabin, index) => (
+                        <div key={index} className="flex flex-col items-center space-y-2 bg-[#8e8e8e57] border-2 rounded-xl overflow-hidden">
+                            <div className="relative w-full h-full">
+                                <div className="border-l-4 border-green-400 select-none text-white text-lg m-4 pl-3 z-10 absolute top-0 left-0">Press to view</div>
+                                <Image src={cabin.image} alt={cabin.name} width="100%" height={250} className="object-cover object-center absolute top-0 left-0" scal unoptimized={true}/>
+                            </div>
+                            <div className="px-7 pb-7 w-full flex flex-col items-center justify-center">
+                                <div className="flex flex-row items-start justify-between w-full">
+                                    <h3 className="text-3xl font-bold">{cabin.name}</h3>
+                                    <p className="text-green-600 font-bold text-3xl">₱ {cabin.price}</p>
+                                </div>
+                                <p className="text-[#555555] w-full text-2xl">Max PAX: {cabin.capacity}</p>
+                                <div className="flex flex-col w-full mt-4">
+                                    <p className="text-black w-full text-lg p-3 bg-yellow-100 border-r-8 border-yellow-600 ">{cabin.description}</p>
+                                </div>
+                                <Button type="primary" onClick={() => onSelectCabin(cabin)} className="w-full py-6 mt-8">Select</Button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </Drawer>
         </>
     )
 }
