@@ -96,7 +96,7 @@ class TokenBasedAuthController extends Controller
             ], 401);
         }
 
-        $plainTextToken = $user->createToken($request->device_name, ['*'], now()->addDay(1))->plainTextToken;
+        $plainTextToken = $user->createToken($request->device_name, ['*'], now()->addDay(2))->plainTextToken;
         return response()->json([
             'token' => $plainTextToken
         ]);
