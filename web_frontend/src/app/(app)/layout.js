@@ -20,7 +20,7 @@ const AppLayout = ({ children }) => {
         theme={{
             token:{
                 colorPrimary: '#256560',
-                colorPrimaryActive: '#5CBCB6',
+                colorPrimaryActive: '#256560',
                 colorPrimaryBgHover: '#BC7B5C',
                 colorFillSecondary: '#BC7B5C',
                 colorBorderSecondary: '#FFC39E',
@@ -42,7 +42,7 @@ const AppLayout = ({ children }) => {
             <div className="min-h-screen bg-gray-100">
                 <AuthenticatedNavbar user={user} />
 
-                <main>
+                <main className='min-h-screen'>
                     {children}    
                 </main>
 

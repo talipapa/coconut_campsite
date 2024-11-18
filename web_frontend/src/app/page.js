@@ -43,7 +43,7 @@ const Home = () => {
                                 <h1 className='text-4xl w-full text-center font-bold tracking-widest text-white'>Welcome to <span className='text-[#FFC39E]'>Coconut</span> Campsite</h1>
                                 <p className='text-white text-lg'>"Be the most alive among the Trees"</p>
                             </div>
-                            <Button type='primary' href='/booking' className='font-semibold py-4 px-6'>Make Reservation</Button>
+                            <Button type='primary' href='/booking' className='font-semibold text-lg py-6 px-16'>Make Reservation</Button>
                         </div>
                         {/* Nav bar */}
                         <NavbarLoginLinks/>

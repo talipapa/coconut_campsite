@@ -30,14 +30,15 @@ const RootLayout = ({ children }) => {
             theme={{
                 token:{
                     colorPrimary: '#256560',
-                    colorPrimaryActive: '#5CBCB6',
+                    colorPrimaryActive: '#256560',
+                    colorBgContainerDisabled: '#B3CCCA',
                     colorPrimaryBgHover: '#BC7B5C',
                     colorFillSecondary: '#BC7B5C',
                     colorBorderSecondary: '#FFC39E',
                     dangerShadow: '0 2px 0 rgba(255, 38, 5, 0.00)',
-                    colorBgTextHover: '#5CBCB6',
+                    colorBgTextHover: '#256560',
                     borderRadius: '0.2em',
-                    colorBgContainer: '#f6ffed',
+                    colorBgContainer: '#256560',
                     
                 },
                 

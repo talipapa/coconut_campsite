@@ -15,7 +15,6 @@ const Dashboard = () => {
   const { user, isLoggedIn } = useGlobalContext()
   const [inputValue, setInputValue] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [response, setResponse] = useState<Iresponse>();
   const navigate = useNavigate()
   const [api, contextHolder] = notification.useNotification();
 
@@ -49,13 +48,12 @@ const Dashboard = () => {
     const debounceTimeout = setTimeout(() => {
       setIsLoading(true);
       axios
-        .post('/kiosk/scan', { 'qr_code': inputValue })
+        .get(`/qr-code/get-booking/${inputValue}`)
         .then((res) => {
-          openNotification('success', 'Success', res.data.message);
-          setResponse(res.data);
+          openNotification('success', 'Success', "QR code has been processed, You will be redirected in a few seconds....");
           setTimeout(() => {
             navigate(`/logbook/${inputValue}`);
-          }, 5000);
+          }, 1000);
         })
         .catch((err) => {
           if (err.response.status === 404){
@@ -63,9 +61,9 @@ const Dashboard = () => {
           } else{
             openNotification('error', 'Please try another QR code', "QR code has already been processed");
           }         
-          setInputValue('');
         })
         .finally(() => {
+          setInputValue('');
           setTimeout(() => {
             setIsLoading(false);
           }, 5000)
@@ -97,7 +95,7 @@ const Dashboard = () => {
                     repeat: Infinity,
                     ease: "easeInOut"
                   }}
-                  className='text-2xl font-semibold'
+                  className='text-2xl font-semibold text-white'
                 >
                   Processing
                 </motion.span>
@@ -111,7 +109,7 @@ const Dashboard = () => {
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
-                className='text-2xl font-bold'
+                className='text-2xl font-bold text-white'
               >
                 Scanner is waiting for QR Code....
               </motion.span>

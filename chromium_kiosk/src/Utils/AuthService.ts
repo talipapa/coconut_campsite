@@ -10,7 +10,7 @@ interface credentialsIE {
 }
 
 export async function login(credentials: credentialsIE) {
-    const { data } = await axios.post('/manager/login', credentials)
+    const { data } = await axios.post('/kiosk/login', credentials)
     await setToken(data.token)
 }
 

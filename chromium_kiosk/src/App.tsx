@@ -13,6 +13,11 @@ function App() {
   return (
     <GlobalProvider>
       <ConfigProvider theme={{
+          token:{
+            colorPrimary: '#559D99',
+            colorFillSecondary: "#3E5F5D",
+            colorBgContainerDisabled: '#B3CCCA',
+          },
           components: {
             Layout: {
               siderBg: '#5CBCB6',
@@ -30,8 +35,8 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/logbook/:id" element={<LogBook />} />
-            <Route path="/logbook/:id/success" element={<LogBookSuccess />} />
+            <Route path="/logbook/:code" element={<LogBook />} />
+            <Route path="/logbook/:code/success" element={<LogBookSuccess />} />
             <Route path="/" element={<Login />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

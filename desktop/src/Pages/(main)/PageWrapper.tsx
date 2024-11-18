@@ -102,7 +102,7 @@ const PageWrapper = ({children} : {children: React.ReactElement}) => {
                 </div>     
             </Sider>
             <Layout>
-                <Header className='bg-white px-6 py-6 flex flex-row items-center justify-between border-slate-200 border-b-2'>
+                <Header className='bg-[#B3CCCA] px-6 py-6 flex flex-row items-center justify-between border-slate-200 border-b-2'>
                     <GiHamburgerMenu onClick={() => setCollapsed(!collapsed)} className={`text-2xl transition-all ease-in-out hover:scale-125 ${collapsed ? 'rotate-90' : 'rotate-0'}`}/>           
                     
                     <div className='flex flex-row items-center space-x-3 select-none'>

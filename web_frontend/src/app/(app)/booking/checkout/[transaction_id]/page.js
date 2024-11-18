@@ -53,28 +53,28 @@ export default function Page({params}) {
         <>
             {/* BODY */}
             <div>
-                <header className="shadow bg-[#363636]">
+                <header className="shadow bg-[#986B41]">
                     <div className="max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
 
                         <h2 className="font-semibold text-xl leading-tight">
                         <Breadcrumb
                             items={[
                             {
-                                title: <a href="/" className="!text-[#acabab]">Home</a>,
+                                title: <a href="/" className="!text-[#dddddd]">Home</a>,
                             },
                             {
-                                title: <a href="/booking" className="!text-[#acabab]">Booking</a>,
+                                title: <a href="/booking" className="!text-[#dddddd]">Booking</a>,
                             },
                             {
-                                title: <span className="text-white cursor-pointer">Checkout</span>,
+                                title: <span className="text-[#98F7F0] cursor-pointer">Checkout</span>,
                             }
                             ]}
                         />
                         </h2>
                     </div>
                 </header>
-                <div className="grid grid-cols-1  md:grid-cols-3">
-                    <div className="flex flex-col space-y-5 order-last md:order-first  bg-[#256560] ">
+                <div className="grid grid-cols-1  md:grid-cols-3 min-h-[100vh]">
+                    <div className="flex flex-col space-y-5 order-last md:order-first h-full bg-[#256560] ">
                         <div className="px-[30px] py-[50px]  space-y-4 text-center md:text-left text-white">
                             <h1 className="text-2xl font-semibold">Booking Summary</h1>
                             <div className="space-y-5">

@@ -16,8 +16,8 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const [formData, setFormData] = useState<IFormData>({
-        email: 'kiosk_device@gmail.com',
-        password: 'kiosk1_device_181017',
+        email: '',
+        password: '',
         device_name: 'kiosk_device_1'
     });
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
@@ -28,8 +28,6 @@ const Login = () => {
         if (accessToken) {
             navigate('/dashboard');
         }
-
-        handleLogin()
     }, []);
 
     const handleLogin = async (e?: any) => {
@@ -58,14 +56,14 @@ const Login = () => {
     };
 
     return (
-        <form onSubmit={handleLogin} className='h-[100vh] w-[100vw] bg-[#5CBCB6] flex flex-col items-center justify-center pt-12 space-y-10 p-10'>
+        <form onSubmit={handleLogin} className='h-[100vh] w-[100vw] bg-[#56342A] flex flex-col items-center justify-center pt-12 space-y-10 p-10'>
             <div className='flex flex-col items-center w-full'>
-                <h1 className='text-4xl text-[#0000009d] font-bold'>Welcome to</h1>            
+                <h1 className='text-4xl text-[#e4dbdb9d] font-bold'>Welcome to</h1>            
                 <h1 className='text-4xl text-white font-bold uppercase'>COCONUT CAMPSITE</h1>            
             </div>
             <div className='flex flex-col space-y-9 w-full'>
                 {serverAccountError && (
-                    <div className='text-black w-full bg-red-300 py-3 flex items-center justify-center'>
+                    <div className='text-white w-full bg-[#986B41] py-3 flex items-center justify-center'>
                         <span className='text-xl font-semibold'>{serverAccountError}</span>
                     </div>
                 )}
@@ -76,7 +74,7 @@ const Login = () => {
                     <TextField otherStyles='items-center w-[60%] flex flex-col' title='Password' isPassword={true} placeholder='Enter your password' value={formData.password} handleChangeText={(e) => setFormData(prev => ({ ...prev, password: e }))} errors={[errors.password]} />
                 </div>
             </div>
-            <Button type='primary' htmlType='submit' loading={isLoading} className='bg-[#BC7B5C] w-[60%] rounded-md py-7 text-white'>Login</Button>
+            <Button type='primary' htmlType='submit' loading={isLoading} className=' w-full rounded-md py-7 text-white'>Login</Button>
         </form>
     );
 };

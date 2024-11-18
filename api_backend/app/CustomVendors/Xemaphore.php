@@ -42,7 +42,7 @@ class Xemaphore{
                 'apikey' => self::getXemaphoreKey(),
                 'number' => '0'.$phoneNumber,
                 'message' => $bodyMessage,
-                // 'sendername' => self::getSenderName()
+                'sendername' => self::getSenderName()
             ]);
             // Perform the POST request with the URL containing the query parameters.
             $response = Http::post($url);

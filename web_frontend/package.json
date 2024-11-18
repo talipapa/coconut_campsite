@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:host": "next dev -H 192.168.2.106 -p 3000",
+    "dev:port": "next dev -p 3100",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

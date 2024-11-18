@@ -20,29 +20,59 @@ interface ICamper {
     name: string;
 }
 
-interface ITransaction {
-    price: number;
-    fee: number;
+interface IReservationHolder{
+    full_name: string;
+}
+
+interface population {
+    adult_count: number;
+    child_count: number;
+    total_guest_count: number;
 }
 
 interface IBooking {
-    id: number;
-    total_campers: number;
-    payment_type: 'XENDIT'|'CASH';
-    booking_type: 'daytour'|'overnight';
-    email: string;
-    tel_number: string;
-    check_in: string;
-    check_out: string;
+    check_in: Date;
+    booking_status: string;
+    booking_type: string;
     bonfire_kit_count: number;
-    is_cabin: true;
     tent_pitching_count: number;
+    has_cabin: boolean;
+    cabin: {
+        cabin_name: string;
+        cabin_price: number;
+        cabin_image: string;
+    }
+}
+
+interface IAutoFillUp {
+    guest_count: number;
+    remaining_log_submissions: number;
+    is_log_submitted: boolean;
+}
+
+interface ITransaction  {
+    transaction_id: string;
+    transaction_type: 'XENDIT'|'CASH';
+    price: number;
+    fee: number;
+    transaction_status: string;
+    xendit_reference: string|null;
+}
+
+interface IQrData {
+    reservation_holder: IReservationHolder;
+    population: population;
+    booking: IBooking;
+    campers: string[];
+    kiosk_autofillup: IAutoFillUp;
     transaction: ITransaction;
+    updated_at: Date;
+    created_at: Date;
 }
 
 
 const LogBook = () => {
-    const { id } = useParams();
+    const { code } = useParams();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
     const [campersName, setCampersName] = useState<ICamper[]>([]);
@@ -51,7 +81,7 @@ const LogBook = () => {
     const listRef = useRef<HTMLDivElement | null>(null);
     const [isNewCamperAdded, setIsNewCamperAdded] = useState(false);
     const [formDelaySubmit, setFormDelaySubmit] = useState(5000);
-    const [booking, setBooking] = useState<IBooking|undefined>();
+    const [qrData, setQrData] = useState<IQrData|undefined>();
 
     const handleNameChange = (id: number, newName: string) => {
         setCampersName(campersName.map(camper =>
@@ -64,8 +94,8 @@ const LogBook = () => {
     };
 
     const addCamper = () => {
-        if (booking) {
-            if (newCamper.trim() !== '' && campersName.length < booking.total_campers) {
+        if (qrData) {
+            if (newCamper.trim() !== '' && campersName.length < qrData?.population.total_guest_count) {
                 setCampersName([{ id: nextId, name: newCamper }, ...campersName]);
                 setNewCamper('');
                 setNextId(nextId + 1);
@@ -87,9 +117,9 @@ const LogBook = () => {
 
     const submitCamperName = () => {
         setIsLoading(true);
-        axios.post(`/kiosk/logbook/${id}`, { camper_names: campersName.map(camper => camper.name) })
+        axios.post(`/kiosk/logbook/${code}`, { camper_names: campersName.map(camper => camper.name) })
             .then((res) => {
-                navigate(`/logbook/${id}/success`, {replace: true});
+                navigate(`/logbook/${code}/success`, {replace: true});
             })
             .catch((err) => {
                 console.log(err);
@@ -102,9 +132,10 @@ const LogBook = () => {
 
     useEffect(() => {
         setIsLoading(true);
-        axios.get(`/kiosk/logbook/${id}`)
+        axios.get(`/qr-code/get-booking/${code}`)
             .then((res) => {
-                setBooking(res.data['booking'])
+                setQrData(res.data)
+                setCampersName(res.data.campers.map((camper:string, index:number) => ({ id: index, name: camper })));
             })
             .catch((err) => {
                 navigate('/dashboard', {replace: true});
@@ -124,12 +155,12 @@ const LogBook = () => {
         }
     }, [campersName, isNewCamperAdded]);
 
-    if (isLoading && !booking) {
+    if (isLoading && !qrData) {
         return (
             <PageWrapper contentClass='justify-start'>
                 <div className='w-full h-full flex flex-col'>
                     <div className='flex flex-col mx-10 h-full space-y-10 items-start my-5'>
-                        <FaArrowLeftLong className='text-5xl transition-all duration-100 hover:scale-125 active:scale-110' onClick={() => navigate("/dashboard", {replace: true})}/>
+                        <FaArrowLeftLong className='text-5xl text-white transition-all duration-100 hover:scale-125 active:scale-110' onClick={() => navigate("/dashboard", {replace: true})}/>
                         <div className='w-full h-full flex flex-col items-center text-3xl font-bold'>
                             <Spin size='large' className='font-black'/>
                         </div>
@@ -145,26 +176,26 @@ const LogBook = () => {
             <PageWrapper contentClass='justify-start'>
                 <div className='w-full h-full flex flex-col'>
                     <div className='flex flex-col mx-10 h-full space-y-7 items-start my-5'>
-                        <FaArrowLeftLong className='text-4xl transition-all duration-100 hover:scale-125 active:scale-110' onClick={() => navigate("/dashboard", {replace: true})}/>
+                        <FaArrowLeftLong className='text-4xl text-white transition-all duration-100 hover:scale-125 active:scale-110' onClick={() => navigate("/dashboard", {replace: true})}/>
                         <div className='w-full h-full flex flex-col items-start justify-start text-3xl font-bold'>
                             <div className='w-full h-full flex flex-col gap-10 items-start'>
                                 <div className='w-full h-full relative space-y-12'>
                                     <div className='h-full w-full'>
                                         <div className='flex flex-row items-center justify-between mb-3'>
-                                            <h1 className='text-lg font-bold text-black uppercase'>Arrival logbook</h1>
-                                            <div className='text-lg font-bold text-slate-500'>
-                                                <span className='text-green-700'>{campersName.length}</span> / {booking?.total_campers}
+                                            <h1 className='text-lg font-bold text-white uppercase'>Arrival logbook</h1>
+                                            <div className='text-lg font-bold text-[#B3CCCA]'>
+                                                <span className='text-green-500'>{campersName.length}</span> / {qrData?.population.total_guest_count}
                                             </div>
                                         </div>
 
-                                        {booking && (
+                                        {qrData && (
                                             <div className='w-full h-[50px] items-center flex flex-row gap-7'>
                                                 {
-                                                    campersName.length >= booking.total_campers ? (
+                                                    campersName.length >= qrData?.population.total_guest_count ? (
                                                         <Button
                                                             type='primary'
                                                             loading={isLoading}
-                                                            className=' text-xl px-6 gap-4 bg-green-700 h-full'
+                                                            className=' text-xl px-6 w-[50%] gap-4 bg-green-500 text-black h-full'
                                                             onClick={submitCamperName}
                                                         >
                                                             <FaUserPlus className='text-2xl' /> Submit
@@ -173,7 +204,7 @@ const LogBook = () => {
                                                     :
                                                         <Button
                                                             type='primary'
-                                                            className='text-xl px-6 gap-4 h-full'
+                                                            className='text-xl w-[25%] px-6 gap-4 h-full'
                                                             onClick={addCamper}
                                                             loading={isLoading}
                                                             disabled={campersName.length >= 10}
@@ -226,81 +257,71 @@ const LogBook = () => {
                                     </div>
                                 </div>
                                 <div className='flex flex-col w-full space-y-3'>
-                                <div className='bg-slate-700 p-5 rounded-xl space-y-3 flex flex-col items-center text-center'>
-                                        <div className='flex flex-col items-center'>
-                                            {booking?.booking_type === 'daytour' ? (
-                                                <div className='bg-yellow-400 rounded-full px-5 flex items-center flex-row justify-center space-x-3'>
-                                                    <FaSun className='text-lg'/>
-                                                    <span className='text-lg'>Day tour</span>
-                                                </div>
-                                            ) : (
-                                                <div className='bg-slate-900 text-slate-100 rounded-full px-5 flex items-center flex-row justify-center space-x-3'>
-                                                    <WiMoonAltWaningCrescent4 className='text-lg'/>
-                                                    <span className='text-lg'>Overnight</span>
-                                                </div>
-                                            )}
+                                    <div className='bg-[#B68E65]  p-5 rounded-xl space-y-3 flex flex-col items-center text-center'>
+                                        <div>
+                                            <h1 className='text-sm font-bold text-black'>Price</h1>
+                                            <h1 className='text-2xl font-bold text-green-600 bg-slate-900 rounded-full px-9'>P {(qrData?.transaction.price)}</h1>
                                         </div>
-        
-                                        <div className='space-y-1'>
-                                            <h1 className='text-sm font-bold text-slate-300'>Total Campers</h1>
-                                            <h1 className='text-xs font-bold text-white'>{booking?.total_campers}</h1>
+                                        <div>
+                                            <h1 className='text-sm font-bold text-black'>Payment method</h1>
+                                            <h1 className='text-2xl font-bold text-black'>{qrData?.transaction.transaction_type}</h1>
                                         </div>
-                                        <div className='space-y-1'>
-                                            <h1 className='text-sm font-bold text-slate-300'>Bonfire kit</h1>
-                                            <div className='flex flex-row items-start space-x-3'>
-                                                <IoBonfireOutline className='text-md text-orange-400'/>
-                                                <h1 className='text-xl font-bold text-white'>{booking?.bonfire_kit_count}</h1>
-                                            </div>
-                                        </div>
-                                        <div className='space-y-1'>
-                                            <h1 className='text-sm font-bold text-slate-300'>Tent pitch</h1>
-                                            <div className='flex flex-row items-end space-x-3'>
-                                                <FaTentArrowDownToLine className='text-md text-blue-400'/>
-                                                <h1 className='text-xl font-bold text-white'>{booking?.tent_pitching_count}</h1>
-                                            </div>
-                                        </div>
-                                        <div className='space-y-1'>
-                                            <h1 className='text-sm font-bold text-slate-300'>Cabin?</h1>
-                                            <div className='flex flex-row items-end space-x-3'>
-                                                {booking?.is_cabin ? (
-                                                    <>
-                                                        <MdOutlineCabin className='text-md text-green-600'/>
-                                                        <h1 className='text-xl font-bold text-white'>YES</h1>
-                                                    </>
+                                    </div>
+                                    <div className='bg-[#D7BA89] p-5 rounded-xl space-y-3 flex flex-col items-center text-center'>
+                                            <div className='flex flex-col items-center'>
+                                                {qrData?.booking.booking_type === 'daytour' ? (
+                                                    <div className='bg-yellow-400 rounded-full px-5 flex items-center flex-row justify-center space-x-3'>
+                                                        <FaSun className='text-lg'/>
+                                                        <span className='text-lg'>Day tour</span>
+                                                    </div>
                                                 ) : (
-                                                    <>
-                                                        <MdOutlineCabin className='text-md text-red-600'/>
-                                                        <h1 className='text-xl font-bold text-white'>NO</h1>
-                                                    </>
+                                                    <div className='bg-slate-900 text-slate-100 rounded-full px-5 flex items-center flex-row justify-center space-x-3'>
+                                                        <WiMoonAltWaningCrescent4 className='text-lg'/>
+                                                        <span className='text-lg'>Overnight</span>
+                                                    </div>
                                                 )}
                                             </div>
-                                        </div>
+                                            <div className='grid grid-cols-2 gap-x-10 gap-y-4'>
+                                                <div className='space-y-1'>
+                                                    <h1 className='text-sm font-bold text-black'>Total Campers</h1>
+                                                    <div className='flex flex-row items-start space-x-3'>
+                                                        <FaUserPlus className='text-md text-green-800'/>
+                                                        <h1 className='text-2xl font-bold text-black'>{qrData?.population.total_guest_count}</h1>
+                                                    </div>
+                                                </div>
+                                                <div className='space-y-1'>
+                                                    <h1 className='text-sm font-bold text-black'>Bonfire kit</h1>
+                                                    <div className='flex flex-row items-start space-x-3'>
+                                                        <IoBonfireOutline className='text-md text-orange-400'/>
+                                                        <h1 className='text-2xl font-bold text-black'>{qrData?.booking.bonfire_kit_count}</h1>
+                                                    </div>
+                                                </div>
+                                                <div className='space-y-1'>
+                                                    <h1 className='text-sm font-bold text-black'>Tent pitch</h1>
+                                                    <div className='flex flex-row items-end space-x-3'>
+                                                        <FaTentArrowDownToLine className='text-md text-blue-400'/>
+                                                        <h1 className='text-2xl font-bold text-black'>{qrData?.booking.tent_pitching_count}</h1>
+                                                    </div>
+                                                </div>
+                                                <div className='space-y-1'>
+                                                    <h1 className='text-sm font-bold text-black'>Cabin?</h1>
+                                                    <div className='flex flex-row items-end space-x-3'>
+                                                        {qrData?.booking.has_cabin ? (
+                                                            <>
+                                                                <MdOutlineCabin className='text-md text-green-600'/>
+                                                                <h1 className='text-2xl font-bold text-black'>YES</h1>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <MdOutlineCabin className='text-md text-red-600'/>
+                                                                <h1 className='text-2xl font-bold text-black'>NO</h1>
+                                                            </>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
                                     </div>
-                                    <div className='bg-slate-700 p-5 rounded-xl space-y-3 flex flex-col items-center text-center'>
-                                        <div>
-                                            <h1 className='text-sm font-bold text-slate-300'>Price</h1>
-                                            <h1 className='text-2xl font-bold text-green-600 bg-slate-900 rounded-full px-9'>P {(booking?.transaction.price)}</h1>
-                                        </div>
-                                        <div>
-                                            <h1 className='text-sm font-bold text-slate-300'>Booking id</h1>
-                                            <h1 className='text-xs font-bold text-white'>{id}</h1>
-                                        </div>
-                                        <div>
-                                            <h1 className='text-sm font-bold text-slate-300'>Payment method</h1>
-                                            <h1 className='text-xs font-bold text-white'>{booking?.payment_type}</h1>
-                                        </div>
-   
-                                        <div>
-                                            <h1 className='text-sm font-bold text-slate-300'>Email</h1>
-                                            <h1 className='text-xs font-bold text-white'>{booking?.email}</h1>
-                                        </div>
-                                        <div>
-                                            <h1 className='text-sm font-bold text-slate-300'>Mobile number</h1>
-                                            <h1 className='text-xs font-bold text-white'>{booking?.tel_number}</h1>
-                                        </div>
-
-                                    </div>
-                
+       
                                 </div>
                             </div>
                         </div>

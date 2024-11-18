@@ -71,7 +71,7 @@ const PageWrapper = ({children, contentClass} : {children: React.ReactElement, c
     return (
         <Layout className='min-h-[100vh]'>
             <Layout>
-                <Content className={`bg-[#dfdede] overflow-hidden flex flex-col items-center  relative py-4 ${contentClass ? contentClass : 'justify-center'}`}>
+                <Content className={`bg-[#56342A] overflow-hidden flex flex-col items-center  relative py-4 ${contentClass ? contentClass : 'justify-center'}`}>
                     {children}
                 </Content>
             </Layout>

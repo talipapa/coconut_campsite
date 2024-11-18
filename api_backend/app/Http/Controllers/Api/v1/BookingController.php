@@ -7,12 +7,15 @@ use App\Http\Resources\v1\BookingResource;
 use App\Http\Resources\v1\SuccessfulBookingResource;
 use App\Http\Resources\v1\TransactionResource;
 use App\Models\Booking;
+use App\Models\Camper;
+use App\Models\Qrcode;
 use App\Models\Refund;
 use App\Models\Transaction;
 use App\Models\User;
 use Carbon\Carbon;
 use GlennRaya\Xendivel\Xendivel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
@@ -278,6 +281,7 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
+        
         $validated = $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
@@ -302,6 +306,7 @@ class BookingController extends Controller
         $transactionId = null;
         
         try {
+            DB::beginTransaction(); 
             $booking = Booking::create([
                 'user_id' => $authenticatedUser->id,
                 'first_name' => $validated['first_name'],
@@ -320,6 +325,13 @@ class BookingController extends Controller
                     'status' => 'PENDING',
             ]);
 
+            if ($validated['adultCount'] + $validated['childCount'] === 1) {
+                Camper::create([
+                    'full_name' => $validated['first_name'] . ' ' . $validated['last_name'],
+                    'booking_id' => $booking->id,
+                ]);
+            }
+
             $transaction = Transaction::create([
                 'user_id' => $request->user()->id,
                 'booking_id' => $booking->id,
@@ -327,13 +339,19 @@ class BookingController extends Controller
                 'fee' => 0,
             ]);  
 
-            $transactionId = $transaction->id;
-            $bookingJson = new BookingResource($booking);
-        } catch (\Throwable $th) {
+            Qrcode::create([
+                'booking_id' => $booking->id,
+                'code' => fake()->regexify('[A-Za-z0-9]{8}')
+            ]);
 
+
+
+            $transactionId = $transaction->id;
+            $bookingJson = new BookingResource($booking);            
+            DB::commit();
+        } catch (\Throwable $th) {
             Log::info("Error", [$th]);
-            $booking->delete();
-            $transaction->delete();
+            DB::rollBack();
             throw $th;
         }
 
@@ -362,6 +380,50 @@ class BookingController extends Controller
         return new BookingResource($booking);
     }
 
+    public function inputLogBook(Request $request, Booking $booking){
+        if ($request->user()->id !== $booking->user_id) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+        $bannedStatus = ['CASH_CANCELLED', 'VOIDED', 'REFUNDED', 'FAILED', 'PENDING', 'REFUND_PENDING', 'CANCELLED'];
+        $validated = $request->validate([
+            'campers' => 'required'
+        ]);
+        if (!$booking) {
+            return response()->json([
+                'message' => 'QR code not found',
+            ], 404);
+        }
+
+        if (!$booking) {
+            return response()->json([
+                'message' => 'QR code not found',
+            ], 404);
+        }
+
+        if (in_array($booking->status, $bannedStatus)) {
+            return response()->json([
+                'message' => 'QR code is not valid',
+            ], 400);
+        }
+        if ($booking->status == 'SCANNED') {
+            return response()->json([
+                'message' => 'QR code already scanned',
+            ], 400);
+        }
+
+        if ($booking->status == 'VERIFIED') {
+            return response()->json([
+                'message' => 'QR code already scanned',
+            ], 400);
+        }
+        // Extract only the 'name' values
+        $insertData = array_map(function($item) use ($booking) {
+            return ['full_name' => $item, 'booking_id' => $booking->id, 'created_at'=>date('Y-m-d H:i:s'), 'updated_at'=> date('Y-m-d H:i:s')];
+        }, $validated['campers']);
+
+        Camper::insert($insertData);
+        return response()->json(['message' => 'Data inserted successfully.']);
+    }
 
 
     /**

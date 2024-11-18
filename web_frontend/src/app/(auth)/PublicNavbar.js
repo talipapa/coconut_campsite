@@ -9,7 +9,7 @@ const PublicNavbar = () => {
     const pathName = usePathname()
     const router = useRouter()
     return (
-        <nav className='bg-[#283618] p-[30px] text-white flex flex-row justify-between w-full'>
+        <nav className='bg-[#56342A] p-[30px] text-white flex flex-row justify-between w-full'>
             <div className='w-full flex flex-row items-end space-x-5'>
                     <a href='/' className='text-2xl font-semibold'>Coconut Campsite</a>
                     <div className='flex flex-row space-x-3'>

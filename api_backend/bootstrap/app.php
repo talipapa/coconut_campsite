@@ -17,9 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->validateCsrfTokens(except:[
-            '/api/v1/manager/login',
+            '/api/v1/kiosk/login',
             '/api/v1/kiosk/scan',
             '/api/v1/kiosk/scan',
+            '/api/v1/qr-code/get-booking/*',
             '/api/v1/kiosk/logbook/*'
         ]);
         

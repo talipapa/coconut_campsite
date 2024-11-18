@@ -12,17 +12,16 @@ export default function Page() {
 
     return (
         <>
-            <header className="bg-[#363636] shadow">
+            <header className="bg-[#B68E65] shadow">
                 <div className="max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
-
                     <h2 className="font-semibold text-xl text-[#ffffff] leading-tight">
                     <Breadcrumb
                         items={[
                         {
-                            title: <a href="/" className="!text-[#acabab]">Home</a>,
+                            title: <a href="/" className="!text-[#dddddd]">Home</a>,
                         },
                         {
-                            title: <span className="text-white cursor-pointer">Account setting</span>,
+                            title: <span className="text-[#98F7F0] cursor-pointer">Account setting</span>,
                         }]}
                     />
                     </h2>

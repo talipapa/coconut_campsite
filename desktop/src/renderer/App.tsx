@@ -18,16 +18,21 @@ export default function App() {
   return (
     <GlobalProvider>
       <ConfigProvider theme={{
+        token: {
+          colorPrimary: '#559D99',
+          colorFillSecondary: "#3E5F5D",
+          colorBgContainerDisabled: '#B3CCCA',
+        },
         components: {
           Layout: {
-            siderBg: '#001d3d',
+            siderBg: '#56342A',
             triggerBg: '#ffffff',
           },
           Menu: {
-            colorBgContainer: '#001d3d',
-            itemSelectedBg: '#BC7B5C',
+            colorBgContainer: '#56342A',
+            itemSelectedBg: '#559D99',
             itemSelectedColor: '#fbfbff',
-            itemColor: '#9db4c0',
+            itemColor: '#f9f9f9',
             itemHoverBg: '#BC7B5C',
             itemHoverColor: '#ffffff',
           }

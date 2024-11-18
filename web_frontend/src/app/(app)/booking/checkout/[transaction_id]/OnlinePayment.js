@@ -89,7 +89,7 @@ const OnlinePayment = ({paymentType, totalPrice, bookId, calculateFee, calculate
   return (
     <>
       {contextHolder}
-      <div className='w-full h-full flex flex-col justify-between space-y-5'>
+      <div className='w-full h-full flex flex-col justify-start space-y-5'>
         <div className='w-full flex flex-col space-y-6'>
           <Alert
             message="Informational Notes"

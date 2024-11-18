@@ -34,7 +34,7 @@ const CashPayment = ({paymentType, totalPrice, bookId}) => {
   }
 
   return (
-    <div className='w-full flex flex-col space-y-6'>
+    <div className='w-full h-full flex flex-col justify-start space-y-5'>
         <Alert
           message="Informational Notes"
           description="Please pay the total amount to the front desk upon arrival. "

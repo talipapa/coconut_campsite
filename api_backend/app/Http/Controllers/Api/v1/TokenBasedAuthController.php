@@ -70,6 +70,39 @@ class TokenBasedAuthController extends Controller
         ]);
     }
 
+    // Login for kiosk
+    public function loginKiosk(Request $request){
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+            'device_name' => 'required'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user || !$user->owner) {
+            if (!$user || !$user->manager) {
+                return response()->json([
+                    'message' => 'You are not authorized to login.'
+                ], 401);
+            }
+        }
+
+
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'message' => 'The provided credentials are incorrect.'
+            ], 401);
+        }
+
+        $plainTextToken = $user->createToken($request->device_name, ['*'], now()->addDay(1))->plainTextToken;
+        return response()->json([
+            'token' => $plainTextToken
+        ]);
+    }
+
+
     public function user(Request $request){
         return response()->json($request->user()->only('id', 'first_name', 'last_name', 'email'));
     }

@@ -59,9 +59,9 @@ const Login = () => {
     return (
       <>
         <div className="min-h-screen grid lg:grid-cols-3 lg:justify-center sm:pt-0 bg-gray-100">
-          <div className="w-full h-full px-6 py-4 col-span-2 bg-white shadow-md sm:rounded-lg items-center justify-center">
-                <div className='h-full w-full flex flex-col items-center justify-center'>
-                    <div className='w-[70%] max-w-[600px]'>
+          <div className="w-full h-full px-6 py-4 bg-[#56342A] text-white col-span-2  shadow-md sm:rounded-lg items-center justify-center">
+                <div className='h-full w-full  flex flex-col items-center justify-center'>
+                    <div className='w-[70%] max-w-[600px] space-y-6'>
                         {serverAccountError && (
                           <div className='text-black w-full bg-red-300 py-3 flex items-center justify-center'>
                             <span className='text-xl font-semibold'>{serverAccountError}</span>
@@ -77,7 +77,7 @@ const Login = () => {
                             <div className='flex flex-col w-full'>
                             <TextField otherStyles='shadow-sm' title='Password' isPassword={true} placeholder='Enter your password' value={formData['password']} handleChangeText={(e) => setFormData((prev) => ({ ...prev, password: e }))} errors={[errors.password]} />
                             </div>
-                        <Button type='primary' loading={isLoading} onClick={handleLogin} className='bg-[#BC7B5C] w-full rounded-md py-8 text-white'>Login</Button>
+                        <Button type='primary' loading={isLoading} onClick={handleLogin} className=' mt-4 w-full rounded-md py-8 text-white'>Login</Button>
                       </div>
                     </div>
                 </div>

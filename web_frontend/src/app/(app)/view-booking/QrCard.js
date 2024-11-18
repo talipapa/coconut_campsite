@@ -12,7 +12,7 @@ function doDownload(url, fileName) {
   document.body.removeChild(a)
 }
 
-const QrCard = ({id}) => {
+const QrCard = ({value}) => {
     // console.log(id)
 
     const downloadCanvasQRCode = () => {
@@ -29,8 +29,11 @@ const QrCard = ({id}) => {
       <Space id="bookingqr" direction="vertical" className="w-full">
         <div className="w-full flex flex-col items-center space-y-4">
           <QRCode
-            value={id}
+            value={value}
             size={300}
+            bgColor='#ecddc3'
+            errorLevel='H'
+            bordered={true}
           />
           <Alert
             message="Important note!"

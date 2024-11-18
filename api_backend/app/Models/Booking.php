@@ -32,11 +32,16 @@ class Booking extends Model
         'payment_type'
     ];
 
-    protected $appends = ['full_name', 'payment_type', 'total_campers', 'transaction_status', 'cabin_name', 'cabin_price'];
+    protected $appends = ['full_name', 'payment_type', 'total_campers', 'transaction_status', 'cabin_name', 'cabin_price', 'cabin_image'];
 
     public function getFullNameAttribute()
     {
         return "{$this->first_name} {$this->last_name}";
+    }
+
+    public function getCabinImageAttribute()
+    {
+        return $this->cabin_id ? $this->cabin->getFirstMediaUrl('cabin_images'): null;
     }
 
     public function getPaymentTypeAttribute()
@@ -83,6 +88,11 @@ class Booking extends Model
     public function cabin()
     {
         return $this->belongsTo(Cabin::class);
+    }
+
+    public function qrcode()
+    {
+        return $this->belongsTo(Qrcode::class);
     }
 
     

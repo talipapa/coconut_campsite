@@ -314,20 +314,20 @@ export default function Page() {
         <>
             {contextHolder}
             <div>
-                <header className="bg-[#363636] shadow">
+                <header className="bg-[#986B41] shadow">
                     <div className="max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
 
-                        <h2 className="font-semibold text-xl text-[#ffffff] leading-tight">
+                        <h2 className="font-semibold text-xl text-[#000000] leading-tight">
                         <Breadcrumb
                             items={[
                             {
-                                title: <a href="/" className="!text-[#acabab]">Home</a>,
+                                title: <a href="/" className="!text-[#dddddd]">Home</a>,
                             },
                             {
-                                title: <span className="text-white cursor-pointer">Booking</span>,
+                                title: <span className="text-[#98F7F0] cursor-pointer">Booking</span>,
                             },
                             {
-                                title: <a href="/booking" className="!text-[#acabab]">Checkout</a>,
+                                title: <a href="/booking" className="!text-[#dddddd]">Checkout</a>,
                             }
                             ]}
                         />
@@ -495,7 +495,7 @@ export default function Page() {
                                                         <span>{selectedCabin.capacity}</span>
                                                     </div>
                                                     |
-                                                    <p className="text-md md:text-lg font-semibold text-green-500 flex flex-row items-center gap-2">₱ {cabinPrice}</p>
+                                                    <p className="text-md md:text-lg font-semibold text-green-500 flex flex-row items-center gap-2">₱ {selectedCabin.price}</p>
                                                 </div>
                                                 <CloseSquareFilled onClick={() => setSelectedCabin(undefined)} className="select-none   text-4xl text-red-500 cursor-pointer hover:scale-125 active:scale-105 ease-in-out duration-200 transition-all"/>
                                             </div>
@@ -627,17 +627,18 @@ export default function Page() {
                 <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-10">
 
                     {cabin.map((cabin, index) => (
-                        <div key={index} className="flex flex-col items-center space-y-2 bg-[#8e8e8e57] border-2 rounded-xl overflow-hidden">
+                        <div key={index} className="flex flex-col items-center space-y-2 bg-[#f7b393ed] border-2 rounded-xl overflow-hidden">
                             <div className="relative w-full h-full">
-                                <div className="border-l-4 border-green-400 select-none text-white text-lg m-4 pl-3 z-10 absolute top-0 left-0">Press to view</div>
+                                <div className="border-l-4 border-green-400 select-none text-black font-bold text-lg m-4 pl-3 z-10 absolute bottom-0 left-0">Press to view</div>
                                 <Image src={cabin.image} alt={cabin.name} width="100%" height={250} className="object-cover object-center absolute top-0 left-0" scal unoptimized={true}/>
+
                             </div>
                             <div className="px-7 pb-7 w-full flex flex-col items-center justify-center">
                                 <div className="flex flex-row items-start justify-between w-full">
-                                    <h3 className="text-3xl font-bold">{cabin.name}</h3>
+                                    <h3 className="text-3xl font-bold text-black">{cabin.name}</h3>
                                     <p className="text-green-600 font-bold text-3xl">₱ {cabin.price}</p>
                                 </div>
-                                <p className="text-[#555555] w-full text-2xl">Max PAX: {cabin.capacity}</p>
+                                <p className="text-[#555454] w-full text-xl font-semibold">Max PAX: {cabin.capacity}</p>
                                 <div className="flex flex-col w-full mt-4">
                                     <p className="text-black w-full text-lg p-3 bg-yellow-100 border-r-8 border-yellow-600 ">{cabin.description}</p>
                                 </div>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
 use App\Models\Camper;
+use App\Models\Qrcode;
 use App\Models\Transaction;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -49,7 +50,11 @@ class KioskController extends Controller
         ]);
     }
 
-    public function inputLogBook(Request $request, Booking $booking){
+    public function inputLogBook(Request $request, $qrCode){
+
+        $qrCode = Qrcode::where('code', $qrCode)->first();
+        $booking = Booking::find($qrCode->booking_id);
+
         $bannedStatus = ['CASH_CANCELLED', 'VOIDED', 'REFUNDED', 'FAILED', 'PENDING', 'REFUND_PENDING', 'CANCELLED'];
         $validated = $request->validate([
             'camper_names' => 'required'
@@ -82,6 +87,10 @@ class KioskController extends Controller
                 'message' => 'QR code already scanned',
             ], 400);
         }
+
+        // Find all campers with the same booking id and delete batch
+        Camper::where('booking_id', $booking->id)->delete();
+        
 
         // Extract only the 'name' values
         $insertData = array_map(function($item) use ($booking) {
