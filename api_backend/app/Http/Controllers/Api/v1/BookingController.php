@@ -317,7 +317,7 @@ class BookingController extends Controller
                     $existingTransaction->delete();
                 }
                 Qrcode::where('booking_id', $existingBooking->id)->delete();
-                
+                Camper::where('booking_id', $existingBooking->id)->delete();                
                 $existingBooking->update([
                     'user_id' => $authenticatedUser->id,
                     'first_name' => $validated['first_name'],
