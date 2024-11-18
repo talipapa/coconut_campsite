@@ -15,6 +15,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use GlennRaya\Xendivel\Xendivel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
@@ -298,7 +299,7 @@ class BookingController extends Controller
             'telNumber' => 'Invalid number. Example: 9921234567',
         ]);
 
-        $authenticatedUser = User::find($request->user()->id);
+        $authenticatedUser = User::find(Auth::id());
         $booking = null;
         $bookingJson = null;
         $transaction = null;
@@ -356,7 +357,7 @@ class BookingController extends Controller
                 ]);
     
                 $transactionId = $transaction->id;
-                $bookingJson = new BookingResource($booking);            
+                $bookingJson = new BookingResource($existingBooking);            
                 DB::commit();
 
             } catch (\Throwable $th) {
