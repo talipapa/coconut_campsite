@@ -281,7 +281,6 @@ class BookingController extends Controller
      */
     public function store(Request $request)
     {
-        
         $validated = $request->validate([
             'first_name' => 'required',
             'last_name' => 'required',
@@ -305,59 +304,119 @@ class BookingController extends Controller
         $transaction = null;
         $transactionId = null;
         
-        try {
-            DB::beginTransaction(); 
-            $booking = Booking::create([
-                'user_id' => $authenticatedUser->id,
-                'first_name' => $validated['first_name'],
-                'last_name' => $validated['last_name'],
-                'email' => $validated['email'],
-                'tel_number' => $validated['telNumber'],
-                'adultCount' => $validated['adultCount'],
-                'childCount' => $validated['childCount'],
-                'check_in' => Carbon::parse($validated['checkInDate'])->timezone('Asia/Manila')->format('Y-m-d'),
-                'check_out' => $validated['bookingType'] === 'overnight' ? Carbon::parse($validated['checkInDate'])->addDay(1)->timezone('Asia/Manila')->format('Y-m-d') : Carbon::parse($validated['checkInDate'])->timezone('Asia/Manila'),
-                'booking_type' => $validated['bookingType'],
-                'tent_pitching_count' => $validated['tentPitchingCount'],
-                'bonfire_kit_count' => $validated['bonfireKitCount'],
-                'cabin_id' => $validated['cabin_id'] ?? null,
-                'note' => $request->note,
-                    'status' => 'PENDING',
-            ]);
 
-            if ($validated['adultCount'] + $validated['childCount'] === 1) {
-                Camper::create([
-                    'full_name' => $validated['first_name'] . ' ' . $validated['last_name'],
-                    'booking_id' => $booking->id,
+        // Check if user has existing booking then update it
+        $existingBooking = Booking::where('user_id', $authenticatedUser->id)->where('status', 'PENDING')->first();
+        if ($existingBooking){
+            DB::beginTransaction();
+            try {
+                // Check if booking has existing transaction
+                $existingTransaction = Transaction::where('booking_id', $existingBooking->id)->first();
+                if ($existingTransaction) {
+                    $existingTransaction->delete();
+                }
+                
+                $existingBooking->update([
+                    'user_id' => $authenticatedUser->id,
+                    'first_name' => $validated['first_name'],
+                    'last_name' => $validated['last_name'],
+                    'email' => $validated['email'],
+                    'tel_number' => $validated['telNumber'],
+                    'adultCount' => $validated['adultCount'],
+                    'childCount' => $validated['childCount'],
+                    'check_in' => Carbon::parse($validated['checkInDate'])->timezone('Asia/Manila')->format('Y-m-d'),
+                    'check_out' => $validated['bookingType'] === 'overnight' ? Carbon::parse($validated['checkInDate'])->addDay(1)->timezone('Asia/Manila')->format('Y-m-d') : Carbon::parse($validated['checkInDate'])->timezone('Asia/Manila'),
+                    'booking_type' => $validated['bookingType'],
+                    'tent_pitching_count' => $validated['tentPitchingCount'],
+                    'bonfire_kit_count' => $validated['bonfireKitCount'],
+                    'cabin_id' => $validated['cabin_id'] ?? null,
+                    'note' => $request->note,
+                        'status' => 'PENDING',
                 ]);
+
+                $existingBooking->save();
+    
+                if ($validated['adultCount'] + $validated['childCount'] === 1) {
+                    Camper::create([
+                        'full_name' => $validated['first_name'] . ' ' . $validated['last_name'],
+                        'booking_id' => $existingBooking->id,
+                    ]);
+                }
+    
+                $transaction = Transaction::create([
+                    'user_id' => $request->user()->id,
+                    'booking_id' => $existingBooking->id,
+                    'price' => $validated['price'],
+                    'fee' => 0,
+                ]);  
+    
+                Qrcode::create([
+                    'booking_id' => $existingBooking->id,
+                    'code' => fake()->regexify('[A-Za-z0-9]{8}')
+                ]);
+    
+                $transactionId = $transaction->id;
+                $bookingJson = new BookingResource($booking);            
+                DB::commit();
+
+            } catch (\Throwable $th) {
+                Log::info("Error at Api/v1/BookingController", [$th]);
+                DB::rollBack();
             }
-
-            $transaction = Transaction::create([
-                'user_id' => $request->user()->id,
-                'booking_id' => $booking->id,
-                'price' => $validated['price'],
-                'fee' => 0,
-            ]);  
-
-            Qrcode::create([
-                'booking_id' => $booking->id,
-                'code' => fake()->regexify('[A-Za-z0-9]{8}')
-            ]);
-
-
-
-            $transactionId = $transaction->id;
-            $bookingJson = new BookingResource($booking);            
-            DB::commit();
-        } catch (\Throwable $th) {
-            Log::info("Error", [$th]);
-            DB::rollBack();
-            throw $th;
+            
+        } else{
+            // Create booking if there is no existing booking
+            try {
+                DB::beginTransaction(); 
+                $booking = Booking::create([
+                    'user_id' => $authenticatedUser->id,
+                    'first_name' => $validated['first_name'],
+                    'last_name' => $validated['last_name'],
+                    'email' => $validated['email'],
+                    'tel_number' => $validated['telNumber'],
+                    'adultCount' => $validated['adultCount'],
+                    'childCount' => $validated['childCount'],
+                    'check_in' => Carbon::parse($validated['checkInDate'])->timezone('Asia/Manila')->format('Y-m-d'),
+                    'check_out' => $validated['bookingType'] === 'overnight' ? Carbon::parse($validated['checkInDate'])->addDay(1)->timezone('Asia/Manila')->format('Y-m-d') : Carbon::parse($validated['checkInDate'])->timezone('Asia/Manila'),
+                    'booking_type' => $validated['bookingType'],
+                    'tent_pitching_count' => $validated['tentPitchingCount'],
+                    'bonfire_kit_count' => $validated['bonfireKitCount'],
+                    'cabin_id' => $validated['cabin_id'] ?? null,
+                    'note' => $request->note,
+                        'status' => 'PENDING',
+                ]);
+    
+                if ($validated['adultCount'] + $validated['childCount'] === 1) {
+                    Camper::create([
+                        'full_name' => $validated['first_name'] . ' ' . $validated['last_name'],
+                        'booking_id' => $booking->id,
+                    ]);
+                }
+    
+                $transaction = Transaction::create([
+                    'user_id' => $request->user()->id,
+                    'booking_id' => $booking->id,
+                    'price' => $validated['price'],
+                    'fee' => 0,
+                ]);  
+    
+                Qrcode::create([
+                    'booking_id' => $booking->id,
+                    'code' => fake()->regexify('[A-Za-z0-9]{8}')
+                ]);
+    
+    
+    
+                $transactionId = $transaction->id;
+                $bookingJson = new BookingResource($booking);            
+                DB::commit();
+            } catch (\Throwable $th) {
+                Log::info("Error at Api/v1/BookingController", [$th]);
+                DB::rollBack();
+                throw $th;
+            }
         }
 
-        
-        
-        // Log::info($booking);
         return [
             "Status" => "Booking Success",
             "booking" => $bookingJson,

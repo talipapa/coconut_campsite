@@ -9,6 +9,7 @@ use App\Models\Camper;
 use App\Models\Qrcode;
 use App\Models\Transaction;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class KioskController extends Controller
@@ -89,19 +90,25 @@ class KioskController extends Controller
         }
 
         // Find all campers with the same booking id and delete batch
-        Camper::where('booking_id', $booking->id)->delete();
-        
-
-        // Extract only the 'name' values
-        $insertData = array_map(function($item) use ($booking) {
-            return ['full_name' => $item, 'booking_id' => $booking->id, 'created_at'=>date('Y-m-d H:i:s'), 'updated_at'=> date('Y-m-d H:i:s')];
-        }, $validated['camper_names']);
-
-        Camper::insert($insertData);
-        $booking->status = 'SCANNED';
-        $booking->save(); 
-
-        return response()->json(['message' => 'Data inserted successfully.']);
+        DB::beginTransaction();
+        try {
+            //code...
+            Camper::where('booking_id', $booking->id)->delete();
+            
+            // Extract only the 'name' values
+            $insertData = array_map(function($item) use ($booking) {
+                return ['full_name' => $item, 'booking_id' => $booking->id, 'created_at'=>date('Y-m-d H:i:s'), 'updated_at'=> date('Y-m-d H:i:s')];
+            }, $validated['camper_names']);
+    
+            Camper::insert($insertData);
+            $booking->status = 'SCANNED';
+            $booking->save(); 
+            DB::commit();
+            return response()->json(['message' => 'Data inserted successfully.']);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['message' => 'Something went wrong', 500]);
+        }
     }
 
     public function fetchBooking(Request $request, Booking $booking){
