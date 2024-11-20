@@ -16,14 +16,14 @@ const _layout = () => {
   const TabIcon:React.FC<TabIconProps> = ({ icon, color, name, focused}) => {
 
     return (
-      <View className='flex flex-col items-center space-y-1'>
+      <View className='flex flex-col space-y-1 h-32 text-center justify-end py-6 w-32 items-center'>
         <Image 
           source={icon}
           resizeMode="contain"
           tintColor={color}
-          className='w-6 h-6'
+          className='w-7 h-7'
         />
-        <Text className={`${focused ? 'font-psemibold' : 'font-pregular'} font-bold text-xs`}>{name}</Text>
+        <Text className={`${focused ? 'font-psemibold text-[#559D99]' : 'font-pregular text-white'} font-bold text-xs`}>{name}</Text>
       </View>
     )
   }
@@ -34,10 +34,10 @@ const _layout = () => {
   return (
     <Tabs screenOptions={{
       tabBarStyle: {
-        height: 80,
-        backgroundColor: '#5CBCB6',
+        height: 70,
+        backgroundColor: '#56342A',
       },
-      tabBarActiveTintColor: '#000',
+      tabBarActiveTintColor: '#559D99',
       tabBarInactiveTintColor: '#cccccc',
       
       tabBarShowLabel: false,

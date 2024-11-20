@@ -1,3 +1,4 @@
+import React from 'react';
 import ToastMessage from '@/components/ToastMessage';
 import { loadUser } from '@/utils/AuthService';
 import { fetchPrice } from '@/utils/PriceService';

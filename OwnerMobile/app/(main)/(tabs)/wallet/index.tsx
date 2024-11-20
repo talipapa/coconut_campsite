@@ -63,16 +63,16 @@ const index = () => {
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshPageBooking} progressViewOffset={50}/>}>
       <MainHeader fullName={`${user?.first_name} ${user?.last_name}`} />
-      <View className='bg-[#58afa9] min-h-[12vh] px-5 py-8 flex flex-col relative mb-4'/>
+      <View className='bg-[#56342A] min-h-[12vh] px-5 py-8 flex flex-col relative mb-4'/>
 
       <View className='relative'>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='absolute top-[-70px]'>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='absolute top-[-80px]'>
             <View className='flex flex-row items-center justify-center'>
               <TouchableOpacity activeOpacity={1} onPress={() => router.push('/scanned' as Href)}>
-                <StatisticCard title={`Scanned bookings`} data="View and confirm campers that visited your campsite here" isLoading={isLoading} dataStyle='text-green-500 text-xs mt-1' titleStyle='text-slate-200' rootStyle='bg-slate-900 h-[100px] w-[220px] ml-5'/>
+                <StatisticCard title={`Scanned bookings`} data="View and confirm campers that visited your campsite here" isLoading={isLoading} dataStyle='text-green-500 text-xs mt-1' titleStyle='text-slate-200' rootStyle='bg-[#256560] h-[100px] w-[220px] ml-5'/>
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={1} onPress={() => router.push('/allsuccessful' as Href)}>
-                <StatisticCard title={`Total Revenue`} data={FormatCurrency(dashboardData?.totalYearEarnings)} isLoading={isLoading} dataStyle='text-green-500' titleStyle='text-slate-200' rootStyle='bg-[#256560] h-[100px] w-[220px] ml-5'/>
+                <StatisticCard title={`Total Revenue`} data={FormatCurrency(dashboardData?.totalYearEarnings)} isLoading={isLoading} dataStyle='text-green-500' titleStyle='text-slate-200' rootStyle='bg-[#559D99] h-[100px] w-[220px] ml-5'/>
               </TouchableOpacity>
               <TouchableOpacity activeOpacity={1} onPress={() => router.push('/currentmonth' as Href)}>
                 <StatisticCard title={`${getCurrentMonthName()} revenue`} data={FormatCurrency(dashboardData?.totalMonthEarnings)} isLoading={isLoading} dataStyle='text-green-500' titleStyle='text-slate-300' rootStyle='h-[100px] w-[250px] ml-5 bg-slate-700'/>
@@ -86,9 +86,9 @@ const index = () => {
         
 
 
-        <ContentBody containerClass='items-center mt-[70px]'>
+        <ContentBody containerClass='items-center mt-[40px]'>
           {dashboardData ? (
-            <View className='w-full h-[12vh] bg-[#256560] rounded-xl p-3 flex flex-row items-center justify-around'>
+            <View className='w-full h-[12vh] bg-[#56342A] rounded-xl p-3 flex flex-row items-center justify-around'>
               <View>
                 <View>  
                   <Text className='text-slate-100 text-md'>Xendit Wallet</Text>
@@ -98,7 +98,7 @@ const index = () => {
                 </View>
               </View>
               <View>
-                <CustomButton handlePress={() => router.push('/cashout')} title='Cash out' containerStyles='bg-[#BC7B5C] px-6' textStyles='text-white text-sm' />
+                <CustomButton handlePress={() => router.push('/cashout')} title='Cash out' containerStyles='bg-[#559D99] px-6' textStyles='text-white text-sm' />
               </View>
             </View>
           ) : (

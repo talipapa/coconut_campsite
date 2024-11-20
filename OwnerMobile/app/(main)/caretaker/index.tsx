@@ -5,7 +5,6 @@ import ContentBody from '@/components/ContentBody';
 import CustomButton from '@/components/CustomButton';
 import { router, useFocusEffect } from 'expo-router';
 import { getManagers } from '@/utils/Caretaker';
-import ToastMessage from '@/components/ToastMessage';
 
 interface IManagers {
     id: string,
@@ -80,7 +79,7 @@ const index = () => {
             <ContentBody>
                 <View className='flex-row justify-between items-center'>
                     <Text className='text-xl text-slate-700 font-semibold'>Manage caretakers</Text>
-                    <CustomButton containerStyles='bg-[#BC7B5C] px-3' textStyles='text-xs text-white' title='Add caretaker' handlePress={() => router.push('/caretaker/add')} />
+                    <CustomButton containerStyles='bg-[#559D99] px-3' textStyles='text-xs text-white' title='Add caretaker' handlePress={() => router.push('/caretaker/add')} />
                 </View>
             </ContentBody>
 

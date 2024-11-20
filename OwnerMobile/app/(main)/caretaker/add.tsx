@@ -96,7 +96,7 @@ const add = () => {
                     />
                 </View>
 
-                <CustomButton textStyles='text-white' containerStyles='bg-[#BC7B5C]' title='Submit'  handlePress={submitForm} isLoading={isLoading} />
+                <CustomButton textStyles='text-white' containerStyles='bg-[#559D99] py-4 mt-4' title='Submit'  handlePress={submitForm} isLoading={isLoading} />
             </ContentBody>
         </ScrollView>
     )

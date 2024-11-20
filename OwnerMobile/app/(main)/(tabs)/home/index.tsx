@@ -68,28 +68,27 @@ const index = () => {
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshWalletSummary} progressViewOffset={50}/>}>
       <MainHeader fullName={`${user?.first_name} ${user?.last_name}`} />
-      <View className='bg-[#5CBCB6] h-[10vh] px-5 py-3 flex flex-col relative'>
-        <View className='absolute bottom-[-40px]  w-[100vw] h-24 px-3'>
-          <View className='w-full h-full bg-[#256560] rounded-xl p-3 flex flex-row items-center justify-around'>
-            <View>
-              <View>  
-                <Text className='text-slate-100 text-md'>Xendit Wallet</Text>
-                {/* Convert to php cash */}
-
-                <Text className='text-[#e5ffb1] text-xl font-bold'>{FormatCurrency(walletSummary?.wallet)}</Text>
-              </View>
+        <View className='bg-[#56342A] h-[10vh] px-5 py-3 flex flex-col relative'>
+          <TouchableOpacity className='absolute bottom-[-20px]  w-[100vw] h-24 px-3' activeOpacity={1} onPress={() => router.push('/scanned' as Href)}>
+            <View className={`flex space-x-4 flex-row justify-between items-center rounded-xl shadow-xl p-5 mb-5 bg-[#256560] h-[100px] w-full mt-4`}>
+                <Image source={require('@/assets/icons/camping.png')} tintColor={"#fcf2ef"} className='w-12 h-12'/>
+                <View className='flex-1 grow'>
+                    <Text className={`font-semibold text-xl text-[#fcf2ef]`}>View scanned bookings</Text>
+                    {!isLoading ? 
+                        <Text className={`font-semibold  w-full h-8 text-green-200 text-xs mt-1`}>View and confirm campers that visited your campsite here</Text> 
+                      :
+                        <View className={`font-semibold bg-slate-800 w-full rounded-lg grow`}/>
+                    }
+                </View>
             </View>
-            <View>
-              <CustomButton handlePress={() => router.push('/cashout')} title='Cash out' containerStyles='bg-[#BC7B5C] px-6' textStyles='text-white text-sm' />
-            </View>
-          </View>
-        </View>
+          </TouchableOpacity>
       </View>
       <ContentBody>
-        <View className='mt-10'>
-          <View className='flex flex-col justify-between'>
+        <View className='mt-5'>
+
+          <View className='flex flex-col justify-between mt-5'>
             <View>
-              <Text className='text-xs text-slate-400'>Your recent bookings</Text>
+              <Text className='text-xs text-slate-400'>Upcoming bookings</Text>
             </View>
             <View className='flex flex-col'>
               <View className='flex flex-row items-center justify-between'>
@@ -99,19 +98,7 @@ const index = () => {
               </View>
             </View>
           </View>
-          <TouchableOpacity activeOpacity={1} onPress={() => router.push('/scanned' as Href)}>
-            <View className={`flex space-x-4 flex-row justify-between items-center rounded-xl shadow-xl p-5 mb-5 bg-slate-900 h-[100px] w-full mt-4`}>
-                <Image source={require('@/assets/icons/camping.png')} tintColor={"#5CBCB6"} className='w-12 h-12'/>
-                <View className='flex-1 grow'>
-                    <Text className={`font-semibold text-xl text-white`}>View scanned bookings</Text>
-                    {!isLoading ? 
-                        <Text className={`font-semibold  w-full h-8 text-green-500 text-xs mt-1`}>View and confirm campers that visited your campsite here</Text> 
-                      :
-                        <View className={`font-semibold bg-slate-800 w-full rounded-lg grow`}/>
-                    }
-                </View>
-            </View>
-          </TouchableOpacity>
+
           <BookingList isLoading={isLoading} bookings={bookings}/>
         </View>
       </ContentBody>

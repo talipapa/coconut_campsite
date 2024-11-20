@@ -4,9 +4,15 @@ import { Stack } from 'expo-router'
 
 const _layout = () => {
   return (
-    <Stack>
+    <Stack screenOptions={{
+        headerTintColor: 'white',
+        headerStyle: {
+            backgroundColor: "#56342A"
+        },
+        }}>
         <Stack.Screen name="(tabs)" options={{
             headerShown: false,
+            
 
         }}/>
         <Stack.Screen
@@ -18,8 +24,19 @@ const _layout = () => {
                 color: 'white'
             },
             headerStyle: {
-                backgroundColor: "#5CBCB6"
+                backgroundColor: "#56342A"
+            },
+            headerSearchBarOptions:{
+                placement: 'inline',
+                
+                headerIconColor: '#ffffff',
+                textColor: '#ffffff',
+                hintTextColor: '#ffffff',
+    
+                shouldShowHintSearchIcon: false,
+                tintColor: '#ffffff',
             }
+
         }}/>
         <Stack.Screen
             name="bookings"
@@ -30,8 +47,18 @@ const _layout = () => {
                 color: 'white'
             },
             headerStyle: {
-                backgroundColor: "#5CBCB6"
+                backgroundColor: "#56342A"
             },
+            headerSearchBarOptions:{
+                placement: 'inline',
+                
+                headerIconColor: '#ffffff',
+                textColor: '#ffffff',
+                hintTextColor: '#ffffff',
+    
+                shouldShowHintSearchIcon: false,
+                tintColor: '#ffffff',
+            }
         }}/>
 
         <Stack.Screen
@@ -43,7 +70,7 @@ const _layout = () => {
                     color: 'white'
                 },
                 headerStyle: {
-                    backgroundColor: "#5CBCB6"
+                    backgroundColor: "#56342A"
                 },
             }}
         />
@@ -56,7 +83,7 @@ const _layout = () => {
                     color: 'white'
                 },
                 headerStyle: {
-                    backgroundColor: "#5CBCB6"
+                    backgroundColor: "#56342A"
                 },
             }}
         />
@@ -69,7 +96,7 @@ const _layout = () => {
                     color: 'white'
                 },
                 headerStyle: {
-                    backgroundColor: "#5CBCB6"
+                    backgroundColor: "#56342A"
                 },
             }}
         />
@@ -80,11 +107,7 @@ const _layout = () => {
                 headerTitle: "Caretakers",
                 headerTitleStyle:{
                     color: 'white'
-                },
-                headerTintColor: 'white',
-                headerStyle: {
-                    backgroundColor: "#1e3a8a"
-                },
+                }
             }}
         />
         <Stack.Screen
@@ -96,7 +119,7 @@ const _layout = () => {
                     color: 'white'
                 },
                 headerStyle: {
-                    backgroundColor: "#5CBCB6"
+                    backgroundColor: "#56342A"
                 },
             }}
         />
@@ -109,7 +132,7 @@ const _layout = () => {
                     color: 'white'
                 },
                 headerStyle: {
-                    backgroundColor: "#5CBCB6"
+                    backgroundColor: "#56342A"
                 },
             }}
         />
@@ -122,9 +145,9 @@ const _layout = () => {
                     color: 'white'
                 },
                 headerStyle: {
-                    backgroundColor: "#9e2a2b"
+                    backgroundColor: "#56342A"
                 },
-                headerTintColor: 'white'
+                
             }}
         />
 
@@ -137,9 +160,19 @@ const _layout = () => {
                     color: 'white'
                 },
                 headerStyle: {
-                    backgroundColor: "#5CBCB6"
+                    backgroundColor: "#56342A"
                 },
-                headerTintColor: 'black'
+                headerSearchBarOptions:{
+                    placement: 'inline',
+                    
+                    headerIconColor: '#ffffff',
+                    textColor: '#ffffff',
+                    hintTextColor: '#ffffff',
+        
+                    shouldShowHintSearchIcon: false,
+                    tintColor: '#ffffff',
+                }
+                
             }}
         />
 
@@ -152,9 +185,18 @@ const _layout = () => {
                     color: 'white'
                 },
                 headerStyle: {
-                    backgroundColor: "#5CBCB6"
+                    backgroundColor: "#56342A"
                 },
-                headerTintColor: 'black'
+                headerSearchBarOptions:{
+                    placement: 'inline',
+                    
+                    headerIconColor: '#ffffff',
+                    textColor: '#ffffff',
+                    hintTextColor: '#ffffff',
+        
+                    shouldShowHintSearchIcon: false,
+                    tintColor: '#ffffff',
+                }
             }}
         />
         <Stack.Screen
@@ -166,9 +208,18 @@ const _layout = () => {
                     color: 'white'
                 },
                 headerStyle: {
-                    backgroundColor: "#5CBCB6"
+                    backgroundColor: "#56342A"
                 },
-                headerTintColor: 'black'
+                headerSearchBarOptions:{
+                    placement: 'inline',
+                    
+                    headerIconColor: '#ffffff',
+                    textColor: '#ffffff',
+                    hintTextColor: '#ffffff',
+        
+                    shouldShowHintSearchIcon: false,
+                    tintColor: '#ffffff',
+                }
             }}
         />
         <Stack.Screen
@@ -180,9 +231,18 @@ const _layout = () => {
                     color: 'white'
                 },
                 headerStyle: {
-                    backgroundColor: "#5CBCB6"
+                    backgroundColor: "#56342A"
                 },
-                headerTintColor: 'black'
+                headerSearchBarOptions:{
+                    placement: 'inline',
+                    
+                    headerIconColor: '#ffffff',
+                    textColor: '#ffffff',
+                    hintTextColor: '#ffffff',
+        
+                    shouldShowHintSearchIcon: false,
+                    tintColor: '#ffffff',
+                }
             }}
         />
         <Stack.Screen
@@ -194,9 +254,18 @@ const _layout = () => {
                     color: 'white'
                 },
                 headerStyle: {
-                    backgroundColor: "#5CBCB6"
+                    backgroundColor: "#56342A"
                 },
-                headerTintColor: 'black'
+                headerSearchBarOptions:{
+                    placement: 'inline',
+                    
+                    headerIconColor: '#ffffff',
+                    textColor: '#ffffff',
+                    hintTextColor: '#ffffff',
+        
+                    shouldShowHintSearchIcon: false,
+                    tintColor: '#ffffff',
+                }
             }}
         />
         <Stack.Screen
@@ -208,9 +277,18 @@ const _layout = () => {
                     color: 'white'
                 },
                 headerStyle: {
-                    backgroundColor: "#5CBCB6"
+                    backgroundColor: "#56342A"
                 },
-                headerTintColor: 'black'
+                headerSearchBarOptions:{
+                    placement: 'inline',
+                    
+                    headerIconColor: '#ffffff',
+                    textColor: '#ffffff',
+                    hintTextColor: '#ffffff',
+        
+                    shouldShowHintSearchIcon: false,
+                    tintColor: '#ffffff',
+                }
             }}
         />
         <Stack.Screen
@@ -222,9 +300,18 @@ const _layout = () => {
                     color: 'white'
                 },
                 headerStyle: {
-                    backgroundColor: "#5CBCB6"
+                    backgroundColor: "#56342A"
                 },
-                headerTintColor: 'black'
+                headerSearchBarOptions:{
+                    placement: 'inline',
+                    
+                    headerIconColor: '#ffffff',
+                    textColor: '#ffffff',
+                    hintTextColor: '#ffffff',
+        
+                    shouldShowHintSearchIcon: false,
+                    tintColor: '#ffffff',
+                }
             }}
         />
         <Stack.Screen
@@ -235,10 +322,20 @@ const _layout = () => {
                 headerTitleStyle:{
                     color: 'white'
                 },
+                headerTintColor: 'white',
                 headerStyle: {
-                    backgroundColor: "#0f172a"
-                },
-                headerTintColor: 'white'
+                    backgroundColor: "#56342A",
+                },     
+                headerSearchBarOptions:{
+                    placement: 'inline',
+                    
+                    headerIconColor: '#ffffff',
+                    textColor: '#ffffff',
+                    hintTextColor: '#ffffff',
+        
+                    shouldShowHintSearchIcon: false,
+                    tintColor: '#ffffff',
+                }     
             }}
         />
     </Stack>

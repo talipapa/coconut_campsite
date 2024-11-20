@@ -51,8 +51,8 @@ const index = () => {
 
   return (
     <View className='space-y-10 grow'>
-      <View className='h-[100px] bg-[#64bdb7] rounded-3xl flex flex-row items-end justify-center px-5 pb-3'>
-          <Text className='text-center text-black text-lg font-semibold'>Settings</Text>
+      <View className='bg-[#56342A] py-6 rounded-b-xl flex flex-row items-end justify-center px-5 pb-5'>
+          <Text className='text-center text-white text-lg font-semibold'>Settings</Text>
       </View>
       <View className='m-5 grow justify-between'>
         <View className='flex flex-col space-y-4'>
@@ -63,7 +63,7 @@ const index = () => {
                 <Text className='font-bold text-black'>View Personal Info</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity style={customStyle.shadow} onPress={() => router.push("/caretaker")} className='flex flex-row bg-blue-900 rounded-xl items-center space-x-5 p-5 bg-slate-20'>
+            <TouchableOpacity style={customStyle.shadow} onPress={() => router.push("/caretaker")} className='flex flex-row bg-[#559D99] rounded-xl items-center space-x-5 p-5 bg-slate-20'>
               <View className='justify-center items-center w-full'>
                 <Image source={require('@/assets/icons/admin-panel.png')} className='w-12 h-12 rounded-full' tintColor={"#ffffff"}/>
                 <Text className='text-white text-lg font-bold'>Caretaker manager</Text>

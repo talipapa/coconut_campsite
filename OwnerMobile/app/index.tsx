@@ -1,7 +1,7 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Redirect, router, useRootNavigationState } from "expo-router";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 import{ useGlobalContext } from "@/Context/GlobalProvider";
 import ToastMessage from "@/components/ToastMessage";
@@ -35,7 +35,7 @@ export default function Index() {
             </View>
           </View>
         </View>
-        <TouchableOpacity className="bg-[#5CBCB6] py-3 w-full rounded-lg" onPress={() => router.push("/login")}>
+        <TouchableOpacity className="bg-[#56342A] py-3 w-full rounded-lg" onPress={() => router.push("/login")}>
           <Text className="text-white text-xl font-semibold tracking-widest text-center">Continue</Text>
         </TouchableOpacity>
       </View>

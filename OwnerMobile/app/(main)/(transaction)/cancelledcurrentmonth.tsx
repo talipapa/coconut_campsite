@@ -8,6 +8,7 @@ import Toast from 'react-native-toast-message';
 import CustomButton from '@/components/CustomButton';
 import BookingCard from '@/components/BookingCard';
 import TransactionCard from '@/components/TransactionCard';
+import NoBookingFound from '@/components/NoBookingFound';
 
 
 
@@ -87,7 +88,11 @@ const cancelledcurrentmonth = () => {
                 placeholder: "Search via name",
                 onChangeText: (e: any) => {
                     handleFilter(e.nativeEvent.text)
-                }
+                },
+                placement: 'inline',
+                textColor: '#ffffff',
+                shouldShowHintSearchIcon: false,
+                tintColor: '#ffffff',
             }
         })
     }, [navigation, bookings])
@@ -103,9 +108,7 @@ const cancelledcurrentmonth = () => {
     
     if (!isLoading && filteredBookings.length === 0){
         return (
-            <ContentBody>
-                <Text>Not found</Text>
-            </ContentBody>
+            <NoBookingFound/>
         )
     }
 
@@ -113,7 +116,7 @@ const cancelledcurrentmonth = () => {
         <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshPageBooking} progressViewOffset={50}/>}>
             <ContentBody>
                 {filteredBookings.length <= 0 ? (
-                    <Text>Booking not found</Text>
+                    <NoBookingFound/>
                 )
                     :
                     filteredBookings.map((booking: VerifiedBookingType, index: number) => (

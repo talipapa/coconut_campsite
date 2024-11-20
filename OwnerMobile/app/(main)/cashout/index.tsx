@@ -142,7 +142,7 @@ const index = () => {
   return (
     <>
     
-      <View className='h-[15vh] bg-[#5CBCB6]'>
+      <View className='h-[12vh] bg-[#56342ae8]'>
         <View className='flex flex-col items-center justify-center h-full'>
           <Text className='text-white'>Available for Cash-out</Text>
           {walletData !== undefined ? <Text className='font-bold text-white text-lg'>{FormatCurrency(walletData.XENDIT)}</Text> : <Text className='bg-black rounded-md px-3 mt-2'>pending request</Text>}
@@ -169,7 +169,7 @@ const index = () => {
           </View>
 
 
-          <CustomButton title='Confirm' containerStyles='bg-[#BC7B5C] mt-10 py-3' textStyles='text-white' handlePress={submitCashoutRequest} isLoading={isLoading}/>
+          <CustomButton title='Confirm' containerStyles='bg-[#559D99] mt-10 py-3' textStyles='text-white' handlePress={submitCashoutRequest} isLoading={isLoading}/>
         </ContentBody>
       </ScrollView>
     </>

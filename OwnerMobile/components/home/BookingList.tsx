@@ -14,8 +14,8 @@ const BookingList = ({isLoading, bookings}: {isLoading: boolean, bookings:Bookin
     if (!isLoading && bookings.length === 0) {
         return (
             <>
-                <View className='items-center mt-5'>
-                    <Text className='text-xl font-bold'>No bookings found</Text>
+                <View className='items-center mt-24'>
+                    <Text className='text-xl font-bold text-slate-400 text-center'>No bookings available at the moment.</Text>
                 </View>
             </>
         )

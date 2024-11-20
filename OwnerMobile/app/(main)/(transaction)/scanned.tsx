@@ -8,6 +8,7 @@ import Toast from 'react-native-toast-message';
 import CustomButton from '@/components/CustomButton';
 import BookingCard from '@/components/BookingCard';
 import TransactionCard from '@/components/TransactionCard';
+import NoBookingFound from '@/components/NoBookingFound';
 
 
 
@@ -42,6 +43,7 @@ const scanned = () => {
                 if (Array.isArray(res.data)){
                     setBookings(res.data)
                     setFilteredBookings(res.data)
+                    
                     setIsLoading(false)
                 } else {
                     setBookings([])
@@ -87,10 +89,14 @@ const scanned = () => {
         navigation.setOptions({
             headerSearchBarOptions: {
                 placeholder: "Search via name",
+                placement: 'inline',
+                textColor: '#ffffff',
+                shouldShowHintSearchIcon: false,
+                tintColor: '#ffffff',
                 onChangeText: (e: any) => {
                     handleFilter(e.nativeEvent.text)
                 }
-            }
+            },
         })
     }, [navigation, bookings])
 
@@ -106,7 +112,7 @@ const scanned = () => {
     if (!isLoading && filteredBookings.length === 0){
         return (
             <ContentBody>
-                <Text>Not found</Text>
+                <NoBookingFound/>
             </ContentBody>
         )
     }
@@ -115,7 +121,7 @@ const scanned = () => {
         <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshPageBooking} progressViewOffset={50}/>}>
             <ContentBody>
                 {filteredBookings.length <= 0 ? (
-                    <Text>Booking not found</Text>
+                    <NoBookingFound/>
                 )
                     :
                     filteredBookings.map((booking: VerifiedBookingType, index: number) => (

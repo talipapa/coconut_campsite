@@ -8,6 +8,7 @@ import { fetchBookings } from '@/utils/BookingService';
 import Toast from 'react-native-toast-message';
 import CustomButton from '@/components/CustomButton';
 import BookingCard from '@/components/BookingCard';
+import NoBookingFound from '@/components/NoBookingFound';
 
 const bookings = () => {
     const navigation = useNavigation();
@@ -72,7 +73,11 @@ const bookings = () => {
                 placeholder: "Search name",
                 onChangeText: (e: any) => {
                     handleFilter(e.nativeEvent.text)
-                }
+                },
+                placement: 'inline',
+                textColor: '#ffffff',
+                shouldShowHintSearchIcon: false,
+                tintColor: '#ffffff',
             }
         })
     }, [navigation, bookings])
@@ -92,7 +97,7 @@ const bookings = () => {
     if (!isLoading && filteredBookings.length === 0){
         return (
             <ContentBody>
-                <Text>Not found</Text>
+                <NoBookingFound/>
             </ContentBody>
         )
     }
@@ -101,7 +106,8 @@ const bookings = () => {
         <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshPageBooking} progressViewOffset={50}/>}>
             <ContentBody>
                 {filteredBookings.length <= 0 ? (
-                    <Text>Booking not found</Text>
+                    <NoBookingFound/>
+
                 )
                     :
                     filteredBookings.map((booking: BookingType, index: number) => (

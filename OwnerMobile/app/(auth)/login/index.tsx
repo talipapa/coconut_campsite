@@ -1,5 +1,5 @@
 import { View, Text, Image, Platform, ScrollView, SafeAreaView } from 'react-native'
-import { useContext, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import FormField from '@/components/FormField'
 import CustomButton from '@/components/CustomButton'
 import { login, loadUser } from '@/utils/AuthService'
@@ -76,7 +76,7 @@ const index = () => {
                         </View>
                     </View>
                 </View>
-                <CustomButton title="Submit" handlePress={handleLogin} containerStyles='bg-[#5CBCB6] mt-12 mb-6 py-3' isLoading={isLoading} textStyles='text-white font-semibold'/>
+                <CustomButton title="Submit" handlePress={handleLogin} containerStyles='bg-[#3E5F5D] mt-12 mb-6 py-3' isLoading={isLoading} textStyles='text-white font-semibold'/>
             </View>
         </SafeAreaView>
     )
