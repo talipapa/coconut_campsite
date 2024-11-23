@@ -1,5 +1,6 @@
 import { View, Text, ActivityIndicator } from 'react-native'
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React = require("react");
+import { useEffect, useLayoutEffect, useState } from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
 import { deleteManager, getSingleManager, updateManager } from '@/utils/Caretaker'
 import ToastMessage from '@/components/ToastMessage'

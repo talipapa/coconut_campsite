@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, ActivityIndicator, RefreshControl } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useGlobalContext } from '@/Context/GlobalProvider';
 import { router, useNavigation } from 'expo-router';
 import ContentBody from '@/components/ContentBody';
@@ -9,6 +9,7 @@ import CustomButton from '@/components/CustomButton';
 import BookingCard from '@/components/BookingCard';
 import TransactionCard from '@/components/TransactionCard';
 import NoBookingFound from '@/components/NoBookingFound';
+import React = require('react');
 
 
 

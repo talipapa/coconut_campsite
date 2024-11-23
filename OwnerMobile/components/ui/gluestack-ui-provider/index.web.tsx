@@ -1,5 +1,7 @@
 'use client';
-import React, { useEffect, useLayoutEffect } from 'react';
+
+
+import { useEffect, useLayoutEffect } from 'react';
 import { config } from './config';
 import { OverlayProvider } from '@gluestack-ui/overlay';
 import { ToastProvider } from '@gluestack-ui/toast';

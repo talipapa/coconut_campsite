@@ -59,4 +59,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne(Owner::class);
     }
+
+    public function mobilePushTokens()
+    {
+        return $this->hasMany(MobilePushToken::class);
+    }
 }

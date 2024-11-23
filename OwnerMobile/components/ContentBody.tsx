@@ -1,5 +1,7 @@
 import { View, Text, SafeAreaView } from 'react-native'
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
+import React = require("react");
+
 import { ScrollView } from 'react-native'
 
 const ContentBody = ({ children, containerClass }: { children: ReactNode, containerClass?: string }) => {

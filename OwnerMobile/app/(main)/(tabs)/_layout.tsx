@@ -1,5 +1,6 @@
 import { View, Text, Image } from 'react-native'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
+import React = require("react");
 import { Slot, Stack, Tabs, router } from 'expo-router'
 import { useGlobalContext } from '@/Context/GlobalProvider'
 
@@ -45,7 +46,7 @@ const _layout = () => {
       <Tabs.Screen name="home/index" options={{
         title: 'Home',
         headerShown: false,
-        tabBarIcon: ({color, focused}) => (
+        tabBarIcon: ({color, focused}: {color:any, focused:any}) => (
           <TabIcon icon={require('@/assets/icons/home.png')} color={color} name='Home' focused={focused}/>
         )
         
@@ -53,14 +54,14 @@ const _layout = () => {
       <Tabs.Screen name="wallet/index" options={{
         title: 'Wallet',
         headerShown: false,
-        tabBarIcon: ({color, focused}) => (
+        tabBarIcon: ({color, focused}: {color:any, focused:any}) => (
           <TabIcon icon={require('@/assets/icons/wallet.png')} color={color} name='Wallet' focused={focused}/>
         )
       }}/>
       <Tabs.Screen name="settings/index" options={{
         title: 'Settings',
         headerShown: false,
-        tabBarIcon: ({color, focused}) => (
+        tabBarIcon: ({color, focused}: {color:any, focused:any}) => (
           <TabIcon icon={require('@/assets/icons/settings.png')} color={color} name='Settings' focused={focused}/>
         )
       }}/>

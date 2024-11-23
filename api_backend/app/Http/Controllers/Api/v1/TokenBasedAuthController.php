@@ -30,11 +30,30 @@ class TokenBasedAuthController extends Controller
             return response()->json([
                 'message' => 'The provided credentials are incorrect.'
             ], 401);
-        }
+        }    
 
         $plainTextToken = $user->createToken($request->device_name)->plainTextToken;
         return response()->json([
             'token' => $plainTextToken
+        ]);
+    }
+
+    public function storeDeviceToken(Request $request)
+    {
+        $request->validate([
+            'token' => 'required',
+            'device_name' => 'required'
+        ]);
+
+        $user = $request->user();
+        $user->mobilePushTokens()->updateOrCreate([
+            'device_name' => $request->device_name
+        ], [
+            'token' => $request->token
+        ]);
+
+        return response()->json([
+            'message' => 'Device token stored successfully'
         ]);
     }
 

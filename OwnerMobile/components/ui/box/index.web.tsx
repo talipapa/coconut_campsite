@@ -1,4 +1,4 @@
-import React from 'react';
+import React = require("react");
 import { boxStyle } from './styles';
 
 import type { VariantProps } from '@gluestack-ui/nativewind-utils';

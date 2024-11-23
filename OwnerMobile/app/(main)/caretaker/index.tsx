@@ -1,5 +1,7 @@
 import { View, Text, ScrollView, RefreshControl, Image, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import React = require("react");
+
 import { useGlobalContext } from '@/Context/GlobalProvider';
 import ContentBody from '@/components/ContentBody';
 import CustomButton from '@/components/CustomButton';

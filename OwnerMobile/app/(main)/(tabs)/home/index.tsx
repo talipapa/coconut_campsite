@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, Button, RefreshControl, TouchableOpacity, Image } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import React = require("react");
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MainHeader from '@/components/MainHeader'
 import { ScrollView } from 'react-native'

@@ -1,11 +1,14 @@
 import { View, Text, Image, Platform, ScrollView, SafeAreaView } from 'react-native'
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
 import FormField from '@/components/FormField'
 import CustomButton from '@/components/CustomButton'
 import { login, loadUser } from '@/utils/AuthService'
 import { useGlobalContext } from '@/Context/GlobalProvider'
 import { router } from 'expo-router'
 import ToastMessage from '@/components/ToastMessage'
+import { usePushNotifcations } from '@/utils/usePushNotifications'
+import axios from '@/utils/axios'
+import React from 'react'
 
 const index = () => {
     const [ errors, setErrors ] = useState<{ email?: string; password?: string }>({})
@@ -13,8 +16,10 @@ const index = () => {
         email: '',
         password: ''
     })
+    
+    const {expoPushToken, notification} = usePushNotifcations()
 
-    const { setIsLoggedIn, setUser } = useGlobalContext();
+const { setIsLoggedIn, setUser } = useGlobalContext();
 
     const [isLoading, setIsLoading] = useState(false)
 
@@ -25,12 +30,20 @@ const index = () => {
             await login({
                 email: form.email,
                 password: form.password,
-                device_name: `${Platform.OS} ${Platform.Version}`
+                device_name: `${Platform.OS} - ${Platform.Version}`
             })
             const user = await loadUser();
             ToastMessage('success', 'Login successful', 'You will be redirected to the home screen')
             setIsLoggedIn(true)
             setUser(user)
+
+            
+
+            await axios.post('/mobile/device-token', {
+                token: expoPushToken?.data,
+                device_name: `${Platform.OS} - ${Platform.Version}`
+            })
+
             setTimeout(() => {
                 router.replace('/home')
             }, 2000)
@@ -51,7 +64,10 @@ const index = () => {
     return (
         <SafeAreaView className='relative w-full h-full'>
             {/* <Image source={require('@/assets/logo.jpg')} className='w-full h-full top-0 absolute'/> */}
-            <View className='p-8 justify-evenly grow'>
+            <View>
+                <Text>Expo token: {expoPushToken?.data} | {expoPushToken?.type}</Text>
+            </View>
+            {/* <View className='p-8 justify-evenly grow'>
                 <View className='flex flex-col items-center grow'>
                     <Image source={require('@/assets/logo.jpg')} className='w-12 h-12 rounded-full'/>
                     <Text className='text-2xl font-bold'>Coconut Campsite</Text>
@@ -77,7 +93,7 @@ const index = () => {
                     </View>
                 </View>
                 <CustomButton title="Submit" handlePress={handleLogin} containerStyles='bg-[#3E5F5D] mt-12 mb-6 py-3' isLoading={isLoading} textStyles='text-white font-semibold'/>
-            </View>
+            </View> */}
         </SafeAreaView>
     )
 }

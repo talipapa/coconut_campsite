@@ -1,5 +1,7 @@
 import { View, Text } from 'react-native'
-import React, { useState } from 'react'
+import { useState } from 'react'
+import React = require("react");
+
 import ContentBody from '@/components/ContentBody'
 import FormField from '@/components/FormField'
 import { useGlobalContext } from '@/Context/GlobalProvider'

@@ -10,7 +10,11 @@ use Illuminate\Support\Facades\Route;
 // Authentication for mobile
 Route::post('login', [TokenBasedAuthController::class, 'loginOwner']);
 Route::middleware(['auth:sanctum', 'owner'])->group(function (){
-    Route::get('user', [TokenBasedAuthController::class, 'user']);   
+    Route::get('user', [TokenBasedAuthController::class, 'user']);
+
+    Route::post('device-token', [TokenBasedAuthController::class, 'storeDeviceToken']);
+
+
     Route::post('logout', [TokenBasedAuthController::class, 'logout']);  
     // Booking controller for mobile
     Route::get('bookings/{page}', [BookingController::class, 'showList']);

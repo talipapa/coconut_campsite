@@ -1,5 +1,7 @@
 import { View, Text, Button, ActivityIndicator, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React = require("react");
+
+import { useEffect, useState } from 'react'
 
 import BookingCard from '@/components/BookingCard'
 import Toast from 'react-native-toast-message'

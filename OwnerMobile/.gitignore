@@ -7,5 +7,7 @@ expo-env.d.ts
 .env*.production
 android/*
 .expo/*
+./google-services.json
+./credentials/*
 
 # @end expo-cli

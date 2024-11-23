@@ -1,5 +1,7 @@
 import { View, Text, Image, StyleSheet, StatusBar } from 'react-native'
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
+import React = require("react");
+
 import AuthContext, { useGlobalContext } from '@/Context/GlobalProvider'
 import { loadUser } from '@/utils/AuthService'
 

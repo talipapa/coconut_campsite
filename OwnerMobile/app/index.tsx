@@ -1,10 +1,10 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Redirect, router, useRootNavigationState } from "expo-router";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 import{ useGlobalContext } from "@/Context/GlobalProvider";
-import ToastMessage from "@/components/ToastMessage";
+import React = require("react");
 
 export default function Index() {
   const rootNavigationState = useRootNavigationState()
@@ -19,9 +19,6 @@ export default function Index() {
       router.replace("/home")
     } 
   }, [isLoading, isLoggedIn])
-
-  // // Redirect based on authentication state
-
   return (
     <SafeAreaView className="h-full bg-[#FFFFFF] flex items-center justify-center p-10">
       <View className="flex flex-col items-center justify-between h-full w-full">
@@ -40,7 +37,6 @@ export default function Index() {
         </TouchableOpacity>
       </View>
     </SafeAreaView>
-
   );
 }
 

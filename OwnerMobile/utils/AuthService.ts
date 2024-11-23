@@ -1,6 +1,7 @@
 import axios from "@/utils/axios";
 import { getToken, setToken } from "./TokenService";
 import { config } from "@/components/ui/gluestack-ui-provider/config";
+import { usePushNotifcations } from "./usePushNotifications";
 
 interface credentialsIE {
     email: string;

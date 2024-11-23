@@ -1,11 +1,14 @@
 {
   "expo": {
-    "newArchEnabled": false,
+    "newArchEnabled": true,
     "name": "Coconut Wallet",
     "slug": "OwnerMobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
+    "notifications": {
+      "icon": "./assets/logo.png"
+    },
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
@@ -14,9 +17,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.coconutwallet"
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"

@@ -1,5 +1,6 @@
 import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import React = require("react");
 import MainHeader from '@/components/MainHeader'
 import ContentBody from '@/components/ContentBody'
 import { useGlobalContext } from '@/Context/GlobalProvider'
