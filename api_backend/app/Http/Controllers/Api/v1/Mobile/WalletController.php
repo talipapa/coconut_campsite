@@ -20,8 +20,14 @@ class WalletController extends Controller
         ];
 
         $response = Xendivel::getBalance()->getResponse();
+
+        
         $decodedResponse = json_decode(json_encode($response), true);
-        $wallet['XENDIT'] = $decodedResponse['balance'];
+        if ($decodedResponse['balance'] < 0){
+            $wallet['XENDIT'] = $decodedResponse['balance'] + 10;
+        } else{   
+            $wallet['XENDIT'] = $decodedResponse['balance'] - 10;
+        }
 
         $fetchVerifiedCash = Transaction::where('status', 'VERIFIED')->get()->sum(function($transaction){
             return $transaction->price;

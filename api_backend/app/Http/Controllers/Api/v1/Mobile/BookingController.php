@@ -93,7 +93,11 @@ class BookingController extends Controller
 
             // Wallet in XENDIT
             $response = CustomVendorsXendivel::getBalance()->getResponse();
-            $xenditWallet = json_decode(json_encode($response), true)['balance'] - 10;
+            if (json_decode(json_encode($response), true)['balance'] < 0){
+                $xenditWallet = json_decode(json_encode($response), true)['balance'] + 10;
+            } else{   
+                $xenditWallet = json_decode(json_encode($response), true)['balance'] - 10;
+            }
 
             return response()->json([
                 'totalYearEarnings' => $totalYearEarnings,
