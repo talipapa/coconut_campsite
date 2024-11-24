@@ -24,8 +24,6 @@ interface IDashboardData {
 }
 
 
-
-
 const index = () => {
   const { isLoggedIn, user, isLoading, setIsLoading } = useGlobalContext();
   const [dashboardData, setDashboardData] = useState<IDashboardData>();

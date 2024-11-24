@@ -26,10 +26,7 @@ class WalletController extends Controller
         $fetchVerifiedCash = Transaction::where('status', 'VERIFIED')->get()->sum(function($transaction){
             return $transaction->price;
         });
-
-        Log::alert($fetchVerifiedCash);
-        $wallet['VERIFIED_CASH'] = $fetchVerifiedCash;
-
+        $wallet['VERIFIED_CASH'] = $fetchVerifiedCash - 10;
         return $wallet;
     }
 
