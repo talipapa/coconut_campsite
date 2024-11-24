@@ -91,7 +91,9 @@ class BookingController extends Controller
         $transaction->update([
             'status' => 'CASH_CANCELLED',
         ]);
-        ExpoPushNotification::pushNotify("{$booking->full_name} cancelled their booking", "A {$booking->booking_type} booking; reserved at {$booking->check_in} has been cancelled by user action");
+
+        $formattedDate = Carbon::parse($booking->check_in)->timezone('Asia/Manila')->toFormattedDateString();
+        ExpoPushNotification::pushNotify("{$booking->full_name} cancelled their booking", "A {$booking->booking_type} booking; reserved at {$formattedDate} has been cancelled by user action");
 
         $booking->save();
         $transaction->save();
@@ -233,6 +235,12 @@ class BookingController extends Controller
             return response()->json(['message' => "You are not allowed to reschedule at this point"], 422);
         }
 
+        $formattedCheckInOld = Carbon::parse($booking->check_in)->timezone('Asia/Manila')->toFormattedDateString();
+        $formattedCheckInNew = Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->toFormattedDateString();
+        ExpoPushNotification::pushNotify(
+            "Camper {$booking->full_name} rescheduled their booking", 
+            "A {$booking->booking_type} booking; reserved at {$formattedCheckInOld} has been rescheduled to --> {$formattedCheckInNew} | {$validated['booking_type']} by user action"
+        );
         switch ($validated['booking_type']) {
             case 'daytour':
                 $booking->update([
@@ -250,10 +258,6 @@ class BookingController extends Controller
                     'check_out' => Carbon::parse($validated['check_in'])->addDay(1)->timezone('Asia/Manila')->format('Y-m-d'),
                 ]);
                 $booking->save();
-                ExpoPushNotification::pushNotify(
-                    "{$booking->full_name} has rescheduled a booking", 
-                    "A {$booking->booking_type} booking; reserved at {$booking->check_in} has been rescheduled to --> {$validated['check_in']} | {$validated['booking_type']} by user action"
-                );
                 return response()->json(['message' => 'Reschedule request sent'], 200);
                 # code...
             break;

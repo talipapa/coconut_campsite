@@ -13,6 +13,7 @@ use App\Models\Refund;
 use App\Models\Transaction;
 use App\Models\User;
 use GlennRaya\Xendivel\Xendivel;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -103,15 +104,17 @@ class eWalletWebhookListener
                         Log::error("Invoicing email error", ['Error' => $th->getMessage()]);
                     }
 
+                    $formattedCheckInOld = Carbon::parse($booking->check_in)->timezone('Asia/Manila')->toFormattedDateString();
                     // Send notification to owner
                     ExpoPushNotification::pushNotify(
-                        "+P{$transaction->price} from {$booking->full_name}", 
-                        "{$booking->full_name} has successfully paid P{$transaction->price}. Booking confirmed at {$booking->check_in} | {$booking->booking_type}.",
+                    "{$booking->full_name} has made a booking using E-Payment! +P{$transaction->price}", 
+                    "Total: P{$transaction->price}, {$booking->full_name} made a reservation at {$formattedCheckInOld} | {$booking->booking_type}. for {$booking->total_campers} campers.",
                     );
 
                     // Send email receipt below
+                    
                     Mail::to($booking->email)->send(new EpaymentConfirmation($booking, $transaction));
-                    Xemaphore::sendSms($booking->tel_number, "You have successfully purchased P{$booking->transaction->price} at Coconut Campsite, Your booking is now confirmed at {$booking->check_in}. We can't wait to see you at the campsite!. Please check your email inbox or spam for more info receipt.");
+                    Xemaphore::sendSms($booking->tel_number, "You have successfully purchased P{$booking->transaction->price} at Coconut Campsite, Your booking is now confirmed at {$formattedCheckInOld}. We can't wait to see you at the campsite!. Please check your email inbox or spam for more info receipt.");
                 }
                 break;
             case 'ewallet.void':
@@ -152,9 +155,10 @@ class eWalletWebhookListener
                         'status' => $transaction->status
                     ]);
                 }
+                $formattedCheckInOld = Carbon::parse($booking->check_in)->timezone('Asia/Manila')->toFormattedDateString();
                 ExpoPushNotification::pushNotify(
                     "-P{$transaction->price} from {$booking->full_name}", 
-                    "{$booking->full_name} has voided P{$transaction->price}. Booking cancelled at {$booking->check_in} | {$booking->booking_type}.",
+                    "{$booking->full_name} has voided P{$transaction->price}. Booking cancelled at {$formattedCheckInOld} | {$booking->booking_type}.",
                 );
                 Xemaphore::sendSms($booking->tel_number, "Your refund has been approved and is being processed! Your money will return after a few hours or days");
                 break;
@@ -198,9 +202,10 @@ class eWalletWebhookListener
                         'status' => $transaction->status
                     ]);
                 }
+                $formattedCheckInOld = Carbon::parse($booking->check_in)->timezone('Asia/Manila')->toFormattedDateString();
                 ExpoPushNotification::pushNotify(
                     "-P{$transaction->price} from {$booking->full_name}", 
-                    "{$booking->full_name} has refunded P{$transaction->price}. Booking cancelled at {$booking->check_in} | {$booking->booking_type}.",
+                    "{$booking->full_name} has refunded P{$transaction->price}. Booking cancelled at {$formattedCheckInOld} | {$booking->booking_type}.",
                 );
 
                 Xemaphore::sendSms($booking->tel_number, "Your refund has been approved and is being processed! Your money will return after a few hours or days");

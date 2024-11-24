@@ -140,7 +140,7 @@ class BookingController extends Controller
         $transaction->save();
         ExpoPushNotification::pushNotify(
             "Caretaker cancelled a booking.",
-            "Caretaker {$request->user()->full_name} has cancelled the booking for {$booking->user->full_name}."
+            "Caretaker {$request->user()->full_name} has cancelled {$booking->user->full_name} booking."
         );
         
 

@@ -13,6 +13,7 @@ use App\Models\CampManager;
 use App\Models\Manager;
 use Exception;
 use GlennRaya\Xendivel\Xendivel as OrigXendivel;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
@@ -220,9 +221,12 @@ class TransactionController extends Controller
                 $transaction->save();
                 $booking->save();
 
+                $formattedCheckInOld = Carbon::parse($booking->check_in)->timezone('Asia/Manila')->toFormattedDateString();
+
+
                 ExpoPushNotification::pushNotify(
-                    "{$booking->full_name} | Cash on site", 
-                    "{$booking->full_name} made a reservation at {$booking->check_in} | {$booking->booking_type}.",
+                    "{$booking->full_name} has made a booking!", 
+                    "Total: P{$booking->transaction->price}, {$booking->full_name} made a reservation at {$formattedCheckInOld} | {$booking->booking_type}. for {$booking->total_campers} campers.",
                 );
 
     
