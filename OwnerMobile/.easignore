@@ -8,9 +8,4 @@ expo-env.d.ts
 android/*
 .expo/*
 
-
-google-services.json
-credentials.json
-./credentials/*
-
 # @end expo-cli

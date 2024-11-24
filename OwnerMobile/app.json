@@ -21,12 +21,12 @@
       "bundleIdentifier": "com.anonymous.coconutwallet"
     },
     "android": {
-      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.coconutwallet"
+      "package": "com.anonymous.coconutwallet",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",

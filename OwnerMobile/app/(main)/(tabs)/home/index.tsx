@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, Button, RefreshControl, TouchableOpacity, Image } from 'react-native'
 import { useCallback, useEffect, useState } from 'react'
-import React = require("react");
 import { SafeAreaView } from 'react-native-safe-area-context'
 import MainHeader from '@/components/MainHeader'
 import { ScrollView } from 'react-native'
@@ -14,6 +13,7 @@ import { fetchBookings, fetchWalletDetails } from '@/utils/BookingService'
 import FormatCurrency from '@/utils/FormatCurrency'
 import Toast from 'react-native-toast-message'
 import StatisticCard from '@/components/StatisticCard'
+import React from 'react'
 
 interface walletSummaryType {
   wallet: number,
@@ -55,16 +55,11 @@ const index = () => {
   )
   }
 
-
-
-
   useFocusEffect(
     useCallback(() => {
       refreshWalletSummary()
     }, [])
   );
-  
-
 
   return (
     <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshWalletSummary} progressViewOffset={50}/>}>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1\Desktop;
 
+use App\CustomVendors\ExpoPushNotification;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\SuccessfulBookingResource;
 use App\Mail\StaffActionRefundNotifier;
@@ -100,6 +101,12 @@ class BookingController extends Controller
             $booking->transaction->status = 'VERIFIED';
             $booking->transaction->save();
             $booking->save();
+
+            
+            ExpoPushNotification::pushNotify(
+                "+{$booking->transaction->price}",
+                "Caretaker {$request->user()->full_name} has completed the booking for {$booking->user->full_name}."
+            );
             return response()->json(['message' => 'Booking status updated']);
         } catch (\Throwable $th) {
             return response()->json(['message' => 'Something went wrong', 'error' => $th], 500);
@@ -131,6 +138,10 @@ class BookingController extends Controller
 
         $booking->save();
         $transaction->save();
+        ExpoPushNotification::pushNotify(
+            "Caretaker cancelled a booking.",
+            "Caretaker {$request->user()->full_name} has cancelled the booking for {$booking->user->full_name}."
+        );
         
 
         return response()->json($booking, 200);
@@ -255,6 +266,10 @@ class BookingController extends Controller
             Camper::insert($insertData);
 
             DB::commit();
+            ExpoPushNotification::pushNotify(
+                "+{$validated['price']} | Walk in",
+                "Caretaker {$request->user()->full_name} confirms a walk-in transaction."
+            );
             return response()->json(['message' => 'Walk in data has been successfully submitted.', 'booking_id' => $booking->id], 200);
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -297,7 +312,10 @@ class BookingController extends Controller
                 ]);
         
                 $booking->save();
-        
+                ExpoPushNotification::pushNotify(
+                    "Caretaker rescheduled a booking",
+                    "Caretaker {$request->user()->full_name} has rescheduled the booking for {$booking->user->full_name}. Old: {$booking->check_in}|{$booking->booking_type} New: {$validated['check_in']}|{$validated['booking_type']}"
+                );
                 return response()->json($booking, 200);
 
                 break;
@@ -360,6 +378,10 @@ class BookingController extends Controller
 
             // Send email to user
             Mail::to($booking->email)->send(new StaffActionRefundNotifier($booking, $transaction, $transaction->price));
+            ExpoPushNotification::pushNotify(
+                "-{$transaction->price} | Refund",
+                "Caretaker {$request->user()->full_name} has refunded the booking of {$booking->user->full_name}."
+            );
 
             return response()->json($booking, 201);
         } catch (\Throwable $th) {

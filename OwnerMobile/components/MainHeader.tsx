@@ -1,9 +1,9 @@
 import { View, Text, Image, StyleSheet, StatusBar } from 'react-native'
 import { useContext, useState } from 'react'
-import React = require("react");
 
 import AuthContext, { useGlobalContext } from '@/Context/GlobalProvider'
 import { loadUser } from '@/utils/AuthService'
+import React from 'react'
 
 interface MainHeaderProps {
   fullName: string
@@ -22,7 +22,7 @@ const MainHeader:React.FC<MainHeaderProps> = ({fullName}) => {
             
               <View className='flex flex-col items-start'>
                 {/* Limit the name in case the letters exceeds over 12 */}
-                <Text className='text-white text-md font-semibold'>{fullName.length > 30 ? fullName.substring(0, 16) + '...' : fullName}</Text>
+                <Text className='text-white text-md font-semibold'>{fullName.length > 20 ? fullName.substring(0, 16) + '...' : fullName}</Text>
                 <Text className='text-white text-sm font-semibold'>Owner</Text>
               </View>
             </View>

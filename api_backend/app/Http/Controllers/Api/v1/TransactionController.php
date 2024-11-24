@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\CustomVendors\ExpoPushNotification;
 use App\CustomVendors\Xendivel;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\TransactionResource;
@@ -218,6 +219,11 @@ class TransactionController extends Controller
                 $booking->status = 'CASH_PENDING';
                 $transaction->save();
                 $booking->save();
+
+                ExpoPushNotification::pushNotify(
+                    "{$booking->full_name} | Cash on site", 
+                    "{$booking->full_name} made a reservation at {$booking->check_in} | {$booking->booking_type}.",
+                );
 
     
                 return response()->json([

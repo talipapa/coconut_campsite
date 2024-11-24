@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1\Kiosk;
 
+use App\CustomVendors\ExpoPushNotification;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Booking;
@@ -104,6 +105,12 @@ class KioskController extends Controller
             $booking->status = 'SCANNED';
             $booking->save(); 
             DB::commit();
+
+
+            ExpoPushNotification::pushNotify(
+                "{$booking->user->full_name} has scanned their QR code.", 
+                "Please attend to them immediately.",
+            );
             return response()->json(['message' => 'Data inserted successfully.']);
         } catch (\Throwable $th) {
             DB::rollBack();

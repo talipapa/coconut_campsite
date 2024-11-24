@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\v1;
 
+use App\CustomVendors\ExpoPushNotification;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\v1\BookingResource;
 use App\Http\Resources\v1\SuccessfulBookingResource;
@@ -54,6 +55,7 @@ class BookingController extends Controller
     }
 
     // Cancel booking for cash payment
+    // Notifier
     public function cancelBooking(Request $request, Booking $booking){
         $transaction = $booking->transaction;
 
@@ -89,6 +91,7 @@ class BookingController extends Controller
         $transaction->update([
             'status' => 'CASH_CANCELLED',
         ]);
+        ExpoPushNotification::pushNotify("{$booking->full_name} cancelled their booking", "A {$booking->booking_type} booking; reserved at {$booking->check_in} has been cancelled by user action");
 
         $booking->save();
         $transaction->save();
@@ -247,6 +250,10 @@ class BookingController extends Controller
                     'check_out' => Carbon::parse($validated['check_in'])->addDay(1)->timezone('Asia/Manila')->format('Y-m-d'),
                 ]);
                 $booking->save();
+                ExpoPushNotification::pushNotify(
+                    "{$booking->full_name} has rescheduled a booking", 
+                    "A {$booking->booking_type} booking; reserved at {$booking->check_in} has been rescheduled to --> {$validated['check_in']} | {$validated['booking_type']} by user action"
+                );
                 return response()->json(['message' => 'Reschedule request sent'], 200);
                 # code...
             break;
@@ -435,9 +442,6 @@ class BookingController extends Controller
         if (!$booking) {
             return response()->json(['message' => 'Booking not found'], 404);
         }
-
-        
-
         return new BookingResource($booking);
     }
 

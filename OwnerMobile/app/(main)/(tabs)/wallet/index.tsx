@@ -1,6 +1,5 @@
 import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native'
 import { useEffect, useState } from 'react'
-import React = require("react");
 import MainHeader from '@/components/MainHeader'
 import ContentBody from '@/components/ContentBody'
 import { useGlobalContext } from '@/Context/GlobalProvider'
@@ -11,6 +10,7 @@ import CustomButton from '@/components/CustomButton'
 import { Href, router, useFocusEffect } from 'expo-router'
 import FormatCurrency from '@/utils/FormatCurrency'
 import StatisticCard from '@/components/StatisticCard'
+import React from 'react'
 
 interface IDashboardData {
   'cancelledBookingThisMonth' : number,
@@ -99,7 +99,13 @@ const index = () => {
                 </View>
               </View>
               <View>
-                <CustomButton handlePress={() => router.push('/cashout')} title='Cash out' containerStyles='bg-[#559D99] px-6' textStyles='text-white text-sm' />
+                {
+                  dashboardData?.xenditWallet <= 50 ? (
+                    <CustomButton isDisabled={true} handlePress={() => router.push('/cashout')} title='Cash out' containerStyles='bg-[#B3CCCA] px-6' textStyles='text-slate-400 text-sm' />
+                  ) : (
+                    <CustomButton handlePress={() => router.push('/cashout')} title='Cash out' containerStyles='bg-[#559D99] px-6' textStyles='text-white text-sm' />
+                  )
+                }
               </View>
             </View>
           ) : (

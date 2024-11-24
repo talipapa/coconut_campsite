@@ -18,7 +18,7 @@ Route::apiResource('/cabin', CabinController::class)->only(['index', 'show', 'st
 
 Route::get('qr-code/get-booking/{qrsecretcode}', [QrCodeController::class, 'viewBookingWithQr']);
 
-Route::get('/send-notification', [MobilePushNotification::class, 'sendPushNotification']);
+Route::post('/send-notification', [MobilePushNotification::class, 'sendPushNotification']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::apiResource('/user', UserController::class)->except(['store', 'update', 'destroy']);

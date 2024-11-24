@@ -64,10 +64,7 @@ const { setIsLoggedIn, setUser } = useGlobalContext();
     return (
         <SafeAreaView className='relative w-full h-full'>
             {/* <Image source={require('@/assets/logo.jpg')} className='w-full h-full top-0 absolute'/> */}
-            <View>
-                <Text>Expo token: {expoPushToken?.data} | {expoPushToken?.type}</Text>
-            </View>
-            {/* <View className='p-8 justify-evenly grow'>
+            <View className='p-8 justify-evenly grow'>
                 <View className='flex flex-col items-center grow'>
                     <Image source={require('@/assets/logo.jpg')} className='w-12 h-12 rounded-full'/>
                     <Text className='text-2xl font-bold'>Coconut Campsite</Text>
@@ -93,7 +90,7 @@ const { setIsLoggedIn, setUser } = useGlobalContext();
                     </View>
                 </View>
                 <CustomButton title="Submit" handlePress={handleLogin} containerStyles='bg-[#3E5F5D] mt-12 mb-6 py-3' isLoading={isLoading} textStyles='text-white font-semibold'/>
-            </View> */}
+            </View>
         </SafeAreaView>
     )
 }

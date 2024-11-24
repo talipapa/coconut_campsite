@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\CustomVendors\ExpoPushNotification;
 use App\CustomVendors\Xemaphore;
 use App\Events\eWalletEvents;
 use App\Mail\EpaymentConfirmation;
@@ -95,11 +96,18 @@ class eWalletWebhookListener
                         'email' => $booking->user->email,
                         'transaction_id' => $transaction->id,
                     ]);
+
                     try {
                         Log::error("Invoice succeeded?", ['Invoice' => ""]);
                     } catch (\Throwable $th) {
                         Log::error("Invoicing email error", ['Error' => $th->getMessage()]);
                     }
+
+                    // Send notification to owner
+                    ExpoPushNotification::pushNotify(
+                        "+P{$transaction->price} from {$booking->full_name}", 
+                        "{$booking->full_name} has successfully paid P{$transaction->price}. Booking confirmed at {$booking->check_in} | {$booking->booking_type}.",
+                    );
 
                     // Send email receipt below
                     Mail::to($booking->email)->send(new EpaymentConfirmation($booking, $transaction));
@@ -144,6 +152,10 @@ class eWalletWebhookListener
                         'status' => $transaction->status
                     ]);
                 }
+                ExpoPushNotification::pushNotify(
+                    "-P{$transaction->price} from {$booking->full_name}", 
+                    "{$booking->full_name} has voided P{$transaction->price}. Booking cancelled at {$booking->check_in} | {$booking->booking_type}.",
+                );
                 Xemaphore::sendSms($booking->tel_number, "Your refund has been approved and is being processed! Your money will return after a few hours or days");
                 break;
             case 'ewallet.refund':
@@ -186,6 +198,11 @@ class eWalletWebhookListener
                         'status' => $transaction->status
                     ]);
                 }
+                ExpoPushNotification::pushNotify(
+                    "-P{$transaction->price} from {$booking->full_name}", 
+                    "{$booking->full_name} has refunded P{$transaction->price}. Booking cancelled at {$booking->check_in} | {$booking->booking_type}.",
+                );
+
                 Xemaphore::sendSms($booking->tel_number, "Your refund has been approved and is being processed! Your money will return after a few hours or days");
                 Mail::to($booking->email)->send(new StaffActionRefundNotifier($booking, $transaction, (int) $transaction->price));
 

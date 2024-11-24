@@ -1,27 +1,32 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\CustomVendors\ExpoPushNotification;
+use App\Models\Owner;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\CloudMessage;
 
 class MobilePushNotification extends Controller
 {
-    public function sendPushNotification()
+    public function sendPushNotification(Request $request)
     {
-        $firebase = (new Factory())->withServiceAccount(__DIR__.'/../../../config/firebase_credentials.json');
-
-        $messaging = $firebase->createMessaging();
-
-        $message = CloudMessage::fromArray([
-            'notification' => [
-                'title' => 'Hello from Firebase!',
-                'body' => 'This is a test notification.'
-            ],
-            'topic' => 'global'
+        $validated = $request->validate([
+            'title' => 'required|string',
+            'body' => 'required|string'
         ]);
 
-        $messaging->send($message);
+        try {
+            ExpoPushNotification::pushNotify($validated['title'], $validated['body']);            
 
-        return response()->json(['message' => 'Push notification sent successfully']);
+
+            return response()->json(['message' => 'Push notification sent'], 200);
+
+        } catch (\Throwable $th) {
+
+            return response()->json(['message' => $th->getMessage()], 500);
+        }
     }
 }
