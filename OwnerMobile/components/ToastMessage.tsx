@@ -11,7 +11,7 @@ export const ToastMessage = (type: "success" | "error" | "info", title:string, b
       },
       swipeable: true,
       position: 'top',
-      topOffset: 70,
+      topOffset: 20,
       visibilityTime: time,
     });
 }

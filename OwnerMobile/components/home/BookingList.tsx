@@ -1,5 +1,5 @@
 import { View, Text, Button, ActivityIndicator, Image } from 'react-native'
-import React = require("react");
+import React from "react";
 
 import { useEffect, useState } from 'react'
 

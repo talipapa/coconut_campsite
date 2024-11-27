@@ -4,7 +4,7 @@ import { Redirect, router, useRootNavigationState } from "expo-router";
 import { useEffect } from "react";
 
 import{ useGlobalContext } from "@/Context/GlobalProvider";
-import React = require("react");
+import React from "react";
 
 export default function Index() {
   const rootNavigationState = useRootNavigationState()

@@ -1,5 +1,5 @@
 import { View, Text, ActivityIndicator } from 'react-native'
-import React = require("react");
+import React from "react";
 import { useEffect, useLayoutEffect, useState } from 'react'
 import { router, useLocalSearchParams } from 'expo-router'
 import { deleteManager, getSingleManager, updateManager } from '@/utils/Caretaker'

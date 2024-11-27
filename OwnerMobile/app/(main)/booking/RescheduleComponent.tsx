@@ -1,6 +1,6 @@
 import { View, Text, Image } from 'react-native'
 import { useState } from 'react'
-import React = require("react");
+import React from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import CustomButton from '@/components/CustomButton';
 import { TouchableOpacity } from 'react-native-gesture-handler';

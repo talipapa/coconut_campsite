@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, ActivityIndicator, RefreshControl } from 'react-native'
 import { useEffect, useState } from 'react'
-import React = require("react");
+import React from "react";
 import { useGlobalContext } from '@/Context/GlobalProvider';
 import { router, useNavigation } from 'expo-router';
 import ContentBody from '@/components/ContentBody';

@@ -1,6 +1,6 @@
 import { View, Text, SafeAreaView } from 'react-native'
 import { ReactNode } from 'react'
-import React = require("react");
+import React from "react";
 
 import { ScrollView } from 'react-native'
 

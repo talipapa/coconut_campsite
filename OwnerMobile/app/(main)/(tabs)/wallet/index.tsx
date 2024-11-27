@@ -60,7 +60,7 @@ const index = () => {
 
 
   return (
-    <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshPageBooking} progressViewOffset={50}/>}>
+    <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshPageBooking} progressViewOffset={30}/>}>
       <MainHeader fullName={`${user?.first_name} ${user?.last_name}`} />
       <View className='bg-[#56342A] min-h-[12vh] px-5 py-8 flex flex-col relative mb-4'/>
 

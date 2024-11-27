@@ -1,6 +1,6 @@
 import { View, Text, ScrollView } from 'react-native'
 import { useLayoutEffect, useState } from 'react'
-import React = require("react");
+import React from "react";
 
 import ContentBody from '@/components/ContentBody'
 import { useGlobalContext } from '@/Context/GlobalProvider';

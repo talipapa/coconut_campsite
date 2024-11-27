@@ -62,7 +62,7 @@ const index = () => {
   );
 
   return (
-    <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshWalletSummary} progressViewOffset={50}/>}>
+    <ScrollView refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refreshWalletSummary} progressViewOffset={30}/>}>
       <MainHeader fullName={`${user?.first_name} ${user?.last_name}`} />
         <View className='bg-[#56342A] h-[10vh] px-5 py-3 flex flex-col relative'>
           <TouchableOpacity className='absolute bottom-[-20px]  w-[100vw] h-24 px-3' activeOpacity={1} onPress={() => router.push('/scanned' as Href)}>

@@ -15,14 +15,10 @@ const index = () => {
     const [form, setForm] = useState({
         email: '',
         password: ''
-    })
-    
+    })    
     const {expoPushToken, notification} = usePushNotifcations()
-
-const { setIsLoggedIn, setUser } = useGlobalContext();
-
+    const { setIsLoggedIn, setUser } = useGlobalContext();
     const [isLoading, setIsLoading] = useState(false)
-
     const handleLogin = async () => {
         setErrors({})
         setIsLoading(true)

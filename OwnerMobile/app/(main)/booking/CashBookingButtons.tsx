@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native'
 import { useCallback, useRef } from 'react'
-import React = require("react");
+import React from "react";
 import CustomButton from '@/components/CustomButton'
 import axios from '@/utils/axios'
 import ToastMessage from '@/components/ToastMessage'

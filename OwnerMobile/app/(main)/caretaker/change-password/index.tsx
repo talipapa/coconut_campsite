@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native'
 import { useState } from 'react'
-import React = require("react");
+import React from "react";
 
 import ContentBody from '@/components/ContentBody'
 import FormField from '@/components/FormField'

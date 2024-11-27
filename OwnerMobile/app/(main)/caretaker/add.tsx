@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React = require("react");
+import React from "react";
 import ContentBody from '@/components/ContentBody'
 import FormField from '@/components/FormField'
 import CustomButton from '@/components/CustomButton'

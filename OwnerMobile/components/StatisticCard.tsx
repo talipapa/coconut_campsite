@@ -1,5 +1,5 @@
 
-import React = require("react");
+import React from "react";
 import { Image, ImagePropsBase, Text, View } from 'react-native'
 
 const StatisticCard = (

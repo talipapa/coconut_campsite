@@ -1,6 +1,6 @@
 import { View, Text, Image } from 'react-native'
 import { useEffect } from 'react'
-import React = require("react");
+import React from "react";
 import { Slot, Stack, Tabs, router } from 'expo-router'
 import { useGlobalContext } from '@/Context/GlobalProvider'
 

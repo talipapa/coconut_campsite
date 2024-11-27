@@ -1,6 +1,6 @@
 import { View, Text, ActivityIndicator, Image, ScrollView, RefreshControl, StyleSheet, Alert } from 'react-native'
 import { ReactNode, useCallback, useEffect, useRef, useState } from 'react'
-import React = require("react");
+import React from "react";
 
 import { router, useLocalSearchParams } from 'expo-router'
 import ToastMessage from '@/components/ToastMessage'

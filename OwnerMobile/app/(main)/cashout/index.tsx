@@ -1,6 +1,6 @@
 import { View, Text, Alert } from 'react-native'
 import { useEffect, useState } from 'react'
-import React = require("react");
+import React from "react";
 
 import ContentBody from '@/components/ContentBody'
 import { getWalletData, sendPayoutRequest } from '@/utils/WalletService';

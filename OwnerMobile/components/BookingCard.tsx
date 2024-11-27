@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Image, TouchableHighlight } from 'react-native'
 import { useState } from 'react'
-import React = require("react");
+import React from "react";
 
 import { Href, router } from 'expo-router'
 import { BookingType } from '@/types/BookingType'

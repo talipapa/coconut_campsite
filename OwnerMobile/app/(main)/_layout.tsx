@@ -1,5 +1,5 @@
 import { View, Text } from 'react-native'
-import React = require("react");
+import React from "react";
 import { Stack } from 'expo-router'
 
 const _layout = () => {
@@ -335,6 +335,48 @@ const _layout = () => {
         
                     shouldShowHintSearchIcon: false,
                     tintColor: '#ffffff',
+                }     
+            }}
+        />
+        <Stack.Screen
+            name="(settings)/prices"
+            options={{
+                presentation: 'modal',
+                headerTitle: "Prices",
+                headerTitleStyle:{
+                    color: 'white'
+                },
+                headerTintColor: 'white',
+                headerStyle: {
+                    backgroundColor: "#56342A",
+                }    
+            }}
+        />
+        <Stack.Screen
+            name="(settings)/cabins"
+            options={{
+                presentation: 'modal',
+                headerTitle: "Cabins",
+                headerTitleStyle:{
+                    color: 'white'
+                },
+                headerTintColor: 'white',
+                headerStyle: {
+                    backgroundColor: "#56342A",
+                }     
+            }}
+        />
+        <Stack.Screen
+            name="(settings)/facebookshares"
+            options={{
+                presentation: 'modal',
+                headerTitle: "Facebook shares",
+                headerTitleStyle:{
+                    color: 'white'
+                },
+                headerTintColor: 'white',
+                headerStyle: {
+                    backgroundColor: "#56342A",
                 }     
             }}
         />

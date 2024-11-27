@@ -2,7 +2,7 @@ import { View, Text, ScrollView } from 'react-native'
 import { useEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Slot } from 'expo-router'
-import React = require("react");
+import React from "react";
 
 
 

@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, RefreshControl, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { useCallback, useEffect, useState } from 'react'
-import React = require("react");
+import React from "react";
 
 import { useGlobalContext } from '@/Context/GlobalProvider';
 import ContentBody from '@/components/ContentBody';

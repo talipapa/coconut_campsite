@@ -1,5 +1,5 @@
 import { View, Text, Alert } from 'react-native'
-import React = require("react");
+import React from "react";
 import { useCallback, useRef } from 'react'
 import CustomButton from '@/components/CustomButton'
 import { refundBooking, rescheduleBooking } from '@/utils/BookingService'

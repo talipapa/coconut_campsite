@@ -9,7 +9,7 @@ import CustomButton from '@/components/CustomButton';
 import BookingCard from '@/components/BookingCard';
 import TransactionCard from '@/components/TransactionCard';
 import NoBookingFound from '@/components/NoBookingFound';
-import React = require('react');
+import React from 'react';
 
 
 
