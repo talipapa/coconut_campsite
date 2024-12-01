@@ -238,11 +238,11 @@ const Home = () => {
                                         <div className='flex flex-row items-center space-x-3'>
                                             <IoPerson className='text-xl text-orange-800'/>
                                             <span>
-                                                {cabin.capacity}
+                                                {cabin.capacity} max capacity
                                             </span>
                                         </div>
                                     </div>
-                                    <div className='font-semibold break-words whitespace-pre-wrap text-slate-800'>
+                                    <div className='font-semibold break-words whitespace-pre-wrap text-slate-800 border-l-4 border-yellow-400 pl-2'>
                                         {cabin.description}
                                     </div>
                                 </div> 
