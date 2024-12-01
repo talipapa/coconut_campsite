@@ -1,6 +1,6 @@
 "use client"
 
-import { Button, Image as AntImage, Carousel } from 'antd'
+import { Button, Image as AntImage, Carousel, Spin } from 'antd'
 import { BsBasketFill } from "react-icons/bs"
 import { MdOutlinePets } from "react-icons/md"
 import { IoPerson, IoPricetags } from "react-icons/io5"
@@ -222,7 +222,7 @@ const Home = () => {
                     </div>
 
                     <div className=' min-h-[300px] max-w-[80vw]  flex flex-col justify-between space-y-12 items-start'>
-                        {cabinLoading && !cabins ? <p>Loading...</p> : cabins?.map((cabin, index) => (
+                        {cabinLoading && !cabins ? <Spin/> : cabins?.map((cabin, index) => (
                             <div className='w-full grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-10'>
                                 <AntImage src={cabin.image} className='col-span-1 rounded-lg'/>
                                 <div className='col-span-2 flex flex-col space-y-3'>
