@@ -367,10 +367,24 @@ const _layout = () => {
             }}
         />
         <Stack.Screen
-            name="(settings)/facebookshares"
+            name="singlecabin/[id]"
             options={{
                 presentation: 'modal',
-                headerTitle: "Facebook shares",
+                headerTitle: "Cabin details",
+                headerTitleStyle:{
+                    color: 'white'
+                },
+                headerTintColor: 'white',
+                headerStyle: {
+                    backgroundColor: "#56342A",
+                }     
+            }}
+        />
+        <Stack.Screen
+            name="singlecabin/extrapage/addcabin"
+            options={{
+                presentation: 'modal',
+                headerTitle: "Add cabin",
                 headerTitleStyle:{
                     color: 'white'
                 },

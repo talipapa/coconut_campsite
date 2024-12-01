@@ -3,13 +3,15 @@
 import { Button, Image as AntImage, Carousel } from 'antd'
 import { BsBasketFill } from "react-icons/bs"
 import { MdOutlinePets } from "react-icons/md"
-import { IoPricetags } from "react-icons/io5"
+import { IoPerson, IoPricetags } from "react-icons/io5"
 import Footer from '@/components/LargeComponents/Footer'
 import NavbarLoginLinks from './NavbarLoginLinks'
 import { usePrice } from '@/hooks/prices'
 import Image from 'next/image'
 import { PiCookingPotFill } from "react-icons/pi";
 import { Parallax, Background } from 'react-parallax';
+import { useEffect, useState } from 'react'
+import axios from '@/lib/axios'
 
 
 
@@ -30,6 +32,19 @@ import { Parallax, Background } from 'react-parallax';
 const Home = () => {
 
     const { adultPrice, childPrice, tentPitchPrice, bonfireKitPrice, cabinPrice } = usePrice()
+
+    const [cabins, setCabins] = useState()
+    const [cabinLoading, setCabinLoading] = useState(true)
+
+    useEffect(() => {
+        axios.get('/api/v1/cabin')
+            .then((res) => {
+                setCabins(res.data)
+            })
+            .finally(() => {
+                setCabinLoading(false)
+            })
+    }, [])
 
     return (
         <div className="bg-[#F2F2F2] min-h-[1600px] overflow-hidden absolute top-[-30px]">
@@ -75,7 +90,7 @@ const Home = () => {
 
 
             {/* Main wrapper */}
-            <main className='w-full h-full'>
+            <main className='max-w-[100vw] h-full'>
                 {/* Marginized */}
                 <section className='py-[60px] px-[30px] flex flex-col md:flex-row justify-between items-center w-full h-full space-x-12'>
                     <div className='w-full h-full flex flex-col text-center md:text-left md:items-left md:space-y-3'>
@@ -160,10 +175,6 @@ const Home = () => {
                                         <td className="border-2 border-slate-600">₱ {tentPitchPrice}</td>
                                     </tr>
                                     <tr>
-                                        <td className="border-2 border-slate-600">Cabin (4-5 person)</td>
-                                        <td className="border-2 border-slate-600">₱ {cabinPrice}</td>
-                                    </tr>
-                                    <tr>
                                         <td className="border-2 border-slate-600">Bonfire kit</td>
                                         <td className="border-2 border-slate-600">₱ {bonfireKitPrice}</td>
                                     </tr>
@@ -202,6 +213,42 @@ const Home = () => {
                     
             
     
+                </section>
+
+                <section className='bg-[rgba(83,54,35,0.13)] py-[60px] md:px-[30px] xl:px-[100px] flex flex-col items-center w-full min-h-[450px] space-y-10'>
+                    <div className='flex flex-col items-center text-center'>
+                        <h3 className='text-md font-semibold text-[#BC7B5C]'>CABINS</h3>
+                        <h2 className='text-2xl font-bold'>Our available cabins</h2>
+                    </div>
+
+                    <div className=' min-h-[300px] max-w-[80vw]  flex flex-col justify-between space-y-12 items-start'>
+                        {cabinLoading && !cabins ? <p>Loading...</p> : cabins?.map((cabin, index) => (
+                            <div className='w-full grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-10'>
+                                <AntImage src={cabin.image} className='col-span-1 rounded-lg'/>
+                                <div className='col-span-2 flex flex-col space-y-3'>
+                                    <div className='space-y-1'>
+                                        <div className='font-bold'>
+                                            {cabin.name}
+                                        </div>
+                                        <div className='flex flex-row items-center space-x-3'>
+                                            <IoPricetags className='text-xl text-green-700'/>
+                                            <span>₱{cabin.price}</span>
+                                            
+                                        </div>
+                                        <div className='flex flex-row items-center space-x-3'>
+                                            <IoPerson className='text-xl text-orange-800'/>
+                                            <span>
+                                                {cabin.capacity}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className='font-semibold break-words whitespace-pre-wrap text-slate-800'>
+                                        {cabin.description}
+                                    </div>
+                                </div> 
+                            </div>
+                        ))}
+                    </div>
                 </section>
 
                 <section className='bg-[rgba(83,54,35,0.13)] py-[60px] md:px-[30px] xl:px-[100px] flex flex-col items-center w-full min-h-[450px] space-y-10'>

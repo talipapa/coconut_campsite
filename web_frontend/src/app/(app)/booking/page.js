@@ -627,7 +627,7 @@ export default function Page() {
                 <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-10">
 
                     {cabin.map((cabin, index) => (
-                        <div key={index} className="flex flex-col items-center space-y-2 bg-[#f7b393ed] border-2 rounded-xl overflow-hidden">
+                        <div key={index} className="flex flex-col items-center space-y-2 bg-white shadow-[#0000008c] shadow-lg border-2 rounded-xl overflow-hidden">
                             <div className="relative w-full h-full">
                                 <div className="border-l-4 border-green-400 select-none text-black font-bold text-lg m-4 pl-3 z-10 absolute bottom-0 left-0">Press to view</div>
                                 <Image src={cabin.image} alt={cabin.name} width="100%" height={250} className="object-cover object-center absolute top-0 left-0" scal unoptimized={true}/>
@@ -640,7 +640,7 @@ export default function Page() {
                                 </div>
                                 <p className="text-[#555454] w-full text-xl font-semibold">Max PAX: {cabin.capacity}</p>
                                 <div className="flex flex-col w-full mt-4">
-                                    <p className="text-black w-full text-lg p-3 bg-yellow-100 border-r-8 border-yellow-600 ">{cabin.description}</p>
+                                    <p className="text-black w-full text-lg p-3 bg-yellow-100 border-r-8 border-yellow-600 font-semibold break-words whitespace-pre-wrap">{cabin.description}</p>
                                 </div>
                                 <Button type="primary" onClick={() => onSelectCabin(cabin)} className="w-full py-6 mt-8">Select</Button>
                             </div>

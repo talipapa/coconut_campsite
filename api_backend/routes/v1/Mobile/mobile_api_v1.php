@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\v1\CabinController;
 use App\Http\Controllers\Api\v1\Mobile\BookingController;
 use App\Http\Controllers\Api\v1\Mobile\OwnerAccountController;
 use App\Http\Controllers\Api\v1\Mobile\WalletController;
+use App\Http\Controllers\Api\v1\PriceController;
 use App\Http\Controllers\Api\v1\TokenBasedAuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,8 @@ Route::middleware(['auth:sanctum', 'owner'])->group(function (){
     Route::get('dashboard-summary', [BookingController::class, 'dashboardSummary']);
     Route::get('booking/{booking}', [BookingController::class, 'getBookingSummary']);
     Route::patch('/reschedule/{booking}', [BookingController::class, 'rescheduleBooking']);
+
+    Route::patch('/prices/update', [PriceController::class, 'batchUpdate']);
 
     // Get booking with successful "VERIFIED status 
     Route::get('/bookings/verified/{page}', [BookingController::class, 'showVerifiedBookings']);

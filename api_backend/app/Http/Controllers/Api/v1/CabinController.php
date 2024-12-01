@@ -11,7 +11,9 @@ class CabinController extends Controller
 {
     public function index()
     {
-        $cabins = Cabin::all();
+        // Sort by created_at in descending order
+        $cabins = Cabin::orderBy('created_at', 'desc')->get();
+                
         return response()->json($cabins);
     }
 
@@ -21,13 +23,13 @@ class CabinController extends Controller
     }
 
     public function store(Request $request)
-    {
+    {           
         $validated = $request->validate([
             'name' => 'required|string',
             'description' => 'required|string',
             'image' => 'required|mimes:jpeg,jpg,png',
-            'price' => 'required|integer',
-            'capacity' => 'required|integer',
+            'price' => 'required|numeric|min:1',
+            'capacity' => 'required|numeric|min:1',
         ]);
         $cabin = Cabin::create([
             'name' => $validated['name'],
@@ -47,9 +49,8 @@ class CabinController extends Controller
             'name' => 'required|string',
             'description' => 'required|string',
             'price' => 'required|integer',
-            'capacity' => 'required|integer',
+            'capacity' => 'required|integer'
         ]);
-
         $cabin->update($validated);
         $cabin->save();
         return response()->json($cabin, 200);
@@ -59,6 +60,10 @@ class CabinController extends Controller
         $validated = $request->validate([
             'image' => 'required|mimes:jpeg,jpg,png',
         ]);
+        // Delete the old image
+        $cabin->clearMediaCollection('cabin_images');
+        
+        // Replace the old image with the new one
         $newFileName = Str::random(20) .'.'.$request->file('image')->extension();
         $cabin->addMedia($request->file('image'))->usingFileName($newFileName)->toMediaCollection('cabin_images');
         return response()->json($cabin, 200);
@@ -66,6 +71,7 @@ class CabinController extends Controller
 
     public function destroy(Request $request, Cabin $cabin)
     {
+        $cabin->clearMediaCollection('cabin_images');
         $cabin->delete();
         return response()->json(null, 204);
     }

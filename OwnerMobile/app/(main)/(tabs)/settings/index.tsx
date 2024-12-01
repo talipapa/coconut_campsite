@@ -86,14 +86,7 @@ const index = () => {
 
             </View>
             <View className='space-y-3 mb-8'>
-              {/* Facebook shares */}
-              <TouchableOpacity style={customStyle.shadow} onPress={() => router.push("/facebookshares")} className='flex flex-row bg-[#5388fb] rounded-xl items-center space-x-5 py-4 px-5 bg-slate-20'>
-                <View className='flex-row items-center gap-3 w-full'>
-                  <Image source={require('@/assets/icons/facebook.png')} className='w-9 h-9' tintColor={"#ffffff"}/>
-                  <Text className='text-white text-md font-bold'>Facebook shares</Text>
-                </View>
-              </TouchableOpacity>
-
+              {/* Profile */}
               <TouchableOpacity style={customStyle.shadow} onPress={() => router.push("/profile")} className='flex flex-row rounded-xl bg-[#315f5c] items-center space-x-5 px-5 py-3'>
                 <Image source={require('@/assets/logo.jpg')} className='w-12 h-12 rounded-full'/>
                 <View>

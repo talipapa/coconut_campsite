@@ -1,6 +1,7 @@
 import axiosLab from 'axios';
 import { getToken, setToken } from './TokenService';
 import { router } from 'expo-router';
+import ToastMessage from '@/components/ToastMessage';
 
 
 const axios = axiosLab.create({
@@ -27,6 +28,7 @@ axios.interceptors.response.use(
     response => response,
     error => {
         if (error.response?.status === 401 && error.response?.data?.message === 'Unauthenticated.') {
+            ToastMessage('error', 'Unauthenticated', 'You have been logged out')
             setToken(null).then(() => {
                 router.replace('/login')
             })

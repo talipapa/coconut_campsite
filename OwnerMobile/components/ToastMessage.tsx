@@ -10,6 +10,7 @@ export const ToastMessage = (type: "success" | "error" | "info", title:string, b
         Toast.hide();
       },
       swipeable: true,
+      
       position: 'top',
       topOffset: 20,
       visibilityTime: time,
