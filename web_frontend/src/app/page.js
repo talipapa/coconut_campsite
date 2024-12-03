@@ -215,41 +215,44 @@ const Home = () => {
     
                 </section>
 
-                <section className='bg-[rgba(83,54,35,0.13)] py-[60px] md:px-[30px] xl:px-[100px] flex flex-col items-center w-full min-h-[450px] space-y-10'>
-                    <div className='flex flex-col items-center text-center'>
-                        <h3 className='text-md font-semibold text-[#BC7B5C]'>CABINS</h3>
-                        <h2 className='text-2xl font-bold'>Our available cabins</h2>
-                    </div>
 
-                    <div className=' min-h-[300px] max-w-[80vw]  flex flex-col justify-between space-y-12 items-start'>
-                        {cabinLoading && !cabins ? <Spin/> : cabins?.map((cabin, index) => (
-                            <div className='w-full grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-10'>
-                                <AntImage src={cabin.image} className='col-span-1 rounded-lg'/>
-                                <div className='col-span-2 flex flex-col space-y-3'>
-                                    <div className='space-y-1'>
-                                        <div className='font-bold'>
-                                            {cabin.name}
+                { !cabinLoading && !cabins && (
+                    <section className='bg-[rgba(83,54,35,0.13)] py-[60px] md:px-[30px] xl:px-[100px] flex flex-col items-center w-full min-h-[450px] space-y-10'>
+                        <div className='flex flex-col items-center text-center'>
+                            <h3 className='text-md font-semibold text-[#BC7B5C]'>CABINS</h3>
+                            <h2 className='text-2xl font-bold'>Our available cabins</h2>
+                        </div>
+
+                        <div className=' min-h-[300px] max-w-[80vw]  flex flex-col justify-between space-y-12 items-start'>
+                            {cabinLoading && !cabins ? <Spin/> : cabins?.map((cabin, index) => (
+                                <div className='w-full grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-10'>
+                                    <AntImage src={cabin.image} className='col-span-1 rounded-lg'/>
+                                    <div className='col-span-2 flex flex-col space-y-3'>
+                                        <div className='space-y-1'>
+                                            <div className='font-bold'>
+                                                {cabin.name}
+                                            </div>
+                                            <div className='flex flex-row items-center space-x-3'>
+                                                <IoPricetags className='text-xl text-green-700'/>
+                                                <span>₱{cabin.price}</span>
+                                                
+                                            </div>
+                                            <div className='flex flex-row items-center space-x-3'>
+                                                <IoPerson className='text-xl text-orange-800'/>
+                                                <span>
+                                                    {cabin.capacity} max capacity
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div className='flex flex-row items-center space-x-3'>
-                                            <IoPricetags className='text-xl text-green-700'/>
-                                            <span>₱{cabin.price}</span>
-                                            
+                                        <div className='font-semibold break-words whitespace-pre-wrap text-slate-800 border-l-4 border-yellow-400 pl-2'>
+                                            {cabin.description}
                                         </div>
-                                        <div className='flex flex-row items-center space-x-3'>
-                                            <IoPerson className='text-xl text-orange-800'/>
-                                            <span>
-                                                {cabin.capacity} max capacity
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className='font-semibold break-words whitespace-pre-wrap text-slate-800 border-l-4 border-yellow-400 pl-2'>
-                                        {cabin.description}
-                                    </div>
-                                </div> 
-                            </div>
-                        ))}
-                    </div>
-                </section>
+                                    </div> 
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                ) }
 
                 <section className='bg-[rgba(83,54,35,0.13)] py-[60px] md:px-[30px] xl:px-[100px] flex flex-col items-center w-full min-h-[450px] space-y-10'>
                     <div className='flex flex-col items-center text-center'>
