@@ -215,8 +215,7 @@ const Home = () => {
     
                 </section>
 
-
-                { !cabinLoading && !cabins && (
+                { !cabinLoading && cabins.length > 0 ? (
                     <section className='bg-[rgba(83,54,35,0.13)] py-[60px] md:px-[30px] xl:px-[100px] flex flex-col items-center w-full min-h-[450px] space-y-10'>
                         <div className='flex flex-col items-center text-center'>
                             <h3 className='text-md font-semibold text-[#BC7B5C]'>CABINS</h3>
@@ -252,7 +251,9 @@ const Home = () => {
                             ))}
                         </div>
                     </section>
-                ) }
+                    ):<></>
+                }
+
 
                 <section className='bg-[rgba(83,54,35,0.13)] py-[60px] md:px-[30px] xl:px-[100px] flex flex-col items-center w-full min-h-[450px] space-y-10'>
                     <div className='flex flex-col items-center text-center'>
