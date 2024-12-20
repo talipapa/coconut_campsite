@@ -8,12 +8,13 @@ import { useGlobalContext } from '@/Context/GlobalProvider'
 import { changeAccountPassword, IPassword } from '@/utils/AccountService'
 import ToastMessage from '@/components/ToastMessage'
 import CustomButton from '@/components/CustomButton'
-import { router } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 
 
 
 const index = () => {
   const { isLoggedIn, setIsLoggedIn, user, setUser, isLoading, setIsLoading } = useGlobalContext();
+  const { id } = useLocalSearchParams() as { id: string | string[] }
 
   const [ errors, setErrors ] = useState<{ password?: string; password_confirmation?: string }>({})
 
@@ -24,7 +25,7 @@ const index = () => {
 
   const changePasswordFunc = () => {
     setIsLoading(true)
-    changeAccountPassword(user?.id, formData)
+    changeAccountPassword(Number(id), formData)
       .then((res) => {
         ToastMessage('success', 'Password success', 'Password has been changed successfully')
         router.back()
@@ -37,6 +38,7 @@ const index = () => {
         setIsLoading(false)
       })
   }
+
 
   return (
     <ContentBody>

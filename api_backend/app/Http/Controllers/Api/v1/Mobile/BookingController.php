@@ -129,15 +129,15 @@ class BookingController extends Controller
 
         
         // // Sum all count of transaction with 'SUCCEEDED' status
-        // $summaryData['successfullTotalBookingCount'] = Booking::where('status', 'PAID')->get()->count();
+        $summaryData['successfullTotalBookingCount'] = Booking::where('status', 'PAID')->get()->count();
         
-        // // Sum all price of transaction with 'CASH_PENDING & PENDING' status using where
-        // $summaryData['pendingCash'] = Booking::whereIn('status', ['CASH_PENDING', 'PENDING'])->get()->sum(function($booking) {
-        //     if ($booking->transaction === null){
-        //         return 0;
-        //     }
-        //     return $booking->transaction->price;
-        // });
+        // Sum all price of transaction with 'CASH_PENDING & PENDING' status using where
+        $summaryData['pendingCash'] = Booking::whereIn('status', ['CASH_PENDING', 'PENDING'])->get()->sum(function($booking) {
+            if ($booking->transaction === null){
+                return 0;
+            }
+            return $booking->transaction->price;
+        });
         
 
         // // Sum all count of transaction with 'CASH_PENDING & PENDING' status
@@ -450,7 +450,8 @@ class BookingController extends Controller
         // Get all bookings
         $bookings = [];
         // Check if $page is number
-        $bookings = Booking::whereIn('status', ['VERIFIED'])->orderBy('check_in', 'asc')->paginate($page);
+        $bookings = Booking::whereIn('status', ['VERIFIED'])->whereYear('updated_at', Carbon::now()->year)
+        ->whereMonth('updated_at', Carbon::now()->month)->orderBy('check_in', 'asc')->paginate($page);
         // Return all bookings with successful bookingresource
         return response()->json($bookings, 200);
     }
@@ -459,7 +460,8 @@ class BookingController extends Controller
         // Get all bookings
         $bookings = [];
         // Check if $page is number
-        $bookings = Booking::whereIn('status', ['CANCELLED'])->orderBy('check_in', 'asc')->paginate($page);
+        $bookings = Booking::whereIn('status', ['CANCELLED'])->whereYear('updated_at', Carbon::now()->year)
+        ->whereMonth('updated_at', Carbon::now()->month)->orderBy('check_in', 'asc')->paginate($page);
         // Return all bookings with successful bookingresource
         return response()->json($bookings, 200);
     }

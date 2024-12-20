@@ -137,7 +137,7 @@ const _layout = () => {
             }}
         />
         <Stack.Screen
-            name="caretaker/change-password/index"
+            name="caretaker/change-password/[id]"
             options={{
                 presentation: 'modal',
                 headerTitle: "Change caretaker password",

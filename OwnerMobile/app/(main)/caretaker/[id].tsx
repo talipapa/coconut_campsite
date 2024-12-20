@@ -75,7 +75,7 @@ const index = () => {
     .finally(() => {
       setIsLoading(false)
     })
-
+    
   }, [])
 
   useEffect(() => {
@@ -86,6 +86,7 @@ const index = () => {
         email: manager.email,
       });
     }
+    
   }, [manager]);
 
   useLayoutEffect(() => {
@@ -101,7 +102,6 @@ const index = () => {
       <ContentBody>
         { isLoading && manager === null ? <ActivityIndicator size="large" className='mt-10'/> : (
           <>
-
             <View>
                 <FormField errors={errors.first_name} title='First name' placeholder={`${manager?.first_name}`} value={formData['first_name']} handleChangeText={(e) => setFormData((prev) => ({ ...prev, first_name: e }))} />
             </View>
@@ -111,12 +111,10 @@ const index = () => {
             <View className='mt-4'>
                 <FormField errors={errors.email} title='Email' placeholder={`${manager?.email}`} value={formData['email']} handleChangeText={(e) => setFormData((prev) => ({ ...prev, email: e }))} />
             </View>
-            <CustomButton title="Change password" handlePress={() => router.push('/caretaker/change-password')} containerStyles='bg-blue-400 mt-7 py-4 w-full' textStyles='text-xs text-white'/>
+            <CustomButton title="Change password" handlePress={() => router.push(`/caretaker/change-password/${id}`)} containerStyles='bg-blue-400 mt-7 py-4 w-full' textStyles='text-xs text-white'/>
             <CustomButton title="Delete" handlePress={() => deleteManagerFunc()} containerStyles='bg-red-600 mt-7 py-4 w-full' textStyles='text-xs text-white'/>
           </>
         )}
-
-
       </ContentBody>
     </ScrollView>
   )

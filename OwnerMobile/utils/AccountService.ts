@@ -18,7 +18,8 @@ export const changeAccountDetail = async (id: number|undefined, data: IUser) => 
     return response.data;
 }
 
-export const changeAccountPassword = async (id: number|undefined, data: IPassword) => {
+export const changeAccountPassword = async (id: number|string|undefined, data: IPassword) => {
+
     const response = await axios.patch(`/mobile/owner-account/change-password/${id}`, data)
     return response.data;
 }
