@@ -14,6 +14,7 @@ import CustomButton from '@/components/CustomButton'
 import RescheduleComponent from './RescheduleComponent'
 import PressButton from '@/components/PressButton'
 import FormatCurrency from '@/utils/FormatCurrency'
+import cabins from '../(settings)/cabins';
 
 export interface transactionDetailType {
   booking_id: string,
@@ -38,11 +39,14 @@ export interface bookingSingleDetailType {
   childCount: number,
   bonfire_kit_count: number,
   tent_pitching_count: number,
+
+  cabin_image: string,
   
   booking_type: 'overnight' | 'daytour',
   check_in: Date,
   check_out: Date,
   is_cabin: boolean,
+  cabin_price: number,
   
   user_id: string
   email: string,
@@ -54,7 +58,7 @@ export interface bookingSingleDetailType {
 
   status: "PENDING" | "PAID" | "CASH_CANCELLED" | "VOIDED" | "REFUNDED" | "SCANNED" | "VERIFIED" | "CANCELLED"
   note: string|null,
-
+  cabin_name: string|null,
   updated_at: Date,
   created_at: Date,
 }
@@ -363,12 +367,30 @@ const index = () => {
             </View>
           </View>
 
+          {booking.cabin_name && (
+            <>
+              <View className='mt-5 text-white shadow-black shadow-xl bg-green-100 p-3 space-y-1 rounded-2xl'>
+                <View className='items-center'>
+                  <Text className='text-slate-500 text-center'>User has reserved a cabin</Text>
+                  <Text className='font-semibold text-center'>{booking.cabin_name}</Text>
+                </View>
+              </View>
+              <View className='py-4'>
+                <Text className='text-slate-500'>Cabin Preview</Text>
+                <Image src={booking.cabin_image}className='w-full h-40 mt-3 rounded-lg'/>
+              </View>
+          
+            </>
+          )}
+
+
           {booking.note && (
             <View className='mt-5 text-white shadow-black shadow-xl bg-yellow-100 p-3 space-y-1'>
               <Text className='text-slate-500'>Note</Text>
               <Text>{booking.note}</Text>
             </View>
           )}
+
 
           <View className='mt-7'>
             <ItemPriceField 
@@ -387,10 +409,14 @@ const index = () => {
               itemName="Bonfire Kit"
               itemCount={booking.bonfire_kit_count} 
               itemPrice={prices.find((price) => price.name === "bonfire")?.price}/>
-            <ItemPriceField 
-              itemName="Cabin"
-              itemCount={booking.is_cabin ? 1 : 0} 
-              itemPrice={prices.find((price) => price.name === "cabin")?.price}/>
+            {
+              booking.cabin_name && (
+              <View className='justify-between flex-row mt-1'>
+                  <Text>{`${booking.cabin_name}`}</Text>
+                  <Text>{`₱ ${booking.cabin_price}.00`}</Text>
+              </View>
+              )
+            }
           </View>
 
           <View className='mt-5'>

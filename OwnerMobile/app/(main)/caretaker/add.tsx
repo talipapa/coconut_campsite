@@ -56,7 +56,6 @@ const add = () => {
                     handleChangeText={setFirstName}
                     errors={errors?.first_name}
                     />
-
                     <FormField
                     otherStyles='mb-4'
                     title="Last name"
@@ -65,7 +64,6 @@ const add = () => {
                     handleChangeText={setLastName}
                     errors={errors?.last_name}
                     />
-
                     <FormField
                     otherStyles='mb-4'
                     title="Email"
@@ -74,7 +72,6 @@ const add = () => {
                     handleChangeText={setEmail}
                     errors={errors?.email}
                     />
-
                     <FormField
                     otherStyles='mb-4'
                     title="Password"
@@ -84,7 +81,6 @@ const add = () => {
                     handleChangeText={setPassword}
                     errors={errors?.password}
                     />
-
                     <FormField
                     otherStyles='mb-4'
                     title="Confirm password"

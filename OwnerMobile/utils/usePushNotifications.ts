@@ -43,7 +43,9 @@ export const usePushNotifcations = (): PushNotificationState => {
                 alert('Please give permission to receive notifications in your device app settings');
                 return;
             }
-            token = await Notifications.getExpoPushTokenAsync()
+            token = await Notifications.getExpoPushTokenAsync({
+                projectId: "4da6ce48-192d-4621-a13b-404c73efd127"
+            })
 
             console.log("Token:", token); // Check if it's undefined
 
