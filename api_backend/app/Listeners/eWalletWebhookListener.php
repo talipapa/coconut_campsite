@@ -113,7 +113,7 @@ class eWalletWebhookListener
 
                     // Send email receipt below
                     
-                    Mail::to($booking->email)->send(new EpaymentConfirmation($booking, $transaction));
+                    #Mail::to($booking->email)->send(new EpaymentConfirmation($booking, $transaction));
                     Xemaphore::sendSms($booking->tel_number, "You have successfully purchased P{$booking->transaction->price} at Coconut Campsite, Your booking is now confirmed at {$formattedCheckInOld}. We can't wait to see you at the campsite!. Please check your email inbox or spam for more info receipt.");
                 }
                 break;
@@ -209,7 +209,7 @@ class eWalletWebhookListener
                 );
 
                 Xemaphore::sendSms($booking->tel_number, "Your refund has been approved and is being processed! Your money will return after a few hours or days");
-                Mail::to($booking->email)->send(new StaffActionRefundNotifier($booking, $transaction, (int) $transaction->price));
+                #Mail::to($booking->email)->send(new StaffActionRefundNotifier($booking, $transaction, (int) $transaction->price));
 
                 break;
             
