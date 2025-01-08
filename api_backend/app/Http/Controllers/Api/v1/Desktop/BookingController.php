@@ -290,7 +290,7 @@ class BookingController extends Controller
         switch ($validated['booking_type']) {
             case 'daytour':
                 // Send email to user
-                #Mail::to($booking->email)->send(new StaffActionRescheduleNotifier($booking, $booking->transaction, $booking->check_in, Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d')));
+                Mail::to($booking->email)->send(new StaffActionRescheduleNotifier($booking, $booking->transaction, $booking->check_in, Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d')));
 
                 $booking->update([
                     'booking_type' => $validated['booking_type'],
@@ -302,7 +302,7 @@ class BookingController extends Controller
                 break;
             case 'overnight':
                 // Send email to user
-                #Mail::to($booking->email)->send(new StaffActionRescheduleNotifier($booking, $booking->transaction, $booking->check_in, Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d')));
+                Mail::to($booking->email)->send(new StaffActionRescheduleNotifier($booking, $booking->transaction, $booking->check_in, Carbon::parse($validated['check_in'])->timezone('Asia/Manila')->format('Y-m-d')));
 
 
                 $booking->update([
@@ -377,7 +377,7 @@ class BookingController extends Controller
             $booking->save();
 
             // Send email to user
-            #Mail::to($booking->email)->send(new StaffActionRefundNotifier($booking, $transaction, $transaction->price));
+            Mail::to($booking->email)->send(new StaffActionRefundNotifier($booking, $transaction, $transaction->price));
             ExpoPushNotification::pushNotify(
                 "-{$transaction->price} | Refund",
                 "Caretaker {$request->user()->full_name} has refunded the booking of {$booking->user->full_name}."
