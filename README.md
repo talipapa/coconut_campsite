@@ -1,5 +1,5 @@
 # COCONUT CAMPSITE
-This project includes a web application, desktop application, mobile application & KIOSK machine (Raspberry pi QR Code Scanner & Touchscreen LCD)
+This project was made to explore RESTful principles, Live Transaction using Payment Gateway & API endpoint version control. This project consists of Web application, Desktop application, Mobile application & IOT KIOSK (Raspberry pi QR Code Scanner & Touchscreen LCD) with Laravel as an API service.
 
 ## Laravel forge important notes
 1. Deployment script
@@ -173,9 +173,6 @@ The booking is verified by the manager/campsite_owner/caretaker
 
 CANCELLED
 Payment bookinng is CANCELLED 
-
-
-
 
 
 
