@@ -100,6 +100,81 @@ To switch api server host, just go to desktop/src/utils/auth.ts
 ## Building react native
 https://docs.expo.dev/develop/development-builds/create-a-build/
 
+## Laravel forge important notes
+1. Deployment script
+```
+cd /home/forge/server.coconutcampsite.com/api_backend
+git pull origin $FORGE_SITE_BRANCH
+
+$FORGE_COMPOSER install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
+# php artisan migrate:fresh --force
+# php artisan db:seed --force
+```
+
+2. Laravel necessary variables
+```
+APP_NAME="Coconut Campsite"
+APP_ENV=production
+APP_KEY=
+APP_DEBUG=false
+APP_TIMEZONE=UTC
+APP_URL=https://server.coconutcampsite.com
+FRONTEND_URL=https://coconutcampsite.com
+SESSION_SAME_SITE=none
+SESSION_SECURE_COOKIE=true
+SANCTUM_STATEFUL_DOMAINS=coconutcampsite.com,api.coconutcampsite.com
+SESSION_DOMAIN=.coconutcampsite.com
+XENDIT_SUCCESS_URL=https://coconutcampsite.com/view-booking
+XENDIT_FAILURE_URL=https://coconutcampsite.com/booking
+XENDIT_CANCEL_URL=https://coconutcampsite.com/booking
+APP_LOCALE=en
+APP_FALLBACK_LOCALE=en
+APP_FAKER_LOCALE=en_US
+APP_MAINTENANCE_DRIVER=file
+DB_CONNECTION=mysql
+DB_HOST=
+DB_PORT=3306
+DB_DATABASE=
+DB_USERNAME=
+DB_PASSWORD=
+BCRYPT_ROUNDS=12
+LOG_CHANNEL=stack
+LOG_STACK=single
+LOG_DEPRECATIONS_CHANNEL=null
+LOG_LEVEL=debug
+BROADCAST_CONNECTION=log
+FILESYSTEM_DISK=local
+QUEUE_CONNECTION=database
+CACHE_STORE=database
+CACHE_PREFIX=
+MEMCACHED_HOST=127.0.0.1
+REDIS_CLIENT=phpredis
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+
+XEMAPHORE_SECRET_KEY=
+XEMAPHORE_SENDER_NAME=
+
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_DEFAULT_REGION=us-east-1
+AWS_BUCKET=
+AWS_USE_PATH_STYLE_ENDPOINT=false
+VITE_APP_NAME=${APP_NAME}
+XENDIT_SECRET_KEY=
+XENDIT_PUBLIC_KEY=
+XENDIT_WEBHOOK_VERIFICATION_TOKEN=
+XENDIT_BUSINESS_ID=
+```
+
+3. Since the laravel backend is not rooted on main, the Web directory for Laravel forge should be the following:
+```
+/api_backend/public
+```
+
 
 
 ## POLICY NOTE
