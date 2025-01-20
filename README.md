@@ -82,7 +82,7 @@ XENDIT_BUSINESS_ID=
 3. api_backend/.env
 
 
-## NGROK tutorial
+## NGROK tutorial (Setting up webhook local environment for xendit)
 1. In CMD, download ngrok.exe
 2. add the ngrok folder to environment variable PATH
 3. in cmd, enter this command: ngrok http http://localhost:8000 --url=glorious-live-marten.ngrok-free.app
@@ -92,6 +92,9 @@ This lets the ngrok host application that listen to port 8000 which is the "Api 
 ## Desktop API change
 To switch api server host, just go to desktop/src/utils/auth.ts
 
+## Building react native
+https://docs.expo.dev/develop/development-builds/create-a-build/
+
 ## BUGS & ISSUE JOURNAL
 
 1. Laravel Returns 401 when calling the api route in Next.JS server component | FIX: Referrer in header is missing, its stated in laravel documentation that Referrer must be included
@@ -100,8 +103,6 @@ To switch api server host, just go to desktop/src/utils/auth.ts
 
 3. Due to CORS error in local machine: Mobile can't connect to localhost:8000 but works with 192.168.2.106(local ip address), Website can connect to localhost:8000 but won't connect with 192.168.2.106(local ip address). This means, you can't run website and mobile at the same local network in development environment.
 
-## Building react native
-https://docs.expo.dev/develop/development-builds/create-a-build/
 
 
 ## Extended Xendit Class
