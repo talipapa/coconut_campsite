@@ -94,7 +94,7 @@ To switch api server host, just go to desktop/src/utils/auth.ts
 
 2. The website (specifically /view-booking page) will always assume and pull a price from the database. Which causes an error if the database is not populated. Make sure to run "php artisan db:seed" to generate default prices.
 
-3. Due to CORS error in local machine: Mobile can't connect to localhost:8000 but works with 192.168.2.106(local ip address), Website can connect to localhost:8000 but won't connect with 192.168.2.106(local ip address).
+3. Due to CORS error in local machine: Mobile can't connect to localhost:8000 but works with 192.168.2.106(local ip address), Website can connect to localhost:8000 but won't connect with 192.168.2.106(local ip address). This means, you can't run website and mobile at the same local network in development environment.
 
 
 ## Building react native
