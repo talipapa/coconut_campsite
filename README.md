@@ -71,6 +71,13 @@ The booking is verified by the manager/campsite_owner/caretaker
 CANCELLED
 Payment bookinng is CANCELLED 
 
+## Important ENV & Credentials or else, the system won't work
+1. OwnerMobile/credentials.json
+2. OwnerMobile/google-services.json
+3. api_backend/.env
+
+
+
 ## NGROK tutorial
 1. In CMD, download ngrok.exe
 2. add the ngrok folder to environment variable PATH
@@ -99,3 +106,4 @@ https://docs.expo.dev/develop/development-builds/create-a-build/
 1. Refund are 100% returned if the refund requests didn't reached the xendit cutoff (23:50) in the same day of making the transaction.
 2. If refund has reached the void cut-off, The campsite will deduct 10% off, which will be used to cover for xendit service fee`s.
 3. The campsite can refund transaction made with e-payment (xendit), but will require a valid and reasonable reason. 
+
