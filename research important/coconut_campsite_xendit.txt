@@ -1,8 +1,0 @@
-prod_secret_key = xnd_production_4jdbcq5PPncq4wOsatR3DgmLl3bnXETEdI7BBauizf79jMUJX7G85rN1sME
-dev_secret_key = xnd_development_8wFZX7QcXQx3kDrXsnA2xbDVdu6jVAeqzSEym3uSgxOPmh9ZbLoWLY8D4o1Ekvcb
-public_key = xnd_public_development_YeHunbKf76oekV52i7k7v1tuQnNMuw6N2nU7W81bWR4UOUM6KHooticJV4e29yJg
-webhook_key = jvaS4NVIbTUbj9wVaTwqNSPja5La5W9xyxSPsBYQ078qtff7\
-
-
-vultr password: 7-ueq+T#vo0pn.|Ahy@;
-vultr database password: sXMjdM9Ri13GmgAHAFWj
